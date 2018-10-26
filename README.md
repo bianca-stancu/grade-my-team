@@ -7,3 +7,4 @@ In order to install all required packages, first install **brew** following the 
 Afterwards, run the **build.sh** script. The script will install:
 * Node.js and npm
 * EthereumJs-TestRPC
+* Web3.js
