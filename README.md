@@ -1,7 +1,7 @@
 # Distributed systems project
-##Team members: Bianca Stancu, Jelena Budakovic, Davide Matteri
+#### Team members: Bianca Stancu, Jelena Budakovic, Davide Matteri
 
-###Setting up the environment
+## Setting up the environment
 In order to install all required packages, first install **brew** following the instructions on their [website](https://brew.sh/)
 
 Afterwards, run the **build.sh** script. The script will install:
