@@ -2,23 +2,37 @@ pragma solidity ^0.4.18;
 
 contract Grading {
     struct Grade {
-        uint id;
-        string name;
+        bytes32 from;
+        bytes32 to;
         uint grade;
     }
-    
+
     constructor() public {
-        addGrade("Candidate 1");
-        addGrade("Candidate 2");
     }
-    // Read/write Grades
-    mapping(uint => Grade) public grades;
 
-    // Store Grades Count
-    uint public gradesCount;
+    bytes32[] assignment_ids;
 
-    function addGrade (string _name) public {
-        gradesCount ++;
-        grades[gradesCount] = Grade(gradesCount, _name, 0);
+    mapping(bytes32 => Grade[]) private assignments;
+
+    function addAssignment (bytes32 _assignment_id) public {
+        Grade[] _init;
+        assignmentsCount++;
+        assignments[_assignment_id] = _init;
+    }
+
+    function addGradeTo(bytes32 _assignment_id, bytes32 _from, bytes32 _to, uint _grade) public {
+        Grade memory grade = Grade(_from,_to,_grade);
+        assignments[_assignment_id].push(grade);
+    }
+
+    uint public assignmentsCount;
+
+    function getGradesCount(bytes32 _assignment_id) public returns(uint[]) {
+        uint[] gradesCount;
+        for (uint i = 0; i < assignments[_assignment_id].length; i++) {                        
+            gradesCount.push(assignments[_assignment_id][i].grade);
+        } 
+        gradesCount.push(assignments[_assignment_id].length);
+        return gradesCount;
     }
 }

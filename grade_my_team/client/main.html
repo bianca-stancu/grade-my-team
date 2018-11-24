@@ -109,8 +109,16 @@
         var Grading = TruffleContract(grading_json );
         Grading.setProvider(new Web3.providers.HttpProvider("http://localhost:8545"));
         Grading.deployed().then(function(instance) {
-            //instance.addGrade("Bianca").then(function(result) {});
-            instance.gradesCount().then(balance => {console.log(balance.toNumber())})       
+            //instance.addAssignment("assignment1").then(function(result) {});
+            //instance.assignmentsCount().then(balance => {console.log(balance.toNumber())});       
+            //instance.addGradeTo("assignment1","bianca","jelena",10,{from: web3.eth.accounts[0], gas:3000000});
+            //instance.getGradesCount.call("assignment1",{from: web3.eth.accounts[0], gas:3000000}).then(result => console.log(Array.from(result)));  
+            balance = web3.eth.getBalance(web3.eth.accounts[0], function(error, result){
+                if(!error)
+                    console.log(JSON.stringify(result));
+                else
+                    console.error(error);
+            });
         });
       });
     }
