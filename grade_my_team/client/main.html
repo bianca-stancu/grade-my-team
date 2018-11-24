@@ -109,7 +109,7 @@
         var Grading = TruffleContract(grading_json );
         Grading.setProvider(new Web3.providers.HttpProvider("http://localhost:8545"));
         Grading.deployed().then(function(instance) {
-            instance.addGrade("Bianca").then(function(result) {});
+            //instance.addGrade("Bianca").then(function(result) {});
             instance.gradesCount().then(balance => {console.log(balance.toNumber())})       
         });
       });
