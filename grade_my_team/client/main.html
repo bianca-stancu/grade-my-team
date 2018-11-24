@@ -5,6 +5,10 @@
 <meta name="viewport" content="width=device-width, initial-scale=1">
 <link rel="stylesheet" href="https://www.w3schools.com/w3css/4/w3.css">
 <link rel="stylesheet" href="https://fonts.googleapis.com/css?family=Poppins">
+<script src="./node_modules/web3/dist/web3.min.js"></script>
+<script src="./node_modules/truffle-contract/dist/truffle-contract.js"></script>
+<script src="https://ajax.googleapis.com/ajax/libs/jquery/1.12.0/jquery.min.js"> </script>
+
 <style>
     body,h1,h2,h3,h4,h5 {font-family: "Poppins", sans-serif}
     body {font-size:16px;}
@@ -91,7 +95,25 @@
         document.getElementById("mySidebar").style.display = "none";
         document.getElementById("myOverlay").style.display = "none";
     }
-
+</script>
+    
+<script>
+     window.onload = function() {
+      if (typeof web3 !== 'undefined') {
+        web3 = new Web3(web3.currentProvider);
+      } else {
+        // set the provider you want from Web3.providers
+        web3 = new Web3(new Web3.providers.HttpProvider("http://localhost:8545"));
+      }
+      $.getJSON("../build/contracts/Grading.json", function(grading_json) {
+        var Grading = TruffleContract(grading_json );
+        Grading.setProvider(new Web3.providers.HttpProvider("http://localhost:8545"));
+        Grading.deployed().then(function(instance) {
+            instance.addGrade("Bianca").then(function(result) {});
+            instance.gradesCount().then(balance => {console.log(balance.toNumber())})       
+        });
+      });
+    }
 </script>
 
 </body>
