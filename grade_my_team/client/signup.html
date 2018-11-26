@@ -1,6 +1,6 @@
 <!DOCTYPE html>
 <html lang="en">
-<title>ICorsi4 - Login</title>
+<title>ICorsi4 - Signup</title>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1">
 <link rel="stylesheet" href="https://www.w3schools.com/w3css/4/w3.css">
@@ -116,26 +116,22 @@
 <!-- !PAGE CONTENT! -->
 <div class="container">
         <div class="row">
-            <h2 style="text-align:center">Login</h2>
-            <form method="post" action="/login">
-                <input type="text" name="username" placeholder="Username" required>
-                <input type="password" name="password" placeholder="Password" required>
-                <input type="submit" value="Login">
+            <h2 style="text-align:center">Sign up</h2>
+            <form method="post" action="/adduser">
+                <input type="text" name="firstName" placeholder="Enter first name..." required>
+                <input type="text" name="lastName" placeholder="Enter last name..." required>
+                <input type="text" name="username" placeholder="Enter username..." required>
+                <input type="text" name="password" placeholder="Enter password..." required>
+                <input type="submit" value="Submit">
             </form>
-
-
         </div>
     <div class="bottom-container">
         <div class="row">
-            <div class="col">
-                <a href="signup.html" style="color:white" class="btn">Sign up</a>
-            </div>
-            <div class="col">
-                <a href="#" style="color:white" class="btn">Forgot password?</a>
-            </div>
+                <a href="#" style="color:white" class="btn">Login</a>
         </div>
     </div>
 </div>
+
 
 <!-- W3.CSS Container -->
 <div class="w3-light-grey w3-container w3-padding-32 w3-bottom" style="margin-top:75px;padding-right:58px"><p class="w3-right">Designed by <br/> Jelena Budakovic, Bianca Stancu and Davide Matteri</p></div>
