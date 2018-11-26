@@ -7,38 +7,21 @@
  * username       String     required   username
  * password       String     required   password
  * courses        Array      required   An array of the ids of the courses the user is enrolled in. Default: []
- * type           Int        required   Int indicating if the user is a student (0) or a professor (1).
+ * role           String     required    User role: Student/Professor
  */
 
 
 'use strict';
 
 var mongoose = require('mongoose');
-var ObjectId = mongoose.Schema.Types.ObjectId;
-
-// /** @constructor
-//  * @param {Object} definition
-//  */
-// var userSchema = new mongoose.Schema(
-//
-//     {
-//
-//         firstname : { type: String, required: true },
-//         lastname : { type: ObjectId, ref:'Artist', required: true },
-//         // album : { type: ObjectId, ref:'Album' },
-//         courses : { type: Array, default:[]},
-//         dateReleased : { type: String, default: Date.now },
-//         dateCreated : { type: String, default: Date.now },
-//         vote: {type: Number, default:0}
-//     }
-//
-// );
 
 var nameSchema = new mongoose.Schema({
-    firstName: String,
-    lastName: String,
-    username: String,
-    password: String
+    firstName: { type: String},
+    lastName: { type: String},
+    username: { type: String},
+    password: { type: String},
+    courses: { type: Array, default:[]},
+    role: {type: String}
 });
 var User = mongoose.model("User", nameSchema);
 
