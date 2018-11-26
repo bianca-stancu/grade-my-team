@@ -48,6 +48,10 @@ app.post("/login",function (req, res){
     });
 });
 
+app.get('/signup', function (req, res) {
+    res.sendFile(__dirname + '/client/signup.html');
+});
+
 app.listen(3000);
 console.log("Running at Port 3000");
 
