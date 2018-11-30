@@ -6,6 +6,8 @@ var Course = require('./models/Course');
 var config = require('./config');
 var app = express();
 var session = require('express-session');
+var formidable = require('formidable');
+var fs = require('fs');
 
 // parse application/x-www-form-urlencoded
 app.use(bodyParser.urlencoded({ extended: false }));
@@ -121,6 +123,18 @@ app.get('/logout', function (req, res, next) {
     }
 });
 
+app.post('/fileupload', function (req, res, next) {
+    var form = new formidable.IncomingForm();
+    form.parse(req, function (err, fields, files) {
+        var oldpath = files.my_file.path;
+        var newpath = __dirname + '/assignments/' + files.my_file.name;
+        fs.rename(oldpath, newpath, function (err) {
+            if (err) throw err;
+            res.end();
+        });
+    });
+    return res.redirect('/profile');
+});
 
 
 app.listen(3000);
