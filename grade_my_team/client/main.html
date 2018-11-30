@@ -22,20 +22,10 @@
     <a href="javascript:void(0)" onclick="w3_close()" class="w3-button w3-hide-large w3-display-topleft" style="width:100%;font-size:22px">Close Menu</a>
     <div class="w3-container">
         <h3 class="w3-padding-64"><b>ICorsi4 <br/>Online Grading System</b></h3>
-        <p id="username"></p>
+        <p class="w3-text-white" id="username"></p>
     </div>
-    <!--<h class="w3-padding-64" id="user_name"><b>user name</b></h>-->
-    <div class="w3-bar-block">
-        <a href="#" onclick="w3_close()" class="w3-bar-item w3-button w3-hover-white">Dashboard</a>
-        <a href="#c1" onclick="w3_close()" class="w3-bar-item w3-button w3-hover-white">Course 1</a>
-        <a href="#c2" onclick="w3_close()" class="w3-bar-item w3-button w3-hover-white">Course 2</a>
-        <a href="#c3" onclick="w3_close()" class="w3-bar-item w3-button w3-hover-white">Course 3</a>
-        <a href="#c4" onclick="w3_close()" class="w3-bar-item w3-button w3-hover-white">Course 4</a>
-        <a href="#c5" onclick="w3_close()" class="w3-bar-item w3-button w3-hover-white">Course 5</a>
-        <form id="seeCourses"> <!-- action="/seeAllCourses"-->
-            <input type="submit" style="background-color: #00bcd4; border: none" value="See all course">
-        </form>
-    </div>
+    <div class="w3-bar-block" id="sidebar"></div>
+    <div class="w3-container w3-bottom" id="extra"></div>
 </nav>
 
 <!-- Top menu on small screens -->
@@ -49,45 +39,12 @@
 
 <!-- !PAGE CONTENT! -->
 <div class="w3-main" style="margin-left:340px;margin-right:40px">
-
-    <!-- Header -->
-    <div class="w3-container" style="margin-top:80px" id="c1">
-        <h1 class="w3-jumbo"><b>ICorsi4</b></h1>
-        <h1 class="w3-xxxlarge w3-text-cyan"><b>Course 1</b></h1>
-        <hr style="width:50px;border:5px solid cyan" class="w3-round">
-    </div>
-
-
-    <!-- Course 2 -->
-    <div class="w3-container" id="c2" style="margin-top:75px">
-        <h1 class="w3-xxxlarge w3-text-cyan"><b>Course 2</b></h1>
-        <hr style="width:50px;border:5px solid cyan" class="w3-round">
-    </div>
-
-    <!-- Course 3 -->
-    <div class="w3-container" id="c3" style="margin-top:75px">
-        <h1 class="w3-xxxlarge w3-text-cyan"><b>Course 3</b></h1>
-        <hr style="width:50px;border:5px solid cyan" class="w3-round">
-    </div>
-
-    <!-- Course 4 -->
-
-    <div class="w3-container" id="c4" style="margin-top:75px">
-        <h1 class="w3-xxxlarge w3-text-cyan"><b>Course 4</b></h1>
-        <hr style="width:50px;border:5px solid cyan" class="w3-round">
-    </div>
-
-    <!-- Course 5 -->
-    <div class="w3-container" id="c5" style="margin-top:75px">
-        <h1 class="w3-xxxlarge w3-text-cyan"><b>Course 5</b></h1>
-        <hr style="width:50px;border:5px solid cyan" class="w3-round">
-    </div>
-
-    <!-- End page content -->
+    <div id="main"></div>
 </div>
+<!--  END PAGE CONTENT! -->
 
 <!-- W3.CSS Container -->
-<div class="w3-light-grey w3-container w3-padding-32 w3-bottom" style="margin-top:75px;padding-right:58px"><p class="w3-right">Designed by Jelena Budakovic, Bianca Stancu and Davide Matteri</p></div>
+<div class="w3-light-grey w3-container w3-padding-32 w3-bottom" style="margin-top:75px;padding-right:58px"><p class="w3-right"> &copy; 2018 Dystibuted systems. All rights reserved | Design by<br/> Jelena Budakovic, Bianca Stancu and Davide Matteri</p></div>
 
 <script>
     // Script to open and close sidebar
@@ -101,10 +58,58 @@
         document.getElementById("myOverlay").style.display = "none";
     }
 </script>
+
+<script> // functions
+    function getUser(){
+        $.ajax({
+            type: "GET",
+            url: "/getUser",
+            cache: false,
+            success: function(res){
+                localStorage.setItem("currentUser", res);
+                console.log(res.username);
+                fillPage(res);
+            }
+        });
+        return false;
+    }
+    function fillPage(user) {
+        // Sidebar/menu
+        var sidebar = '<a href="#" onclick="w3_close()" class="w3-bar-item w3-button w3-hover-white">Dashboard</a>';
+        // Extra based on user
+        var extra = "";
+        // Courses
+        var htmlText = "";
+        var i;
+        for (i = 0; i < user.courses.length; i++) {
+            htmlText += '<div class="w3-container" id="' + 'c' + i + '" style="margin-top:75px">' +
+                '<h1 class="w3-xxxlarge w3-text-cyan"><b>' + user.courses[i] + '</b></h1>' +
+                '<hr style="width:50px;border:5px solid cyan" class="w3-round">' +
+                '</div>';
+
+            sidebar += '<a href="#c' + i + '" onclick="w3_close()" class="w3-bar-item w3-button w3-hover-white">' + user.courses[i] + '</a>';
+        };
+
+        if(user.role == "Student"){
+            extra += '<form id="seeCourses">' +
+                '<input type="submit" style="background-color: #00bcd4; border: none" value="See all available course">' +
+                '</form>';
+        }
+        else{
+            extra += '<form action="/newCourse">' +
+                '<input type="submit" style="background-color: #00bcd4; border: none" value="New course">' +
+                '</form>';
+        }
+
+       document.getElementById("username").innerHTML = user.firstName + " " + user.lastName;
+       document.getElementById("main").innerHTML = htmlText;
+       document.getElementById("sidebar").innerHTML = sidebar;
+       document.getElementById("extra").innerHTML = extra;
+
+    }
+</script>
     
 <script>
-
-    localStorage.setItem("currentUser", undefined);
 
      window.onload = function() {
 //         console.log($("user_name").text())
@@ -123,22 +128,10 @@
         });
       });
 
-//      console.log("outside if: " + localStorage.getItem("currentUser"))
-//    // For filling the page
-//    if (localStorage.getItem("currentUser") != undefined){
-//        console.log("inside if: " + localStorage.getItem("currentUser"))
-////        $(username).innerHTML = currentUser[0].firstName + currentUser[0].lastName;
-//        document.getElementById("username").innerHTML = localStorage.getItem("currentUser").firstName;
-//    }
-//    };
-//
-//     $('#seeCourses').on('submit', function(res,e){
-//         $( "#seeCourses" ).load( "/seeAllCourses", function(res,err) {
-////             alert(JSON.parse(res).firstName);
-//             localStorage.setItem("currentUser", JSON.parse(res));
-//             console.log("inside seeCourses: " + localStorage.getItem("currentUser"))
-//         });
-//     });
+      // GET PAGE CONTENT
+      getUser();
+
+    };
 
 </script>
 <script src="http://modernizr.com/downloads/modernizr-latest.js"></script>

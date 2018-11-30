@@ -79,13 +79,9 @@ app.get('/profile', function (req, res, next) {
                     err.status = 400;
                     return next(err);
                 }
-                else if(user.role == 'Student'){
+                else{
                     currentUser = user;
                     res.sendFile(__dirname + '/client/main.html');
-                }
-                else if(user.role == 'Professor'){
-                    currentUser = user;
-                    res.sendFile(__dirname + '/client/mainProf.html');
                 }
             }
         });
@@ -104,13 +100,25 @@ app.post("/addcourse",function (req, res){
     myData.save().then(function(item,bla){
         console.log("Course successfluly saved to database");
     });
-    res.sendFile(__dirname + '/client/mainProf.html');
+    return res.redirect('/profile');
 });
 
-app.get("/seeAllCourses",function (req, res){
-    // console.log("-------------------")
+app.get("/getUser",function (req, res){
     res.json(currentUser)
 
+});
+
+app.get('/logout', function (req, res, next) {
+    if (req.session) {
+        // delete session object
+        req.session.destroy(function (err) {
+            if (err) {
+                return next(err);
+            } else {
+                return res.redirect('/');
+            }
+        });
+    }
 });
 
 
