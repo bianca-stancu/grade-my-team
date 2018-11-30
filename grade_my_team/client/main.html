@@ -22,7 +22,9 @@
     <a href="javascript:void(0)" onclick="w3_close()" class="w3-button w3-hide-large w3-display-topleft" style="width:100%;font-size:22px">Close Menu</a>
     <div class="w3-container">
         <h3 class="w3-padding-64"><b>ICorsi4 <br/>Online Grading System</b></h3>
+        <p id="username"></p>
     </div>
+    <!--<h class="w3-padding-64" id="user_name"><b>user name</b></h>-->
     <div class="w3-bar-block">
         <a href="#" onclick="w3_close()" class="w3-bar-item w3-button w3-hover-white">Dashboard</a>
         <a href="#c1" onclick="w3_close()" class="w3-bar-item w3-button w3-hover-white">Course 1</a>
@@ -30,6 +32,9 @@
         <a href="#c3" onclick="w3_close()" class="w3-bar-item w3-button w3-hover-white">Course 3</a>
         <a href="#c4" onclick="w3_close()" class="w3-bar-item w3-button w3-hover-white">Course 4</a>
         <a href="#c5" onclick="w3_close()" class="w3-bar-item w3-button w3-hover-white">Course 5</a>
+        <form id="seeCourses"> <!-- action="/seeAllCourses"-->
+            <input type="submit" style="background-color: #00bcd4; border: none" value="See all course">
+        </form>
     </div>
 </nav>
 
@@ -98,7 +103,11 @@
 </script>
     
 <script>
+
+    localStorage.setItem("currentUser", undefined);
+
      window.onload = function() {
+//         console.log($("user_name").text())
       if (typeof web3 !== 'undefined') {
         web3 = new Web3(web3.currentProvider);
       } else {
@@ -113,8 +122,26 @@
             instance.gradesCount().then(balance => {console.log(balance.toNumber())})       
         });
       });
-    }
+
+//      console.log("outside if: " + localStorage.getItem("currentUser"))
+//    // For filling the page
+//    if (localStorage.getItem("currentUser") != undefined){
+//        console.log("inside if: " + localStorage.getItem("currentUser"))
+////        $(username).innerHTML = currentUser[0].firstName + currentUser[0].lastName;
+//        document.getElementById("username").innerHTML = localStorage.getItem("currentUser").firstName;
+//    }
+//    };
+//
+//     $('#seeCourses').on('submit', function(res,e){
+//         $( "#seeCourses" ).load( "/seeAllCourses", function(res,err) {
+////             alert(JSON.parse(res).firstName);
+//             localStorage.setItem("currentUser", JSON.parse(res));
+//             console.log("inside seeCourses: " + localStorage.getItem("currentUser"))
+//         });
+//     });
+
 </script>
+<script src="http://modernizr.com/downloads/modernizr-latest.js"></script>
 
 </body>
 </html>
