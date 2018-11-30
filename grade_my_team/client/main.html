@@ -25,7 +25,12 @@
         <p class="w3-text-white" id="username"></p>
     </div>
     <div class="w3-bar-block" id="sidebar"></div>
-    <div class="w3-container w3-bottom" id="extra"></div>
+    <div class="w3-container w3-padding-64" id="extra"></div>
+    <div class="w3-container w3-padding-64">
+        <form action="/logout">
+            <input type="submit" style="background-color: #00bcd4; border: none" value="Logout">
+        </form>
+    </div>
 </nav>
 
 <!-- Top menu on small screens -->
@@ -66,8 +71,6 @@
             url: "/getUser",
             cache: false,
             success: function(res){
-                localStorage.setItem("currentUser", res);
-                console.log(res.username);
                 fillPage(res);
             }
         });
