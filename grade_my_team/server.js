@@ -3,6 +3,7 @@ var express = require("express");
 const bodyParser = require('body-parser');
 var User = require('./models/User');
 var Course = require('./models/Course');
+var Homework = require('./models/Homework');
 var config = require('./config');
 var app = express();
 var session = require('express-session');
@@ -100,7 +101,7 @@ app.get("/newCourse",function (req, res){
 app.post("/addcourse",function (req, res){
     var myData = new Course(req.body);
     myData.save().then(function(item,bla){
-        console.log("Course successfluly saved to database");
+        console.log("Course successfuly saved to database");
     });
     return res.redirect('/profile');
 });
@@ -125,17 +126,32 @@ app.get('/logout', function (req, res, next) {
 
 app.post('/fileupload', function (req, res, next) {
     var form = new formidable.IncomingForm();
+    var newpath;
     form.parse(req, function (err, fields, files) {
         var oldpath = files.my_file.path;
-        var newpath = __dirname + '/assignments/' + files.my_file.name;
+        newpath = __dirname + '/assignments/' + files.my_file.name;
         fs.rename(oldpath, newpath, function (err) {
             if (err) throw err;
+            // Store file to MongoDb
+            var fileData = fs.readFileSync(newpath);
+            const hm = new Homework({
+                type: 'text/plain',
+                data: fileData
+            });
+            hm.save().then(function (homework, err) {
+                if (homework) {
+                    homework._id
+                    console.log("Homework successfuly saved to database");
+                } else {
+                    throw new Error('An error occured.');
+                }
+            });
             res.end();
         });
     });
+
     return res.redirect('/profile');
 });
-
 
 app.listen(3000);
 console.log("Running at Port 3000");
