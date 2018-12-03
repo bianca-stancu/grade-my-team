@@ -22,6 +22,7 @@ var nameSchema = new mongoose.Schema({
     username: { type: String},
     password: { type: String},
     courses: { type: Array, default:[]},
+    assignments: {type: Array, default:[]},
     role: {type: String}
 });
 

@@ -140,8 +140,13 @@ app.post('/fileupload', function (req, res, next) {
             });
             hm.save().then(function (homework, err) {
                 if (homework) {
-                    homework._id
                     console.log("Homework successfuly saved to database");
+                    // console.log("homework._id " + homework._id);
+                    //Add homework's id to the user's assignments
+                    User.findOne({ username: currentUser.username }, function (err, doc){
+                        doc.assignments.push(homework._id);
+                        doc.save();
+                    });
                 } else {
                     throw new Error('An error occured.');
                 }
