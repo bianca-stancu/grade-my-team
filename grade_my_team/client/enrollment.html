@@ -1,20 +1,19 @@
 <!DOCTYPE html>
 <html lang="en">
-<title>ICorsi4 - Add new course</title>
+<title>ICorsi4 - All courses</title>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1">
 <link rel="stylesheet" href="https://www.w3schools.com/w3css/4/w3.css">
 <link rel="stylesheet" href="https://fonts.googleapis.com/css?family=Poppins">
+<script src="../node_modules/web3/dist/web3.min.js"></script>
+<script src="../node_modules/truffle-contract/dist/truffle-contract.js"></script>
 <script src="https://ajax.googleapis.com/ajax/libs/jquery/1.12.0/jquery.min.js"> </script>
+
 <style>
     body,h1,h2,h3,h4,h5 {font-family: "Poppins", sans-serif}
     body {font-size:16px;}
     .w3-half img{margin-bottom:-6px;margin-top:16px;opacity:0.8;cursor:pointer}
     .w3-half img:hover{opacity:1}
-
-    * {
-        box-sizing: border-box;
-    }
 
     /* style the container */
     .container {
@@ -24,19 +23,12 @@
         background-color: #f2f2f2;
         padding: 20px 70px 50px 70px;
         position: fixed;
-        top: 30%;
-        left: 50%;
-        transform: translate(-30%, -50%);
-        -webkit-transform: translate(-30%, -50%);
-        -moz-transform: translate(-30%, -50%);
-        -o-transform: translate(-30%, -50%);
-        -ms-transform: translate(-30%, -50%);
     }
 
     /* style inputs and link buttons */
     input,
     .btn {
-        width: 100%;
+        width: 50%;
         padding: 12px;
         border: none;
         border-radius: 4px;
@@ -79,20 +71,12 @@
         display: table;
         clear: both;
     }
-
     /* bottom container */
     .bottom-container {
+        width: 40%;
         text-align: center;
         background-color: #666;
         border-radius: 0px 0px 4px 4px;
-    }
-
-    /* Responsive layout - when the screen is less than 650px wide, make the two columns stack on top of each other instead of next to each other */
-    @media screen and (max-width: 650px) {
-        .col {
-            width: 100%;
-            margin-top: 0;
-        }
     }
 </style>
 <body>
@@ -120,36 +104,16 @@
 </header>
 
 <!-- Overlay effect when opening sidebar on small screens -->
-<div class="w3-overlay w3-hide-large " onclick="w3_close()" style="cursor:pointer" title="close side menu" id="myOverlay"></div>
+<div class="w3-overlay w3-hide-large" onclick="w3_close()" style="cursor:pointer" title="close side menu" id="myOverlay"></div>
 
 <!-- !PAGE CONTENT! -->
-<div class="container">
-    <div class="row">
-        <h2 style="text-align:center">Add new course</h2>
-        <form method="post" action="/addcourse">
-            <input type="text" name="name" placeholder="Enter course name..." required>
-            <input type="text" name="professor" placeholder="Enter professor name..." required>
-            <input type="submit" value="Create">
-        </form>
-    </div>
+<div class="w3-main" style="margin-left:340px;margin-right:40px">
+    <div id="main"></div>
 </div>
+<!--  END PAGE CONTENT! -->
 
 <!-- W3.CSS Container -->
 <div class="w3-light-grey w3-container w3-padding-32 w3-bottom" style="margin-top:75px;padding-right:58px"><p class="w3-right"> &copy; 2018 Distibuted systems. All rights reserved | Design by<br/> Jelena Budakovic, Bianca Stancu and Davide Matteri</p></div>
-
-<script>
-    // Script to open and close sidebar
-    function w3_open() {
-        document.getElementById("mySidebar").style.display = "block";
-        document.getElementById("myOverlay").style.display = "block";
-    }
-
-    function w3_close() {
-        document.getElementById("mySidebar").style.display = "none";
-        document.getElementById("myOverlay").style.display = "none";
-    }
-
-</script>
 <script>
     function getUser(){
         $.ajax({
@@ -173,9 +137,47 @@
         document.getElementById("sidebar").innerHTML = sidebar;
     }
 
+    function getAllCourses() {
+        $.ajax({
+            type: "GET",
+            url: "/getAllCourses",
+            cache: false,
+            success: function(res){
+                var htmlText = "";
+                for (var i = 0; i < res.length; i++){
+                    htmlText += '<div class="w3-container" id="' + 'c' + i + '" style="margin-top:75px">' +
+                                '<h1 class="w3-xxxlarge w3-text-cyan"><b>' + res[i] + '</b></h1>' +
+                                '<hr style="width:50px;border:5px solid cyan" class="w3-round">' +
+                                '</div>';
+                    htmlText += '<div>' +
+                                    '<div class="bottom-container">' +
+                                        '<div class="row">' +
+                                            '<div class="col">' +
+                                                '<form method="post" action="/enroll">' +
+                                                    '<input type="text" name="enrollCourse" value="' + res[i] +'" hidden>' +
+                                                    '<input type="submit" style="background-color: #666;" value="Enroll">' +
+                                                '</form>' +
+                                            '</div>' +
+                                        '<div class="col">' +
+                                            '<form method="post" action="/unenroll">' +
+                                                '<input type="text" name="unEnrollCourse" value="' + res[i] +'" hidden>' +
+                                                '<input type="submit" style="background-color: #666;" value="Unenroll">' +
+                                            '</form>' +
+                                        '</div>' +
+                                    '</div>' +
+                                '</div>'
+                }
+                document.getElementById("main").innerHTML = htmlText;
+            }
+        });
+        return false;
+    }
+
     window.onload = function() {
         getUser();
+        getAllCourses();
     };
 </script>
+
 </body>
 </html>

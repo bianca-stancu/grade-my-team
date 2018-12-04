@@ -158,6 +158,29 @@ app.post('/fileupload', function (req, res, next) {
     return res.redirect('/profile');
 });
 
+app.get('/enrollment', function (req, res, next) {
+    res.sendFile(__dirname + '/client/enrollment.html');
+});
+
+app.get('/getAllCourses', function (req, res, next) {
+    Course.find({}, function(err, courses) {
+        var courseMap = [];
+        courses.forEach(function(course) {
+            courseMap.push(course.name);
+        });
+        res.json(courseMap);
+    });
+});
+
+app.post('/enroll', function (req, res, next){
+    console.log("req " + req.body.enrollCourse)
+});
+
+app.post('/unenroll', function (req, res, next){
+    console.log("req " + req.body.unEnrollCourse)
+
+});
+
 app.listen(3000);
 console.log("Running at Port 3000");
 

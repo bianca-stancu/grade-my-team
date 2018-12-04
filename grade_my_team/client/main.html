@@ -84,7 +84,7 @@
     }
     function fillPage(user) {
         // Sidebar/menu
-        var sidebar = '<a href="#" onclick="w3_close()" class="w3-bar-item w3-button w3-hover-white">Dashboard</a>';
+        var sidebar = '<a href="#" class="w3-bar-item w3-button w3-hover-white">Dashboard</a>';
         // Extra based on user
         var extra = "";
         // Courses
@@ -100,7 +100,7 @@
         };
 
         if(user.role == "Student"){
-            extra += '<form id="seeCourses">' +
+            extra += '<form id="getCourses" action="/enrollment">' +
                 '<input type="submit" style="background-color: #00bcd4; border: none" value="See all available course">' +
                 '</form>';
         }
@@ -114,8 +114,8 @@
        document.getElementById("main").innerHTML = htmlText;
        document.getElementById("sidebar").innerHTML = sidebar;
        document.getElementById("extra").innerHTML = extra;
-
     }
+
 </script>
     
 <script>
