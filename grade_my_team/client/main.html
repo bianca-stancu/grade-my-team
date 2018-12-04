@@ -92,11 +92,11 @@
         var i;
         for (i = 0; i < user.courses.length; i++) {
             htmlText += '<div class="w3-container" id="' + 'c' + i + '" style="margin-top:75px">' +
-                '<h1 class="w3-xxxlarge w3-text-cyan"><b>' + user.courses[i] + '</b></h1>' +
+                '<h1 class="w3-xxxlarge w3-text-cyan"><b>' + user.courses[i].name + '</b></h1>' +
                 '<hr style="width:50px;border:5px solid cyan" class="w3-round">' +
                 '</div>';
 
-            sidebar += '<a href="#c' + i + '" onclick="w3_close()" class="w3-bar-item w3-button w3-hover-white">' + user.courses[i] + '</a>';
+            sidebar += '<a href="#c' + i + '" onclick="w3_close()" class="w3-bar-item w3-button w3-hover-white">' + user.courses[i].name + '</a>';
         };
 
         if(user.role == "Student"){

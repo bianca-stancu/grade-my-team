@@ -72,7 +72,7 @@ app.post("/",function (req, res){
 });
 
 app.get('/profile', function (req, res, next) {
-    User.findById(req.session.userId)
+    User.findById(req.session.userId).populate("courses")
         .exec(function (error, user) {
             if (error) {
                 return next(error);
