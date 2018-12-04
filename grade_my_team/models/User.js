@@ -17,12 +17,13 @@ var mongoose = require('mongoose');
 var bcrypt = require('bcrypt');
 
 var nameSchema = new mongoose.Schema({
+    _id: mongoose.Schema.Types.ObjectId,
     firstName: { type: String},
     lastName: { type: String},
     username: { type: String},
     password: { type: String},
-    courses: { type: Array, default:[]},
-    assignments: {type: Array, default:[]},
+    courses: [{ type: mongoose.Schema.Types.ObjectId, ref: 'Course' , default:[]}],
+    assignments: [{ type: mongoose.Schema.Types.ObjectId, ref: 'Homework' , default:[]}],
     role: {type: String}
 });
 

@@ -11,12 +11,29 @@
 'use strict';
 
 var mongoose = require('mongoose');
+var User = require('./User');
 
 var courseSchema = new mongoose.Schema({
     name: { type: String},
-    professor: { type: String},
+    professor: { type: mongoose.Schema.Types.ObjectId, ref: 'User'},
+    professorName: { type: String},
     students: { type: Array, default:[]}
 });
+
+// Find Professor's id before saving
+courseSchema.pre('save', function (next) {
+    var course = this;
+    var prof = course.professorName.split(" ");
+    User.findOne({ firstName: prof[0], lastName: prof[1] }, function (err, user){
+        if (err) {
+            console.log("Course " + course.name + " can not be created because professor " + course.professorName + " does not exist.");
+            return next(err);
+        }
+        course.professor = user._id;
+        next();
+    });
+});
+
 var Course = mongoose.model("Course", courseSchema);
 
 module.exports = Course;

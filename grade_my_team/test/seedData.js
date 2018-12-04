@@ -9,51 +9,57 @@ var users = {
     name : 'User',
     data : [
         {
+            "_id"            : new mongoose.Types.ObjectId(),
             "firstName"      : "Davide",
             "lastName"       : "Matteri",
             "username"       : "davidem",
             "password"       : "123",
-            "courses"        : ["Distributed systems","User experience design"],
+            // "courses"        : ["Distributed systems","User experience design"],
             "role"           : "Student"
         },
         {
+            "_id"            : new mongoose.Types.ObjectId(),
             "firstName"      : "Paolo",
             "lastName"       : "Rossi",
             "username"       : "paolor",
             "password"       : "234",
-            "courses"        : ["Distributed systems","Algorithms"],
+            // "courses"        : ["Distributed systems","Algorithms"],
             "role"           : "Student"
         },
         {
+            "_id"            : new mongoose.Types.ObjectId(),
             "firstName"      : "Marco",
             "lastName"       : "Bianchi",
             "username"       : "marcob",
             "password"       : "345",
-            "courses"        : ["Algorithms"],
+            // "courses"        : ["Algorithms"],
             "role"           : "Student"
         },
         {
+            "_id"            : new mongoose.Types.ObjectId(),
             "firstName"      : "Fernando",
             "lastName"       : "Pedone",
             "username"       : "pedonep",
             "password"       : "abc",
-            "courses"        : ["Distributed systems"],
+            // "courses"        : ["Distributed systems"],
             "role"           : "Professor"
         },
         {
+            "_id"            : new mongoose.Types.ObjectId(),
             "firstName"      : "Monica",
             "lastName"       : "Landoni",
             "username"       : "monical",
             "password"       : "bcd",
-            "courses"        : ["User experience design"],
+            // "courses"        : ["User experience design"],
             "role"           : "Professor"
         },
         {
+            "_id"            : new mongoose.Types.ObjectId(),
             "firstName"      : "Antonio",
             "lastName"       : "Carzaniga",
             "username"       : "antonioc",
             "password"       : "cdf",
-            "courses"        : ["Algorithms"],
+            // "courses"        : ["Algorithms"],
             "role"           : "Professor"
         }]
 };
@@ -65,17 +71,17 @@ var courses = {
     name : "Course",
     data: [{
         "name"       : "Algorithms",
-        "professor"  : "Antonio Carzaniga",
+        "professorName"  : "Antonio Carzaniga",
         "students"   : []
     },
         {
             "name"       : "User experience design",
-            "professor"  : "Monica Landoni",
+            "professorName"  : "Monica Landoni",
             "students"   : []
         },
         {
             "name"       : "Distributed systems",
-            "professor"  : "Fernando Pedone",
+            "professorName"  : "Fernando Pedone",
             "students"   : []
         }
     ]

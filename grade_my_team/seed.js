@@ -1,7 +1,7 @@
 /**
  * Standalond db seed
  */
-console.log(process.cwd())
+// console.log(process.cwd())
 var seed = require('./test/seedDb').seed;
 
 seed(function(err, seedData){
