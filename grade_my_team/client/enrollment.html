@@ -131,7 +131,7 @@
         var sidebar = '<a href="/profile" class="w3-bar-item w3-button w3-hover-white">Dashboard</a>';
         var i;
         for (i = 0; i < user.courses.length; i++) {
-            sidebar += '<a href="#c' + i + '" onclick="w3_close()" class="w3-bar-item w3-button w3-hover-white">' + user.courses[i] + '</a>';
+            sidebar += '<a href="#c' + i + '" onclick="w3_close()" class="w3-bar-item w3-button w3-hover-white">' + user.courses[i].name + '</a>';
         };
         document.getElementById("username").innerHTML = user.firstName + " " + user.lastName;
         document.getElementById("sidebar").innerHTML = sidebar;

@@ -173,11 +173,62 @@ app.get('/getAllCourses', function (req, res, next) {
 });
 
 app.post('/enroll', function (req, res, next){
-    console.log("req " + req.body.enrollCourse)
+    Course.findOne({name: req.body.enrollCourse})
+        .exec(function (error, course) {
+            if (error) {
+                return next(error);
+            } else {
+                User.findOne({username: currentUser.username})
+                    .exec(function (error, user) {
+                        if (error) {
+                            return next(error);
+                        } else {
+                            if(user.courses.indexOf(course._id)!=-1){
+                                var err = new Error('You are already enrolled in this course! Go back!');
+                                err.status = 400;
+                                return next(err);
+                            }
+                            user.courses.push(course._id);
+                            user.save();
+                        }
+                    });
+                course.students.push(currentUser._id);
+                course.save();
+            }
+        });
 });
 
 app.post('/unenroll', function (req, res, next){
-    console.log("req " + req.body.unEnrollCourse)
+    Course.findOne({name: req.body.unEnrollCourse})
+        .exec(function (error, course) {
+            if (error) {
+                return next(error);
+            } else {
+                var index = course.students.indexOf(currentUser._id);
+                if (index > -1) {
+                    course.students.splice(index, 1);
+                }
+                else{
+                    var err = new Error('Not authorized! You are not enrolled in this course! Go back!');
+                    err.status = 400;
+                    return next(err);
+                }
+                course.save();
+
+                User.findOne({username: currentUser.username})
+                    .exec(function (error, user) {
+                        if (error) {
+                            return next(error);
+                        } else {
+                            var index = user.courses.indexOf(course._id);
+                            if (index > -1) {
+                                user.courses.splice(index, 1);
+                            }
+                            user.save();
+                        }
+                    });
+            }
+        });
 
 });
 
