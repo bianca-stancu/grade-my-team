@@ -46,6 +46,7 @@ app.post("/",function (req, res){
         req.body.role) {
 
         var myData = new User(req.body);
+        myData._id = new mongoose.Types.ObjectId();
         myData.save().then(function (user, err) {
             if (user) {
                 console.log("User successfluly saved to database");
@@ -100,6 +101,7 @@ app.get("/newCourse",function (req, res){
 
 app.post("/addcourse",function (req, res){
     var myData = new Course(req.body);
+    myData._id = new mongoose.Types.ObjectId();
     myData.save().then(function(item,bla){
         console.log("Course successfuly saved to database");
     });

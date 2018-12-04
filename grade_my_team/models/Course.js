@@ -24,9 +24,9 @@ var courseSchema = new mongoose.Schema({
 // Find Professor's id before saving
 courseSchema.pre('save', function (next) {
     var course = this;
-    if(!this.isModified('professor')){
-        return next();
-    }
+    // if(!this.isModified('professor')){
+    //     return next();
+    // }
     var prof = course.professorName.split(" ");
     User.findOne({ firstName: prof[0], lastName: prof[1] }, function (err, user){
         if (err) {
@@ -36,7 +36,7 @@ courseSchema.pre('save', function (next) {
         course.professor = user._id;
         user.courses.push(course._id);
         user.save();
-        next();
+        return next();
     });
 });
 
