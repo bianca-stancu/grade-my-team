@@ -51,12 +51,16 @@ nameSchema.statics.authenticate = function (username, password, callback) {
 //hashing a password before saving it to the database
 nameSchema.pre('save', function (next) {
     var user = this;
+
+    if(!this.isModified('password')){
+        return next();
+    }
     bcrypt.hash(user.password, 10, function (err, hash) {
         if (err) {
             return next(err);
         }
         user.password = hash;
-        next();
+        return next();
     })
 });
 

@@ -127,8 +127,8 @@
     <div class="row">
         <h2 style="text-align:center">Add new course</h2>
         <form method="post" action="/addcourse">
-            <input type="text" name="name" placeholder="Enter course name..." required>
-            <input type="text" name="professorName" placeholder="Enter professor name..." required>
+            <input id="profName" type="text" name="professorName" readonly="readonly">
+            <input type="text" name="name" placeholder="Enter course name..."required>
             <input type="submit" value="Create">
         </form>
     </div>
@@ -171,6 +171,9 @@
         };
         document.getElementById("username").innerHTML = user.firstName + " " + user.lastName;
         document.getElementById("sidebar").innerHTML = sidebar;
+
+        // Add professor's name in input form
+        document.getElementById("profName").value = user.firstName + " " + user.lastName;
     }
 
     window.onload = function() {

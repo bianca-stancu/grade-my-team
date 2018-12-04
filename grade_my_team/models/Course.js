@@ -14,6 +14,7 @@ var mongoose = require('mongoose');
 var User = require('./User');
 
 var courseSchema = new mongoose.Schema({
+    _id: mongoose.Schema.Types.ObjectId,
     name: { type: String},
     professor: { type: mongoose.Schema.Types.ObjectId, ref: 'User'},
     professorName: { type: String},
@@ -30,6 +31,8 @@ courseSchema.pre('save', function (next) {
             return next(err);
         }
         course.professor = user._id;
+        user.courses.push(course._id);
+        user.save();
         next();
     });
 });
