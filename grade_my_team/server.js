@@ -196,6 +196,7 @@ app.post('/enroll', function (req, res, next){
                 course.save();
             }
         });
+    return res.redirect('/profile');
 });
 
 app.post('/unenroll', function (req, res, next){
@@ -229,7 +230,7 @@ app.post('/unenroll', function (req, res, next){
                     });
             }
         });
-
+    return res.redirect('/profile');
 });
 
 app.listen(3000);
