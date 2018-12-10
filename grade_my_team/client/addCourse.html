@@ -123,12 +123,12 @@
 <div class="w3-overlay w3-hide-large " onclick="w3_close()" style="cursor:pointer" title="close side menu" id="myOverlay"></div>
 
 <!-- !PAGE CONTENT! -->
-<div class="container">
+<div class="container" >
     <div class="row">
         <h2 style="text-align:center">Add new course</h2>
         <form method="post" action="/addcourse">
-            <input id="profName" type="text" name="professorName" readonly="readonly">
             <input type="text" name="name" placeholder="Enter course name..."required>
+            <input id="profName"type="text" name="professorName" readonly="readonly">
             <input type="submit" value="Create">
         </form>
     </div>
@@ -167,7 +167,7 @@
         var sidebar = '<a href="/profile" class="w3-bar-item w3-button w3-hover-white">Dashboard</a>';
         var i;
         for (i = 0; i < user.courses.length; i++) {
-            sidebar += '<a href="#c' + i + '" onclick="w3_close()" class="w3-bar-item w3-button w3-hover-white">' + user.courses[i].name + '</a>';
+            sidebar += '<a href="#c' + i + '" onclick="w3_close()" class="w3-bar-item w3-button w3-hover-white">' + user.courses[i] + '</a>';
         };
         document.getElementById("username").innerHTML = user.firstName + " " + user.lastName;
         document.getElementById("sidebar").innerHTML = sidebar;

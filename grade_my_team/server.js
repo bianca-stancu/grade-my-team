@@ -30,6 +30,7 @@ mongoose.connect(config.mongoUrl + config.mongoDbName);
 
 var __dirname = process.cwd();
 var currentUser;
+var currentCourse;
 
 
 app.get('/',function(req,res){
@@ -73,7 +74,7 @@ app.post("/",function (req, res){
 });
 
 app.get('/profile', function (req, res, next) {
-    User.findById(req.session.userId).populate("courses")
+    User.findById(req.session.userId).populate("courses").populate("assignments")
         .exec(function (error, user) {
             if (error) {
                 return next(error);
@@ -91,15 +92,29 @@ app.get('/profile', function (req, res, next) {
         });
 });
 
-app.get('/signup', function (req, res) {
+app.get('/signup', function (req, res,next) {
     res.sendFile(__dirname + '/client/signup.html');
 });
 
-app.get("/newCourse",function (req, res){
+app.get("/newCourse",function (req, res,next){
     res.sendFile(__dirname + '/client/addCourse.html');
 });
 
-app.post("/addcourse",function (req, res){
+app.post("/addcourse",function (req, res, next){
+    //Check if course already exists
+    Course.find({}, function(err, courses) {
+        courses.forEach(function(course) {
+            console.log(course.name)
+            console.log(req.body.name)
+            if(course.name == req.body.name){
+                console.log("inside")
+                var err = new Error('Not authorized! Course already exists! Go back!');
+                err.status = 400;
+                return next(err);
+            }
+        });
+    });
+    //Create course
     var myData = new Course(req.body);
     myData._id = new mongoose.Types.ObjectId();
     myData.save().then(function(item,bla){
@@ -138,16 +153,22 @@ app.post('/fileupload', function (req, res, next) {
             var fileData = fs.readFileSync(newpath);
             const hm = new Homework({
                 type: 'text/plain',
-                data: fileData
+                data: fileData,
+                name: files.my_file.name,
+                uploader: currentUser._id,
+                course: currentCourse._id,
+                graded: false
+                // members:
+
             });
             hm.save().then(function (homework, err) {
                 if (homework) {
                     console.log("Homework successfuly saved to database");
                     // console.log("homework._id " + homework._id);
                     //Add homework's id to the user's assignments
-                    User.findOne({ username: currentUser.username }, function (err, doc){
-                        doc.assignments.push(homework._id);
-                        doc.save();
+                    User.findOne({ username: currentUser.username }, function (err, user){
+                        user.assignments.push(homework._id);
+                        user.save();
                     });
                 } else {
                     throw new Error('An error occured.');
@@ -156,8 +177,24 @@ app.post('/fileupload', function (req, res, next) {
             res.end();
         });
     });
+    // To update currentUser
+    User.findById(req.session.userId).populate("courses").populate("assignments")
+        .exec(function (error, user) {
+            if (error) {
+                return next(error);
+            } else {
+                if (user === null) {
+                    var err = new Error('Not authorized! Go back!');
+                    err.status = 400;
+                    return next(err);
+                }
+                else{
+                    currentUser = user;
+                }
+            }
+        });
 
-    return res.redirect('/profile');
+    return res.redirect('/courseView');
 });
 
 app.get('/enrollment', function (req, res, next) {
@@ -234,6 +271,26 @@ app.post('/unenroll', function (req, res, next){
         });
     return res.redirect('/profile');
 });
+
+app.post('/getCourseView',function(req,res){
+    // console.log(req.body.courseName);
+    // currentCourse = req.body.courseName;
+    Course.findOne({ name: req.body.courseName }, function (err, course){
+        currentCourse = course;
+    });
+    return res.redirect('/courseView');
+});
+
+
+app.get('/courseView',function(req,res){
+    return res.sendFile(__dirname + '/client/course.html');
+});
+
+app.get("/getHomoworks",function (req, res){
+    res.json([currentUser, currentCourse])
+
+});
+
 
 app.listen(3000);
 console.log("Running at Port 3000");

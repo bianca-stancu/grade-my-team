@@ -14,6 +14,9 @@
     body {font-size:16px;}
     .w3-half img{margin-bottom:-6px;margin-top:16px;opacity:0.8;cursor:pointer}
     .w3-half img:hover{opacity:1}
+    #mainContent{
+        /*background-image: linear-gradient(#00bcd4, white);*/
+    }
 </style>
 <body>
 
@@ -43,14 +46,8 @@
 <div class="w3-overlay w3-hide-large" onclick="w3_close()" style="cursor:pointer" title="close side menu" id="myOverlay"></div>
 
 <!-- !PAGE CONTENT! -->
-<div class="w3-main" style="margin-left:340px;margin-right:40px">
+<div id="mainContent" class="w3-main" style="margin-left:340px;margin-right:40px">
     <div id="main"></div>
-    <div>
-        <form action="/fileupload" method="post" enctype="multipart/form-data" id="my_form">
-            <input type="file" name="my_file" id="my_file" />
-            <input type="submit" name="submit" value="Submit" />
-        </form>
-    </div>
 </div>
 <!--  END PAGE CONTENT! -->
 
@@ -92,7 +89,11 @@
         var i;
         for (i = 0; i < user.courses.length; i++) {
             htmlText += '<div class="w3-container" id="' + 'c' + i + '" style="margin-top:75px">' +
-                '<h1 class="w3-xxxlarge w3-text-cyan"><b>' + user.courses[i].name + '</b></h1>' +
+//                '<h1 class="w3-xxxlarge w3-text-cyan"><b>' + user.courses[i].name + '</b></h1>' +
+                '<form method="post" id="getCourseView" action="/getCourseView">' +
+                '<input id="' + 'courseName' + i + '" type="text" name="courseName" hidden>' +
+                '<input type="submit" style="border: none" class="w3-xxxlarge w3-text-cyan" value="' +  user.courses[i].name + '">' +
+                '</form>' +
                 '<hr style="width:50px;border:5px solid cyan" class="w3-round">' +
                 '</div>';
 
@@ -114,6 +115,10 @@
        document.getElementById("main").innerHTML = htmlText;
        document.getElementById("sidebar").innerHTML = sidebar;
        document.getElementById("extra").innerHTML = extra;
+
+       for (i = 0; i < user.courses.length; i++) {
+           document.getElementById("courseName" + i).value = user.courses[i].name;
+       }
     }
 
 </script>
