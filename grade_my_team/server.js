@@ -31,6 +31,7 @@ mongoose.connect(config.mongoUrl + config.mongoDbName);
 var __dirname = process.cwd();
 var currentUser;
 var currentCourse;
+var allUsers;
 
 
 app.get('/',function(req,res){
@@ -288,9 +289,18 @@ app.get('/courseView',function(req,res){
 
 app.get("/getHomoworks",function (req, res){
     res.json([currentUser, currentCourse])
-
 });
 
+app.get("/getAllUsers",function (req,res) {
+    User.find({ role: "Student"}, function(err, users) {
+        var usernames = [];
+        users.forEach(function(user) {
+            usernames.push(user.username);
+        });
+        allUsers = usernames;
+    });
+    res.json(allUsers)
+});
 
 app.listen(3000);
 console.log("Running at Port 3000");

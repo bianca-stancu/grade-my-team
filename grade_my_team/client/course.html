@@ -94,6 +94,35 @@
                 margin-top: 0;
             }
         }
+        .autocomplete-items {
+            /*position: absolute;*/
+            border: 1px solid #d4d4d4;
+            /*border-bottom: none;*/
+            /*border-top: none;*/
+            z-index: 99;
+            /*position the autocomplete items to be the same width as the container:*/
+            /*top: 100%;*/
+            /*left: 0;*/
+            /*right: 0;*/
+        }
+
+        .autocomplete-items div {
+            padding: 10px;
+            cursor: pointer;
+            background-color: #fff;
+            border-bottom: 1px solid #d4d4d4;
+        }
+
+        /*when hovering an item:*/
+        .autocomplete-items div:hover {
+            background-color: #e9e9e9;
+        }
+
+        /*when navigating through the items using the arrow keys:*/
+        .autocomplete-active {
+            background-color: DodgerBlue !important;
+            color: #ffffff;
+        }
     </style>
     <body>
 
@@ -127,11 +156,16 @@
         <div id="intro"></div>
         <div>
             <h1 class="w3-xlarge w3-text-cyan"><b> Upload new homework</b></h1>
-            <form action="/fileupload" method="post" enctype="multipart/form-data" id="my_form">
-                <input type="file" name="my_file" id="my_file"/>
-                <input type="submit" name="submit" value="Submit" />
-            </form>
-            <hr style="width:50px;border:5px solid cyan" class="w3-round">
+            <div id="numMembersForm">
+                <form>
+                    Select number of members: <input style="border: solid; width: 10%" id="numMembers" type="number" name="quantity" max="9" min="1" value="1">
+                    <input type="button" style="border: solid; width: 10%" onclick="createforms()" value="Submit">
+                </form>
+                <hr style="width:50px;border:5px solid cyan" class="w3-round">
+            </div>
+            <div id="fileForm" hidden>
+            </div>
+
         </div>
         <div id="pendings"></div>
         <div id="graded"></div>
@@ -179,6 +213,10 @@
             var i;
             for (i = 0; i < user[0].courses.length; i++) {
                 sidebar += '<a href="#c' + i + '" onclick="w3_close()" class="w3-bar-item w3-button w3-hover-white">' + user[0].courses[i].name + '</a>';
+//                sidebar += '<form method="post" id="getCourseView" action="/getCourseView">' +
+//                    '<input id="' + 'courseName_' + i + '" type="text" name="courseName" hidden>' +
+//                    '<input type="submit" style="border: none" class="w3-bar-item w3-button w3-hover-white" value="' +  user[0].courses[i].name + '">' +
+//                    '</form>';
             };
             document.getElementById("username").innerHTML = user[0].firstName + " " + user[0].lastName;
             document.getElementById("sidebar").innerHTML = sidebar;
@@ -186,7 +224,8 @@
 
             for (i = 0; i < user[0].assignments.length; i++) {
                 if((user[0].assignments[i].course == user[1]._id)  && (user[0].assignments[i].graded == false)){
-                    pendingHm += '<p><b>' + user[0].assignments[i].name + '</b></p>';
+//                    pendingHm += '<p><b>' + user[0].assignments[i].name + '</b></p>';
+                    pendingHm += '<a href="../assignments/' + user[0].assignments[i].name +'" download>' + user[0].assignments[i].name + '</a><br/>';
                 }
                 else{
 //                    gradedHm += '<a href="../assignments/' + user[0].assignments[i].name +'" download>' + user[0].assignments[i].name + '</a><br/>';
@@ -195,12 +234,163 @@
             pendingHm += '<hr style="width:50px;border:5px solid cyan" class="w3-round">';
             document.getElementById("pendings").innerHTML = pendingHm;
             document.getElementById("graded").innerHTML = gradedHm;
+//            for (i = 0; i < user[0].courses.length; i++) {
+//                document.getElementById("courseName" + i).value = user[0].courses[i].name;
+//                document.getElementById("courseName_" + i).value = user[0].courses[i].name;
+//            }
 
         }
+
+        function createforms() {
+            $.ajax({
+                type: "GET",
+                url: "/getAllUsers",
+                cache: false,
+                success: function(res){
+                    var numberMembers = parseInt(document.getElementById("numMembers").value);
+                    $("#numMembersForm").hide();
+
+                    var content = '<form autocomplete="off" action="/fileupload" method="post" enctype="multipart/form-data" id="my_form" onsubmit="return validateForm()">' +
+                        '<div class="autocomplete">';
+
+                    for(var i = 0; i < numberMembers; i++){
+                        content +='<input style="border: solid; width: 10%" type="text" name="member_'+ i + '" id="member_' + i + '">';
+                    }
+
+                    content += '</div>' +
+                        '<input type="number" name="nmembers" id="nmembers" value="'+ numberMembers +'" hidden/>' +
+                        '<input type="file" name="my_file" id="my_file"/>' +
+                        '<input type="submit" name="submit" value="Submit" />' +
+                        '</form>' +
+                        '<hr style="width:50px;border:5px solid cyan" class="w3-round">';
+
+                    document.getElementById("fileForm").innerHTML = content;
+
+                    /*initiate the autocomplete function on the "myInput" element, and pass along the countries array as possible autocomplete values:*/
+                    for(var i = 0; i < numberMembers; i++){
+                        content +='<input style="border: solid; width: 10%" type="text" name="member_'+ i + '" id="member_' + i + '">';
+                        autocomplete(document.getElementById("member_" + i), res);
+                    }
+
+                    $("#fileForm").show();
+                }
+            });
+            return false;
+
+        }
+
+//        function validateForm() {
+//            var n = document.forms["my_form"]["nmembers"].value;
+//            for(var i = 0 ; i < n ; i++){
+//
+//            }
+////            if (x == "") {
+//                alert(x);
+//                return false;
+////            }
+//        }
 
         window.onload = function() {
             getHomoworks();
         };
+    </script>
+    <script>
+        function autocomplete(inp, arr) {
+            /*the autocomplete function takes two arguments,
+            the text field element and an array of possible autocompleted values:*/
+            var currentFocus;
+            /*execute a function when someone writes in the text field:*/
+            inp.addEventListener("input", function(e) {
+                var a, b, i, val = this.value;
+                /*close any already open lists of autocompleted values*/
+                closeAllLists();
+                if (!val) { return false;}
+                currentFocus = -1;
+                /*create a DIV element that will contain the items (values):*/
+                a = document.createElement("DIV");
+                a.setAttribute("id", this.id + "autocomplete-list");
+                a.setAttribute("class", "autocomplete-items");
+                /*append the DIV element as a child of the autocomplete container:*/
+                this.parentNode.appendChild(a);
+                /*for each item in the array...*/
+                for (i = 0; i < arr.length; i++) {
+                    /*check if the item starts with the same letters as the text field value:*/
+                    if (arr[i].substr(0, val.length).toUpperCase() == val.toUpperCase()) {
+                        /*create a DIV element for each matching element:*/
+                        b = document.createElement("DIV");
+                        /*make the matching letters bold:*/
+                        b.innerHTML = "<strong>" + arr[i].substr(0, val.length) + "</strong>";
+                        b.innerHTML += arr[i].substr(val.length);
+                        /*insert a input field that will hold the current array item's value:*/
+                        b.innerHTML += "<input type='hidden' value='" + arr[i] + "'>";
+                        /*execute a function when someone clicks on the item value (DIV element):*/
+                        b.addEventListener("click", function(e) {
+                            /*insert the value for the autocomplete text field:*/
+                            inp.value = this.getElementsByTagName("input")[0].value;
+                            /*close the list of autocompleted values,
+                            (or any other open lists of autocompleted values:*/
+                            closeAllLists();
+                        });
+                        a.appendChild(b);
+                    }
+                }
+            });
+            /*execute a function presses a key on the keyboard:*/
+            inp.addEventListener("keydown", function(e) {
+                var x = document.getElementById(this.id + "autocomplete-list");
+                if (x) x = x.getElementsByTagName("div");
+                if (e.keyCode == 40) {
+                    /*If the arrow DOWN key is pressed,
+                    increase the currentFocus variable:*/
+                    currentFocus++;
+                    /*and and make the current item more visible:*/
+                    addActive(x);
+                } else if (e.keyCode == 38) { //up
+                    /*If the arrow UP key is pressed,
+                    decrease the currentFocus variable:*/
+                    currentFocus--;
+                    /*and and make the current item more visible:*/
+                    addActive(x);
+                } else if (e.keyCode == 13) {
+                    /*If the ENTER key is pressed, prevent the form from being submitted,*/
+                    e.preventDefault();
+                    if (currentFocus > -1) {
+                        /*and simulate a click on the "active" item:*/
+                        if (x) x[currentFocus].click();
+                    }
+                }
+            });
+            function addActive(x) {
+                /*a function to classify an item as "active":*/
+                if (!x) return false;
+                /*start by removing the "active" class on all items:*/
+                removeActive(x);
+                if (currentFocus >= x.length) currentFocus = 0;
+                if (currentFocus < 0) currentFocus = (x.length - 1);
+                /*add class "autocomplete-active":*/
+                x[currentFocus].classList.add("autocomplete-active");
+            }
+            function removeActive(x) {
+                /*a function to remove the "active" class from all autocomplete items:*/
+                for (var i = 0; i < x.length; i++) {
+                    x[i].classList.remove("autocomplete-active");
+                }
+            }
+            function closeAllLists(elmnt) {
+                /*close all autocomplete lists in the document,
+                except the one passed as an argument:*/
+                var x = document.getElementsByClassName("autocomplete-items");
+                for (var i = 0; i < x.length; i++) {
+                    if (elmnt != x[i] && elmnt != inp) {
+                        x[i].parentNode.removeChild(x[i]);
+                    }
+                }
+            }
+            /*execute a function when someone clicks in the document:*/
+            document.addEventListener("click", function (e) {
+                closeAllLists(e.target);
+            });
+        }
     </script>
     </body>
 </html>

@@ -89,7 +89,6 @@
         var i;
         for (i = 0; i < user.courses.length; i++) {
             htmlText += '<div class="w3-container" id="' + 'c' + i + '" style="margin-top:75px">' +
-//                '<h1 class="w3-xxxlarge w3-text-cyan"><b>' + user.courses[i].name + '</b></h1>' +
                 '<form method="post" id="getCourseView" action="/getCourseView">' +
                 '<input id="' + 'courseName' + i + '" type="text" name="courseName" hidden>' +
                 '<input type="submit" style="border: none" class="w3-xxxlarge w3-text-cyan" value="' +  user.courses[i].name + '">' +
@@ -97,7 +96,11 @@
                 '<hr style="width:50px;border:5px solid cyan" class="w3-round">' +
                 '</div>';
 
-            sidebar += '<a href="#c' + i + '" onclick="w3_close()" class="w3-bar-item w3-button w3-hover-white">' + user.courses[i].name + '</a>';
+//            sidebar += '<a href="#c' + i + '" onclick="w3_close()" class="w3-bar-item w3-button w3-hover-white">' + user.courses[i].name + '</a>';
+            sidebar += '<form method="post" id="getCourseView" action="/getCourseView">' +
+                '<input id="' + 'courseName_' + i + '" type="text" name="courseName" hidden>' +
+                '<input type="submit" style="border: none" class="w3-bar-item w3-button w3-hover-white" value="' +  user.courses[i].name + '">' +
+                '</form>';
         };
 
         if(user.role == "Student"){
@@ -118,6 +121,7 @@
 
        for (i = 0; i < user.courses.length; i++) {
            document.getElementById("courseName" + i).value = user.courses[i].name;
+           document.getElementById("courseName_" + i).value = user.courses[i].name;
        }
     }
 
