@@ -7,32 +7,140 @@ contract Grading {
         uint grade;
     }
 
+    struct Metrics{
+        bytes32 student_id;
+        uint average_grade_to_self;
+        uint average_grade_to_others;
+        uint average_grade_from_others;
+    }
+
     constructor() public {
     }
 
-    bytes32[] assignment_ids;
+    mapping(bytes32 => Grade[]) private assignment_grades;
+    mapping(bytes32 => Grade[]) private professor_grades;
+    mapping(bytes32 => uint) private overall_grade;
+    mapping(bytes32 => Metrics) private student_metrics;
+    
 
-    mapping(bytes32 => Grade[]) private assignments;
-
-    function addAssignment (bytes32 _assignment_id) public {
-        Grade[] _init;
-        assignmentsCount++;
-        assignments[_assignment_id] = _init;
-    }
-
-    function addGradeTo(bytes32 _assignment_id, bytes32 _from, bytes32 _to, uint _grade) public {
-        Grade memory grade = Grade(_from,_to,_grade);
-        assignments[_assignment_id].push(grade);
-    }
-
-    uint public assignmentsCount;
-
-    function getGradesCount(bytes32 _assignment_id) public returns(uint[]) {
-        uint[] gradesCount;
-        for (uint i = 0; i < assignments[_assignment_id].length; i++) {                        
-            gradesCount.push(assignments[_assignment_id][i].grade);
+    function addOverallGrade(bytes32 _assignment_id, uint _grade) public{
+        if(overall_grade[_assignment_id] == 0) {
+            overall_grade[_assignment_id] = _grade;
         } 
-        gradesCount.push(assignments[_assignment_id].length);
-        return gradesCount;
     }
+
+    function getOverallGrade(bytes32 _assignment_id) public returns (uint) {
+        return overall_grade[_assignment_id];
+    }
+
+    function addToStudents(bytes32 _assignment_id, bytes32 _from, bytes32 _to, uint _grade) private {
+        if(assignment_grades[_assignment_id].length == 0) {
+            Grade[] _init;
+            assignment_grades[_assignment_id] = _init;
+        }
+        Grade memory grade = Grade(_from,_to,_grade);
+        assignment_grades[_assignment_id].push(grade);
+    }
+
+    function addToProfessors(bytes32 _assignment_id, bytes32 _from, bytes32 _to, uint _grade) private {
+        if(professor_grades[_assignment_id].length == 0) {
+            Grade[] _init;
+            professor_grades[_assignment_id] = _init;
+        }
+        Grade memory grade = Grade(_from,_to,_grade);
+        professor_grades[_assignment_id].push(grade);
+    }
+
+    function addGradeTo(bytes32 _assignment_id, bytes32 _from, bytes32 _to, uint _grade, bool _professor_grading) public {
+        if (_professor_grading == false){
+            if(_from == _to) {
+                updateMetricToSelf(_from, _grade);
+            }
+            updateMetricFromOthers(_to, _grade);
+            updateMetricToOthers(_from, _grade);
+            addToStudents(_assignment_id,_from,_to,_grade);
+        } else {
+            addToProfessors(_assignment_id,_from,_to,_grade);
+        }
+    }
+
+    function updateMetricToSelf(bytes32 user, uint _grade) private {
+        uint current_grade = getMetricAverageToSelf(user); 
+        if(current_grade == 0) {
+            setMetricAverageToSelf(user,_grade);
+        } else {
+            setMetricAverageToSelf(user,(current_grade + _grade) / 2);
+        }
+    }
+
+    function getMetricAverageToSelf(bytes32 user) public returns (uint) {
+        return student_metrics[user].average_grade_to_self;
+    }
+
+    function setMetricAverageToSelf(bytes32 user, uint value) private {
+        student_metrics[user].average_grade_to_self = value;
+    }
+
+    function updateMetricFromOthers(bytes32 user, uint _grade) private {
+        uint current_grade = getMetricAverageFromOthers(user); 
+        if(current_grade == 0) {
+            setMetricAverageFromOthers(user,_grade);
+        } else {
+            setMetricAverageFromOthers(user,(current_grade + _grade) / 2);
+        }
+    }
+
+    function getMetricAverageFromOthers(bytes32 user) public returns (uint) {
+        return student_metrics[user].average_grade_from_others;
+    }
+
+    function setMetricAverageFromOthers(bytes32 user, uint value) private {
+        student_metrics[user].average_grade_from_others = value;
+    }
+
+    function updateMetricToOthers(bytes32 user, uint _grade) private {
+        uint current_grade = getMetricAverageToOthers(user); 
+        if(current_grade == 0) {
+            setMetricAverageToOthers(user,_grade);
+        } else {
+            setMetricAverageToOthers(user,(current_grade + _grade) / 2);
+        }
+    }
+
+    function getMetricAverageToOthers(bytes32 user) public returns (uint) {
+        return student_metrics[user].average_grade_to_others;
+    }
+
+    function setMetricAverageToOthers(bytes32 user, uint value) private {
+        student_metrics[user].average_grade_to_others = value;
+    }
+
+    function getGradesStudents(bytes32 _assignment_id)
+        public
+        returns (bytes32[], uint[])
+    {
+        uint assignment_length = assignment_grades[_assignment_id].length;
+        bytes32[] memory students = new bytes32[](assignment_length);
+        uint[] memory grades = new uint[](assignment_length);
+        for (uint i = 0; i < assignment_length; i++) {
+            students[i] = assignment_grades[_assignment_id][i].to;
+            grades[i] = assignment_grades[_assignment_id][i].grade;
+        }
+        return (students, grades);
+    }
+
+    function getGradesProfessor(bytes32 _assignment_id)
+        public
+        returns (bytes32[], uint[]) {
+        uint assignment_length = professor_grades[_assignment_id].length;
+        bytes32[] memory students = new bytes32[](assignment_length);
+        uint[] memory grades = new uint[](assignment_length);
+        for (uint i = 0; i < assignment_length; i++) {
+            students[i] = professor_grades[_assignment_id][i].to;
+            grades[i] = professor_grades[_assignment_id][i].grade;
+        }
+        return (students, grades);
+    }
+
+    //TODO: method to get grade and its fairness
 }

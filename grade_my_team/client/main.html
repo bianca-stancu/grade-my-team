@@ -109,10 +109,24 @@
         var Grading = TruffleContract(grading_json );
         Grading.setProvider(new Web3.providers.HttpProvider("http://localhost:8545"));
         Grading.deployed().then(function(instance) {
-            //instance.addAssignment("assignment1").then(function(result) {});
-            //instance.assignmentsCount().then(balance => {console.log(balance.toNumber())});       
-            //instance.addGradeTo("assignment1","bianca","jelena",10,{from: web3.eth.accounts[0], gas:3000000});
-            //instance.getGradesCount.call("assignment1",{from: web3.eth.accounts[0], gas:3000000}).then(result => console.log(Array.from(result)));  
+           instance.addGradeTo("assignment1","bianca","jelena",10, false ,{from: web3.eth.accounts[0], gas:3000000});
+            instance.addGradeTo("assignment1","jelena","jelena",9, false ,{from: web3.eth.accounts[0], gas:3000000});
+            instance.addGradeTo("assignment1","bianca","bianca",9, false ,{from: web3.eth.accounts[0], gas:3000000});
+            instance.addGradeTo("assignment2","bianca","jelena",5, false ,{from: web3.eth.accounts[0], gas:3000000});
+            instance.addGradeTo("assignment2","jelena","jelena",5, false ,{from: web3.eth.accounts[0], gas:3000000});
+            instance.addGradeTo("assignment2","bianca","bianca",5, false ,{from: web3.eth.accounts[0], gas:3000000});
+            instance.addGradeTo("assignment1","prof","bianca",6, true ,{from: web3.eth.accounts[0], gas:3000000});
+           instance.addGradeTo("assignment2","prof","bianca",7, true ,{from: web3.eth.accounts[0], gas:3000000});
+            instance.addOverallGrade("assignment2",8,{from: web3.eth.accounts[0], gas:3000000});
+            instance.getOverallGrade.call("assignment2",{from: web3.eth.accounts[0], gas:3000000}).then(result => console.log(result));
+            instance.getGradesStudents.call("assignment1",{from: web3.eth.accounts[0], gas:3000000}).then(result => console.log(Array.from(result[0])));
+            instance.getGradesProfessor.call("assignment1",{from: web3.eth.accounts[0], gas:3000000}).then(result => console.log(Array.from(result[0])));
+            instance.getGradesStudents.call("assignment1",{from: web3.eth.accounts[0], gas:3000000}).then(result => console.log(web3.toAscii(Array.from(result[0])[0])));
+            instance.getGradesProfessor.call("assignment1",{from: web3.eth.accounts[0], gas:3000000}).then(result => console.log(web3.toAscii(Array.from(result[0])[0])));  
+            instance.getMetricAverageToOthers.call("bianca",{from: web3.eth.accounts[0], gas:3000000}).then(result => console.log(result.toNumber())); 
+           instance.getMetricAverageFromOthers.call("bianca",{from: web3.eth.accounts[0], gas:3000000}).then(result => console.log(result.toNumber())); 
+           instance.getMetricAverageToSelf.call("bianca",{from: web3.eth.accounts[0], gas:3000000}).then(result => console.log(result.toNumber())); 
+            balance = web3.eth.getBalance(web3.eth.accounts[0], function(error, result){ 
             balance = web3.eth.getBalance(web3.eth.accounts[0], function(error, result){
                 if(!error)
                     console.log(JSON.stringify(result));
@@ -121,8 +135,8 @@
             });
         });
       });
+    });
     }
 </script>
-
 </body>
 </html>
