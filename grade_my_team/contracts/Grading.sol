@@ -142,5 +142,48 @@ contract Grading {
         return (students, grades);
     }
 
-    //TODO: method to get grade and its fairness
+    function getGradeFor(bytes32 _assignment_id, bytes32 _student_id) private returns (uint){
+        uint assignment_length_students = assignment_grades[_assignment_id].length;
+        uint student_average = 0;
+        uint count = 0;
+        for (uint i = 0; i < assignment_length_students; i++) {
+            if (assignment_grades[_assignment_id][i].to == _student_id) {
+                student_average = student_average + assignment_grades[_assignment_id][i].grade;
+                count = count + 1;
+            }
+        }
+        student_average = student_average / count;
+        return student_average; 
+    }
+
+    function getProfessorGrade(bytes32 _assignment_id, bytes32 _student_id) private returns (uint){
+        uint assignment_length_prof = professor_grades[_assignment_id].length;
+        for (uint j = 0; j < assignment_length_prof; j++) {
+            if (professor_grades[_assignment_id][j].to == _student_id) {
+                return professor_grades[_assignment_id][j].grade;
+            }
+        }
+    }
+
+    function getMalus(int grade) private returns (uint){
+        if (grade < 0){ 
+            if(grade <= -10 && grade > -25){
+                return 5;
+            } else if (grade <= -25 && grade > -50){
+                return 10;
+            } else if (grade <= -50){
+                return 15;
+            } 
+        }
+        return 0;
+    }
+
+    function getGrade(bytes32 _assignment_id, bytes32 _student_id) public returns (uint, uint){
+        uint student_average = getGradeFor(_assignment_id, _student_id);
+        uint malus = getMalus((int(student_average) - 10) * 10);
+        uint overall = overall_grade[_assignment_id];
+        uint prof_grade = getProfessorGrade(_assignment_id, _student_id);
+        uint fair_grade = overall - malus;
+        return (prof_grade,fair_grade);
+    }
 }
