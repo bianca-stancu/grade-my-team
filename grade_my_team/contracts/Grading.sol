@@ -115,20 +115,6 @@ contract Grading {
         student_metrics[user].average_grade_to_others = value;
     }
 
-    function getGradesStudents(bytes32 _assignment_id)
-        public
-        returns (bytes32[], uint[])
-    {
-        uint assignment_length = assignment_grades[_assignment_id].length;
-        bytes32[] memory students = new bytes32[](assignment_length);
-        uint[] memory grades = new uint[](assignment_length);
-        for (uint i = 0; i < assignment_length; i++) {
-            students[i] = assignment_grades[_assignment_id][i].to;
-            grades[i] = assignment_grades[_assignment_id][i].grade;
-        }
-        return (students, grades);
-    }
-
     function getGradesProfessor(bytes32 _assignment_id)
         public
         returns (bytes32[], uint[]) {
@@ -142,7 +128,7 @@ contract Grading {
         return (students, grades);
     }
 
-    function getGradeFor(bytes32 _assignment_id, bytes32 _student_id) private returns (uint){
+    function getGradeFor(bytes32 _assignment_id, bytes32 _student_id) public returns (uint){
         uint assignment_length_students = assignment_grades[_assignment_id].length;
         uint student_average = 0;
         uint count = 0;
