@@ -1,0 +1,183 @@
+<!DOCTYPE html>
+<html lang="en">
+<title>ICorsi4 - All courses</title>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<link rel="stylesheet" href="https://www.w3schools.com/w3css/4/w3.css">
+<link rel="stylesheet" href="https://fonts.googleapis.com/css?family=Poppins">
+<script src="../node_modules/web3/dist/web3.min.js"></script>
+<script src="../node_modules/truffle-contract/dist/truffle-contract.js"></script>
+<script src="https://ajax.googleapis.com/ajax/libs/jquery/1.12.0/jquery.min.js"> </script>
+
+<style>
+    body,h1,h2,h3,h4,h5 {font-family: "Poppins", sans-serif}
+    body {font-size:16px;}
+    .w3-half img{margin-bottom:-6px;margin-top:16px;opacity:0.8;cursor:pointer}
+    .w3-half img:hover{opacity:1}
+
+    /* style the container */
+    .container {
+        margin: auto;
+        width: 50%;
+        border-radius: 5px;
+        background-color: #f2f2f2;
+        padding: 20px 70px 50px 70px;
+        position: fixed;
+    }
+
+    /* style inputs and link buttons */
+    input,
+    .btn {
+        width: 50%;
+        padding: 12px;
+        border: none;
+        border-radius: 4px;
+        margin: 5px 0;
+        opacity: 0.85;
+        display: inline-block;
+        font-size: 17px;
+        line-height: 20px;
+        text-decoration: none; /* remove underline from anchors */
+    }
+
+    input:hover,
+    .btn:hover {
+        opacity: 1;
+    }
+
+    /* style the submit button */
+    input[type=submit] {
+        background-color: cyan;
+        color: white;
+        cursor: pointer;
+    }
+
+    input[type=submit]:hover {
+        background-color: cyan;
+    }
+
+    /* Two-column layout */
+    .col {
+        float: left;
+        width: 50%;
+        margin: auto;
+        padding: 0 50px;
+        margin-top: 6px;
+    }
+
+    /* Clear floats after the columns */
+    .row:after {
+        content: "";
+        display: table;
+        clear: both;
+    }
+    /* bottom container */
+    .bottom-container {
+        width: 40%;
+        text-align: center;
+        background-color: #666;
+        border-radius: 0px 0px 4px 4px;
+    }
+</style>
+<body>
+
+<!-- Sidebar/menu -->
+<nav class="w3-sidebar w3-cyan w3-collapse w3-top w3-large w3-padding" style="z-index:3;width:300px;font-weight:bold;" id="mySidebar"><br>
+    <a href="javascript:void(0)" onclick="w3_close()" class="w3-button w3-hide-large w3-display-topleft" style="width:100%;font-size:22px">Close Menu</a>
+    <div class="w3-container">
+        <h3 class="w3-padding-64"><b>ICorsi4 <br/>Online Grading System</b></h3>
+        <p class="w3-text-white" id="username"></p>
+    </div>
+    <div class="w3-bar-block" id="sidebar"></div>
+    <div class="w3-container w3-padding-64" id="extra"></div>
+    <div class="w3-container w3-padding-64">
+        <form action="/logout">
+            <input type="submit" style="background-color: #00bcd4; border: none" value="Logout">
+        </form>
+    </div>
+</nav>
+
+<!-- Top menu on small screens -->
+<header class="w3-container w3-top w3-hide-large w3-cyan w3-xlarge w3-padding">
+    <a href="javascript:void(0)" class="w3-button w3-cyan w3-margin-right" onclick="w3_open()">☰</a>
+    <span>ICorsi4</span>
+</header>
+
+<!-- Overlay effect when opening sidebar on small screens -->
+<div class="w3-overlay w3-hide-large" onclick="w3_close()" style="cursor:pointer" title="close side menu" id="myOverlay"></div>
+
+<!-- !PAGE CONTENT! -->
+<div class="w3-main" style="margin-left:340px;margin-right:40px">
+    <div id="main"></div>
+</div>
+<!--  END PAGE CONTENT! -->
+
+<!-- W3.CSS Container -->
+<div class="w3-light-grey w3-container w3-padding-32 w3-bottom" style="margin-top:75px;padding-right:58px"><p class="w3-right"> &copy; 2018 Distibuted systems. All rights reserved | Design by<br/> Jelena Budakovic, Bianca Stancu and Davide Matteri</p></div>
+<script>
+    function getUser(){
+        $.ajax({
+            type: "GET",
+            url: "/getUser",
+            cache: false,
+            success: function(res){
+                fillPage(res);
+            }
+        });
+        return false;
+    }
+    function fillPage(user) {
+        // Sidebar/menu
+        var sidebar = '<a href="/profile" class="w3-bar-item w3-button w3-hover-white">Dashboard</a>';
+        var i;
+        for (i = 0; i < user.courses.length; i++) {
+            sidebar += '<a href="#c' + i + '" onclick="w3_close()" class="w3-bar-item w3-button w3-hover-white">' + user.courses[i].name + '</a>';
+        };
+        document.getElementById("username").innerHTML = user.firstName + " " + user.lastName;
+        document.getElementById("sidebar").innerHTML = sidebar;
+    }
+
+    function getAllCourses() {
+        $.ajax({
+            type: "GET",
+            url: "/getAllCourses",
+            cache: false,
+            success: function(res){
+                var htmlText = "";
+                for (var i = 0; i < res.length; i++){
+                    htmlText += '<div class="w3-container" id="' + 'c' + i + '" style="margin-top:75px">' +
+                                '<h1 class="w3-xxxlarge w3-text-cyan"><b>' + res[i] + '</b></h1>' +
+                                '<hr style="width:50px;border:5px solid cyan" class="w3-round">' +
+                                '</div>';
+                    htmlText += '<div>' +
+                                    '<div class="bottom-container">' +
+                                        '<div class="row">' +
+                                            '<div class="col">' +
+                                                '<form method="post" action="/enroll">' +
+                                                    '<input type="text" name="enrollCourse" value="' + res[i] +'" hidden>' +
+                                                    '<input type="submit" style="background-color: #666;" value="Enroll">' +
+                                                '</form>' +
+                                            '</div>' +
+                                        '<div class="col">' +
+                                            '<form method="post" action="/unenroll">' +
+                                                '<input type="text" name="unEnrollCourse" value="' + res[i] +'" hidden>' +
+                                                '<input type="submit" style="background-color: #666;" value="Unenroll">' +
+                                            '</form>' +
+                                        '</div>' +
+                                    '</div>' +
+                                '</div>'
+                }
+                document.getElementById("main").innerHTML = htmlText;
+            }
+        });
+        return false;
+    }
+
+    window.onload = function() {
+        getUser();
+        getAllCourses();
+    };
+</script>
+
+</body>
+</html>
