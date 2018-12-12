@@ -1,0 +1,214 @@
+<!DOCTYPE html>
+<html lang="en">
+<title>ICorsi4 - Add new course</title>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<link rel="stylesheet" href="https://www.w3schools.com/w3css/4/w3.css">
+<link rel="stylesheet" href="https://fonts.googleapis.com/css?family=Poppins">
+<script src="https://ajax.googleapis.com/ajax/libs/jquery/1.12.0/jquery.min.js"> </script>
+<style>
+    body,h1,h2,h3,h4,h5 {font-family: "Poppins", sans-serif}
+    body {font-size:16px;}
+    .w3-half img{margin-bottom:-6px;margin-top:16px;opacity:0.8;cursor:pointer}
+    .w3-half img:hover{opacity:1}
+
+    * {
+        box-sizing: border-box;
+    }
+    .center {
+        margin: auto;
+        width: 60%;
+        border: 3px solid #73AD21;
+        padding: 10px;
+    }
+
+    /* style the container */
+    .container {
+        margin: auto;
+        width: 50%;
+        border-radius: 5px;
+        background-color: #f2f2f2;
+        padding: 20px 70px 50px 70px;
+        position: fixed;
+        top: 30%;
+        left: 50%;
+        transform: translate(-30%, -50%);
+        -webkit-transform: translate(-30%, -50%);
+        -moz-transform: translate(-30%, -50%);
+        -o-transform: translate(-30%, -50%);
+        -ms-transform: translate(-30%, -50%);
+    }
+
+    /* style inputs and link buttons */
+    input,
+    .btn {
+        width: 100%;
+        padding: 12px;
+        border: none;
+        border-radius: 4px;
+        margin: 5px 0;
+        opacity: 0.85;
+        display: inline-block;
+        font-size: 17px;
+        line-height: 20px;
+        text-decoration: none; /* remove underline from anchors */
+    }
+
+    input:hover,
+    .btn:hover {
+        opacity: 1;
+    }
+
+    /* style the submit button */
+    input[type=submit] {
+        background-color: cyan;
+        color: white;
+        cursor: pointer;
+    }
+
+    input[type=submit]:hover {
+        background-color: cyan;
+    }
+
+    /* Two-column layout */
+    .col {
+        float: left;
+        width: 50%;
+        margin: auto;
+        padding: 0 50px;
+        margin-top: 6px;
+    }
+
+    /* Clear floats after the columns */
+    .row:after {
+        content: "";
+        display: table;
+        clear: both;
+    }
+
+    /* bottom container */
+    .bottom-container {
+        text-align: center;
+        background-color: #666;
+        border-radius: 0px 0px 4px 4px;
+    }
+
+    /* Responsive layout - when the screen is less than 650px wide, make the two columns stack on top of each other instead of next to each other */
+    @media screen and (max-width: 650px) {
+        .col {
+            width: 100%;
+            margin-top: 0;
+        }
+    }
+</style>
+<body>
+
+<!-- Sidebar/menu -->
+<nav class="w3-sidebar w3-cyan w3-collapse w3-top w3-large w3-padding" style="z-index:3;width:300px;font-weight:bold;" id="mySidebar"><br>
+    <a href="javascript:void(0)" onclick="w3_close()" class="w3-button w3-hide-large w3-display-topleft" style="width:100%;font-size:22px">Close Menu</a>
+    <div class="w3-container">
+        <h3 class="w3-padding-64"><b>ICorsi4 <br/>Online Grading System</b></h3>
+        <p class="w3-text-white" id="username"></p>
+    </div>
+    <div class="w3-bar-block" id="sidebar"></div>
+    <div class="w3-container w3-padding-64" id="extra"></div>
+    <div class="w3-container w3-padding-64">
+        <form action="/logout">
+            <input type="submit" style="background-color: #00bcd4; border: none" value="Logout">
+        </form>
+    </div>
+</nav>
+
+<!-- Top menu on small screens -->
+<header class="w3-container w3-top w3-hide-large w3-cyan w3-xlarge w3-padding">
+    <a href="javascript:void(0)" class="w3-button w3-cyan w3-margin-right" onclick="w3_open()">☰</a>
+    <span>ICorsi4</span>
+</header>
+
+<!-- Overlay effect when opening sidebar on small screens -->
+<div class="w3-overlay w3-hide-large " onclick="w3_close()" style="cursor:pointer" title="close side menu" id="myOverlay"></div>
+
+<!-- !PAGE CONTENT! -->
+<div class="container" >
+    <div class="row">
+        <h2 style="text-align:center">Grade your team</h2>
+        <form method="post" action="/grade" id="myForm">
+
+        </form>
+    </div>
+</div>
+
+<!-- W3.CSS Container -->
+<div class="w3-light-grey w3-container w3-padding-32 w3-bottom" ><p class="w3-right"> &copy; 2018 Distibuted systems. All rights reserved | Design by<br/> Jelena Budakovic, Bianca Stancu and Davide Matteri</p></div>
+
+<script>
+    // Script to open and close sidebar
+    function w3_open() {
+        document.getElementById("mySidebar").style.display = "block";
+        document.getElementById("myOverlay").style.display = "block";
+    }
+
+    function w3_close() {
+        document.getElementById("mySidebar").style.display = "none";
+        document.getElementById("myOverlay").style.display = "none";
+    }
+
+</script>
+<script>
+    function getUser(){
+        $.ajax({
+            type: "GET",
+            url: "/getUser",
+            cache: false,
+            success: function(res){
+                fillPage(res);
+            }
+        });
+        return false;
+    }
+
+    function fillPage(user) {
+        // Sidebar/menu
+        var sidebar = '<a href="/profile" class="w3-bar-item w3-button w3-hover-white">Dashboard</a>';
+        var i;
+        for (i = 0; i < user.courses.length; i++) {
+            sidebar += '<a href="#c' + i + '" onclick="w3_close()" class="w3-bar-item w3-button w3-hover-white">' + user.courses[i].name + '</a>';
+        };
+        document.getElementById("username").innerHTML = user.firstName + " " + user.lastName;
+        document.getElementById("sidebar").innerHTML = sidebar;
+    }
+
+    function createform() {
+        $.ajax({
+            type: "GET",
+            url: "/getHm",
+            cache: false,
+            success: function(res){
+                var content = '<p>Distribute the '+ res[0].members.length*10 +' points between the team members</p>';
+
+                for(var i = 0; i < res[0].members.length; i++){
+                    content += '<input id="studName_' + i + '" type="text" name="studName_' + i + '" readonly="readonly">' +
+                        '<input style="border: solid; width: 10%" type="number" name="studGrade_'+ i + '" id="studGrade_' + i + '" min="0" value="10" required>';
+                }
+
+                content += '<input type="submit" value="Create">';
+
+                document.getElementById("myForm").innerHTML = content;
+
+                for(var i = 0; i < res[0].members.length; i++){
+                    document.getElementById("studName_" + i).value = res[1][i];
+                }
+
+            }
+        });
+        return false;
+
+    }
+
+    window.onload = function() {
+        getUser();
+        createform();
+    };
+</script>
+</body>
+</html>

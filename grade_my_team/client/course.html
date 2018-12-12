@@ -11,6 +11,9 @@
         body {font-size:16px;}
         .w3-half img{margin-bottom:-6px;margin-top:16px;opacity:0.8;cursor:pointer}
         .w3-half img:hover{opacity:1}
+        div{
+            overflow: auto;
+        }
 
         * {
             box-sizing: border-box;
@@ -173,7 +176,7 @@
     <!--  END PAGE CONTENT! -->
 
     <!-- W3.CSS Container -->
-    <div class="w3-light-grey w3-container w3-padding-32 w3-bottom" style="margin-top:75px;padding-right:58px"><p class="w3-right"> &copy; 2018 Distibuted systems. All rights reserved | Design by<br/> Jelena Budakovic, Bianca Stancu and Davide Matteri</p></div>
+    <div class="w3-light-grey w3-bottom" ><p class="w3-right"> &copy; 2018 Distibuted systems. All rights reserved | Design by<br/> Jelena Budakovic, Bianca Stancu and Davide Matteri</p></div>
 
     <script>
         // Script to open and close sidebar
@@ -223,15 +226,20 @@
             document.getElementById("intro").innerHTML = courseName;
 
             for (i = 0; i < user[0].assignments.length; i++) {
-                if((user[0].assignments[i].course == user[1]._id)  && (user[0].assignments[i].graded == false)){
+                if((user[0].assignments[i].course == user[1]._id)  && (user[0].assignments[i].gradedmembers.length < user[0].assignments[i].members.length)){
 //                    pendingHm += '<p><b>' + user[0].assignments[i].name + '</b></p>';
-                    pendingHm += '<a href="../assignments/' + user[0].assignments[i].name +'" download>' + user[0].assignments[i].name + '</a><br/>';
+                    pendingHm += '<a href="../assignments/' + user[0].assignments[i].name +'" download>' + user[0].assignments[i].name + '</a><br/>' +
+                                 '<form method="post" action="/goGrading" id="myForm">' +
+                                 '<input id="ass_' + i + '" type="text" name="ass_" value="'+ user[0].assignments[i]._id +'" hidden>' +
+                                 '<input type="submit" style="background-color: #00bcd4; border: none" value="Grade">' +
+                                 '</form>';
                 }
                 else{
-//                    gradedHm += '<a href="../assignments/' + user[0].assignments[i].name +'" download>' + user[0].assignments[i].name + '</a><br/>';
+                    gradedHm += '<a href="../assignments/' + user[0].assignments[i].name +'" download>' + user[0].assignments[i].name + '</a><br/>';
                 }
             };
             pendingHm += '<hr style="width:50px;border:5px solid cyan" class="w3-round">';
+            gradedHm += '<hr style="width:50px;border:5px solid cyan" class="w3-round">';
             document.getElementById("pendings").innerHTML = pendingHm;
             document.getElementById("graded").innerHTML = gradedHm;
 //            for (i = 0; i < user[0].courses.length; i++) {

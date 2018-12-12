@@ -32,7 +32,8 @@ var __dirname = process.cwd();
 var currentUser;
 var currentCourse;
 var allUsers;
-
+var currentHm;
+var teamMembersNames = [];
 
 app.get('/',function(req,res){
     return res.sendFile(__dirname + '/client/login.html');
@@ -105,10 +106,7 @@ app.post("/addcourse",function (req, res, next){
     //Check if course already exists
     Course.find({}, function(err, courses) {
         courses.forEach(function(course) {
-            console.log(course.name)
-            console.log(req.body.name)
             if(course.name == req.body.name){
-                console.log("inside")
                 var err = new Error('Not authorized! Course already exists! Go back!');
                 err.status = 400;
                 return next(err);
@@ -146,56 +144,70 @@ app.post('/fileupload', function (req, res, next) {
     var form = new formidable.IncomingForm();
     var newpath;
     form.parse(req, function (err, fields, files) {
+        var members = Object.values(fields).slice(0, Object.values(fields).length-2);
+        // console.log(members)
         var oldpath = files.my_file.path;
         newpath = __dirname + '/assignments/' + files.my_file.name;
         fs.rename(oldpath, newpath, function (err) {
             if (err) throw err;
             // Store file to MongoDb
             var fileData = fs.readFileSync(newpath);
-            const hm = new Homework({
+            var hm = new Homework({
                 type: 'text/plain',
                 data: fileData,
                 name: files.my_file.name,
                 uploader: currentUser._id,
                 course: currentCourse._id,
-                graded: false
-                // members:
+                graded: false,
+                members: [],
+                gradedmembers: []
+            });
 
-            });
-            hm.save().then(function (homework, err) {
-                if (homework) {
-                    console.log("Homework successfuly saved to database");
-                    // console.log("homework._id " + homework._id);
-                    //Add homework's id to the user's assignments
-                    User.findOne({ username: currentUser.username }, function (err, user){
-                        user.assignments.push(homework._id);
-                        user.save();
+            for(var i=0; i< members.length; i++){
+                User.findOne({ username: members[i] }, function (err, user){
+                    hm.members.push(user._id);
+                });
+            }
+            setTimeout(function() {
+                hm.save().then(function (homework, err) {
+                    if (homework) {
+                        // this_id = homework._id;
+                        console.log("Homework successfuly saved to database");
+                        // console.log("homework._id " + homework._id);
+                        //Add homework's id to the user's assignments
+                        User.findOne({ username: currentUser.username }, function (err, user){
+                            user.assignments.push(homework._id);
+                            user.save();
+                        });
+                    } else {
+                        throw new Error('An error occured.');
+                    }
+                });
+
+                // To update currentUser
+                User.findById(req.session.userId).populate("courses").populate("assignments")
+                    .exec(function (error, user) {
+                        if (error) {
+                            return next(error);
+                        } else {
+                            if (user === null) {
+                                var err = new Error('Not authorized! Go back!');
+                                err.status = 400;
+                                return next(err);
+                            }
+                            else{
+                                currentUser = user;
+                            }
+                        }
                     });
-                } else {
-                    throw new Error('An error occured.');
-                }
-            });
-            res.end();
+                return res.redirect('/courseView');
+            }, 2000);
+
+
         });
     });
-    // To update currentUser
-    User.findById(req.session.userId).populate("courses").populate("assignments")
-        .exec(function (error, user) {
-            if (error) {
-                return next(error);
-            } else {
-                if (user === null) {
-                    var err = new Error('Not authorized! Go back!');
-                    err.status = 400;
-                    return next(err);
-                }
-                else{
-                    currentUser = user;
-                }
-            }
-        });
 
-    return res.redirect('/courseView');
+
 });
 
 app.get('/enrollment', function (req, res, next) {
@@ -274,8 +286,6 @@ app.post('/unenroll', function (req, res, next){
 });
 
 app.post('/getCourseView',function(req,res){
-    // console.log(req.body.courseName);
-    // currentCourse = req.body.courseName;
     Course.findOne({ name: req.body.courseName }, function (err, course){
         currentCourse = course;
     });
@@ -300,6 +310,28 @@ app.get("/getAllUsers",function (req,res) {
         allUsers = usernames;
     });
     res.json(allUsers)
+});
+
+app.post("/goGrading", function (req,res) {
+    teamMembersNames = [];
+    Homework.findOne({ _id: req.body.ass_}, function(err, hm) {
+        // console.log(hm)
+        for(var i=0; i<hm.members.length;i++){ //new mongoose.mongo.ObjectId('56cb91bdc3464f14678934ca');
+            User.findOne({ _id: new mongoose.mongo.ObjectId(hm.members[i])}, function(err, user) {
+                teamMembersNames.push(user.username);
+            });
+        }
+        currentHm = hm;
+    });
+    return res.redirect('/gradeView');
+});
+
+app.get('/gradeView',function(req,res){
+    return res.sendFile(__dirname + '/client/grade.html');
+});
+
+app.get("/getHm",function (req,res) {
+    res.json([currentHm,teamMembersNames])
 });
 
 app.listen(3000);
