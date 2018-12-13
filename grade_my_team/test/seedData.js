@@ -73,19 +73,22 @@ var courses = {
         "_id"            : new mongoose.Types.ObjectId(),
         "name"       : "Algorithms",
         "professorName"  : "Antonio Carzaniga",
-        "students"   : []
+        "students"   : [],
+        "professor" : new mongoose.Types.ObjectId()
     },
         {
             "_id"            : new mongoose.Types.ObjectId(),
             "name"       : "User experience design",
             "professorName"  : "Monica Landoni",
-            "students"   : []
+            "students"   : [],
+            "professor" : new mongoose.Types.ObjectId()
         },
         {
             "_id"            : new mongoose.Types.ObjectId(),
             "name"       : "Distributed systems",
             "professorName"  : "Fernando Pedone",
-            "students"   : []
+            "students"   : [],
+            "professor" : new mongoose.Types.ObjectId()
         }
     ]
 };

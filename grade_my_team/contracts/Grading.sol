@@ -22,7 +22,6 @@ contract Grading {
     mapping(bytes32 => uint) private overall_grade;
     mapping(bytes32 => Metrics) private student_metrics;
     
-
     function addOverallGrade(bytes32 _assignment_id, uint _grade) public{
         if(overall_grade[_assignment_id] == 0) {
             overall_grade[_assignment_id] = _grade;
@@ -113,6 +112,10 @@ contract Grading {
 
     function setMetricAverageToOthers(bytes32 user, uint value) private {
         student_metrics[user].average_grade_to_others = value;
+    }
+
+    function getMetrics(bytes32 user) public returns (uint,uint,uint){
+        return (getMetricAverageToSelf(user), getMetricAverageFromOthers(user),getMetricAverageToSelf(user));
     }
 
     function getGradesProfessor(bytes32 _assignment_id)

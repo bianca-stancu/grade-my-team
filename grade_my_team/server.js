@@ -12,7 +12,6 @@ var fs = require('fs');
 
 // parse application/x-www-form-urlencoded
 app.use(bodyParser.urlencoded({ extended: false }));
-
 // parse application/json
 app.use(bodyParser.json());
 // Use the session middleware
@@ -29,11 +28,16 @@ mongoose.Promise = global.Promise;
 mongoose.connect(config.mongoUrl + config.mongoDbName);
 
 var __dirname = process.cwd();
+app.use(express.static(__dirname)); //module directory
+
+
+
 var currentUser;
 var currentCourse;
 var allUsers;
 var currentHm;
 var teamMembersNames = [];
+var allHmCourse_currentCourse = [];
 
 app.get('/',function(req,res){
     return res.sendFile(__dirname + '/client/login.html');
@@ -166,6 +170,7 @@ app.post('/fileupload', function (req, res, next) {
             for(var i=0; i< members.length; i++){
                 User.findOne({ username: members[i] }, function (err, user){
                     hm.members.push(user._id);
+
                 });
             }
             setTimeout(function() {
@@ -175,10 +180,12 @@ app.post('/fileupload', function (req, res, next) {
                         console.log("Homework successfuly saved to database");
                         // console.log("homework._id " + homework._id);
                         //Add homework's id to the user's assignments
-                        User.findOne({ username: currentUser.username }, function (err, user){
-                            user.assignments.push(homework._id);
-                            user.save();
-                        });
+                        for(var i=0; i< members.length; i++){
+                            User.findOne({ username: members[i] }, function (err, user){
+                                user.assignments.push(homework._id);
+                                user.save();
+                            });
+                        }
                     } else {
                         throw new Error('An error occured.');
                     }
@@ -289,9 +296,18 @@ app.post('/getCourseView',function(req,res){
     Course.findOne({ name: req.body.courseName }, function (err, course){
         currentCourse = course;
     });
-    return res.redirect('/courseView');
+    if(currentUser.role == "Professor"){
+        return res.redirect('/courseViewProf');
+    }
+    else{
+        return res.redirect('/courseView');
+    }
+
 });
 
+app.get('/courseViewProf',function(req,res){
+    return res.sendFile(__dirname + '/client/courseProf.html');
+});
 
 app.get('/courseView',function(req,res){
     return res.sendFile(__dirname + '/client/course.html');
@@ -299,6 +315,20 @@ app.get('/courseView',function(req,res){
 
 app.get("/getHomoworks",function (req, res){
     res.json([currentUser, currentCourse])
+});
+
+app.get("/getProfInfos",function (req, res){
+    allHmCourse_currentCourse = [];
+    Homework.find({course: currentCourse._id}, function(err, hms) {
+        hms.forEach(function(hm) {
+            if(hm.gradedmembers.length == hm.members.length){
+                allHmCourse_currentCourse.push(hm);
+            }
+        });
+    });
+    setTimeout(function() {
+        res.json([currentUser, currentCourse, allHmCourse_currentCourse])
+    }, 2000);
 });
 
 app.get("/getAllUsers",function (req,res) {
@@ -332,6 +362,37 @@ app.get('/gradeView',function(req,res){
 
 app.get("/getHm",function (req,res) {
     res.json([currentHm,teamMembersNames])
+});
+
+app.get("/toBlockchainData", function (req,res) {
+    res.json([currentHm,currentUser, teamMembersNames])
+});
+
+app.get("/updateAssignment", function (req,res) {
+    Homework.findOne({ _id: currentHm._id}, function(err, hm) {
+        hm.gradedmembers.push(currentUser._id);
+        currentHm = hm;
+        hm.save();
+    });
+    return res.sendFile(__dirname + '/client/course.html');
+});
+
+app.post("/goGradingProf", function (req,res) {
+    teamMembersNames = [];
+    Homework.findOne({ _id: req.body.ass_}, function(err, hm) {
+        console.log(hm)
+        for(var i=0; i<hm.members.length;i++){
+            User.findOne({ _id: new mongoose.mongo.ObjectId(hm.members[i])}, function(err, user) {
+                teamMembersNames.push(user.username);
+            });
+        }
+        currentHm = hm;
+    });
+    return res.redirect('/profGradeView');
+});
+
+app.get('/profGradeView',function(req,res){
+    return res.sendFile(__dirname + '/client/gradeProf.html');
 });
 
 app.listen(3000);
