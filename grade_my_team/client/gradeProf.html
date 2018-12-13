@@ -16,11 +16,8 @@
     * {
         box-sizing: border-box;
     }
-    .center {
-        margin: auto;
-        width: 60%;
-        border: 3px solid #73AD21;
-        padding: 10px;
+    table, td {
+        border: 1px solid black;
     }
 
     /* style the container */
@@ -87,13 +84,6 @@
         clear: both;
     }
 
-    /* bottom container */
-    .bottom-container {
-        text-align: center;
-        background-color: #666;
-        border-radius: 0px 0px 4px 4px;
-    }
-
     /* Responsive layout - when the screen is less than 650px wide, make the two columns stack on top of each other instead of next to each other */
     @media screen and (max-width: 650px) {
         .col {
@@ -132,9 +122,18 @@
 <!-- !PAGE CONTENT! -->
 <div class="container" >
     <div class="row">
-        <h2 style="text-align:center">Grade your team</h2>
+        <h2 style="text-align:center">Grade students and homework</h2>
         <form id="myForm">
-
+            <table id="metricsTable">
+                <tr id="firstRow">
+                    <td class="space">&nbsp;</td>
+                    <td>Member1</td>
+                </tr>
+                <!--<tr id="secondRow">-->
+                    <!--<td>Avg metrics 1</td>-->
+                    <!--<td></td>-->
+                <!--</tr>-->
+            </table><br>
         </form>
     </div>
 </div>
@@ -184,78 +183,103 @@
             type: "GET",
             url: "/getHm",
             cache: false,
-            success: function(res){
-                var content = '<p>Distribute the '+ res[0].members.length*10 +' points between the team members</p>';
-
-                for(var i = 0; i < res[0].members.length; i++){
-                    content += '<input id="studName_' + i + '" type="text" name="studName_' + i + '" readonly="readonly">' +
-                        '<input style="border: solid; width: 10%" type="number" name="studGrade_'+ i + '" id="studGrade_' + i + '" min="0" value="10" required>';
-                }
-
-                content += '<input type="submit" value="Create">';
-
-                document.getElementById("myForm").innerHTML = content;
-
-                for(var i = 0; i < res[0].members.length; i++){
-                    document.getElementById("studName_" + i).value = res[1][i];
-                }
+            success: function(res){ // res = [currentHm,teamMembersNames]
+//                var content = "";
+//                for(var i = 0; i < res[0].members.length; i++){
+//                    content+= ''
+//
+//                    content += '<input id="field_' + i + '" type="text" name="field_' + i + '" readonly="readonly">' +
+//                        '<input style="border: solid; width: 10%" type="number" name="studGrade_'+ i + '" id="studGrade_' + i + '" min="0" value="10" required>';
+//                }
+//
+//                content += '<input type="submit" value="Create">';
+//
+//                document.getElementById("myForm").innerHTML = content;
+//
+//                for(var i = 0; i < res[0].members.length; i++){
+//                    document.getElementById("studName_" + i).value = res[1][i];
+//                }
 
             }
         });
-        return false;
+//        return false;
+        var entry = "entry_";
+        var counter = 0;
+        var nmembers = 3;
+        var first_row = $('#firstRow');
+        while(nmembers-- > 0) {
+            var next_row = first_row.clone();
+            next_row.id = entry + counter;
+            next_row.appendTo('#metricsTable');
+            counter++;
+        }
+        var nmembers = 3;
+        while(nmembers-- > 1){
+            $("#metricsTable tr").each(function(){
+                $(this).append("<td>test</td>");
+            })
+        }
+
+
 
     }
 
-    $("#myForm").on('submit',function (e,res) {
-        ///
-        var values = $(this).serializeArray();
-
-        var hm_id;
-        var currentUserUsername;
-
-        // Number of members
-        var nmember = values.length/2;
-
-        $.ajax({
-            type: "GET",
-            url: "/toBlockchainData",
-            cache: false,
-            success: function(res){
-                hm_id = res[0]._id;
-                currentUserUsername = res[1].username;
-            }
-        });
-
-        ///
-        if (typeof web3 !== 'undefined') {
-            web3 = new Web3(web3.currentProvider);
-        } else {
-            web3 = new Web3(new Web3.providers.HttpProvider("http://localhost:8545"));
-        }
-        $.getJSON("../build/contracts/Grading.json", function(grading_json) {
-            var Grading = TruffleContract(grading_json);
-            Grading.setProvider(new Web3.providers.HttpProvider("http://localhost:8545"));
-            Grading.deployed().then(function(instance) {
-                for(var i=0 ; i< nmember; i++){
-                    instance.addGradeTo(hm_id, currentUserUsername, values[2*i].value, values[2*i+1].value, false ,{from: web3.eth.accounts[0], gas:3000000});
-                }
-
-            });
-        });
-
-        $.ajax({
-            type: "GET",
-            url: "/updateAssignment",
-            cache: false,
-            success: function(res){
-                window.location.assign("/courseView");
-
-            }
-        });
+//
+//        $('#btnAdd').click(function () {
+//            var count = 3, first_row = $('#Row2');
+//            while(count-- > 0) first_row.clone().appendTo('#blacklistgrid');
+//        });
+//
+//
+//        $('#btnAddCol').click(function () {
+//            $("#metricsTable tr").each(function(){
+//                $(this).append("<td>test</td>");
+//            })
+//        });
 
 
-        e.preventDefault();
-    })
+
+
+
+
+//    $("#myForm").on('submit',function (e,res) {
+//        ///
+//        var values = $(this).serializeArray();
+//
+//        var hm_id;
+//        var currentUserUsername;
+//
+//        // Number of members
+//        var nmember = values.length/2;
+//
+//        $.ajax({
+//            type: "GET",
+//            url: "/toBlockchainData",
+//            cache: false,
+//            success: function(res){
+//                hm_id = res[0]._id;
+//                currentUserUsername = res[1].username;
+//            }
+//        });
+//
+//        ///
+//        if (typeof web3 !== 'undefined') {
+//            web3 = new Web3(web3.currentProvider);
+//        } else {
+//            web3 = new Web3(new Web3.providers.HttpProvider("http://localhost:8545"));
+//        }
+//        $.getJSON("../build/contracts/Grading.json", function(grading_json) {
+//            var Grading = TruffleContract(grading_json);
+//            Grading.setProvider(new Web3.providers.HttpProvider("http://localhost:8545"));
+//            Grading.deployed().then(function(instance) {
+//                for(var i=0 ; i< nmember; i++){
+//                    instance.addGradeTo(hm_id, currentUserUsername, values[2*i].value, values[2*i+1].value, false ,{from: web3.eth.accounts[0], gas:3000000});
+//                }
+//
+//            });
+//        });
+//        e.preventDefault();
+//    })
 
     window.onload = function() {
         getUser();

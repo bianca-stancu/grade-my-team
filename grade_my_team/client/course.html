@@ -226,16 +226,23 @@
             document.getElementById("intro").innerHTML = courseName;
 
             for (i = 0; i < user[0].assignments.length; i++) {
-                if((user[0].assignments[i].course == user[1]._id)  && (user[0].assignments[i].gradedmembers.length < user[0].assignments[i].members.length)){
-//                    pendingHm += '<p><b>' + user[0].assignments[i].name + '</b></p>';
+                if((user[0].assignments[i].course == user[1]._id)  && !user[0].assignments[i].gradedmembers.includes(user[0]._id)){
                     pendingHm += '<a href="../assignments/' + user[0].assignments[i].name +'" download>' + user[0].assignments[i].name + '</a><br/>' +
                                  '<form method="post" action="/goGrading" id="myForm">' +
                                  '<input id="ass_' + i + '" type="text" name="ass_" value="'+ user[0].assignments[i]._id +'" hidden>' +
                                  '<input type="submit" style="background-color: #00bcd4; border: none" value="Grade">' +
                                  '</form>';
                 }
-                else{
-                    gradedHm += '<a href="../assignments/' + user[0].assignments[i].name +'" download>' + user[0].assignments[i].name + '</a><br/>';
+                else if((user[0].assignments[i].course == user[1]._id)  && user[0].assignments[i].gradedmembers.includes(user[0]._id)){
+                    if(user[0].assignments[i].gradedmembers.length == (user[0].assignments[i].members.length+1)){
+                        gradedHm += '<a href="../assignments/' + user[0].assignments[i].name +'" download>' + user[0].assignments[i].name + '</a><br/>' +
+                        '<button type="button" onclick="alert("Call block chain soon")">Click Me!</button>';
+
+
+                    }
+                    else{
+                        gradedHm += '<a href="../assignments/' + user[0].assignments[i].name +'" download>' + user[0].assignments[i].name + '</a><br/>';
+                    }
                 }
             };
             pendingHm += '<hr style="width:50px;border:5px solid cyan" class="w3-round">';

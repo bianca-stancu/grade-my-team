@@ -12,7 +12,6 @@ var fs = require('fs');
 
 // parse application/x-www-form-urlencoded
 app.use(bodyParser.urlencoded({ extended: false }));
-
 // parse application/json
 app.use(bodyParser.json());
 // Use the session middleware
@@ -29,6 +28,10 @@ mongoose.Promise = global.Promise;
 mongoose.connect(config.mongoUrl + config.mongoDbName);
 
 var __dirname = process.cwd();
+app.use(express.static(__dirname)); //module directory
+
+
+
 var currentUser;
 var currentCourse;
 var allUsers;
@@ -332,6 +335,23 @@ app.get('/gradeView',function(req,res){
 
 app.get("/getHm",function (req,res) {
     res.json([currentHm,teamMembersNames])
+});
+
+app.get("/toBlockchainData", function (req,res) {
+    res.json([currentHm,currentUser, teamMembersNames])
+});
+
+app.get("/updateAssignment", function (req,res) {
+    Homework.findOne({ _id: currentHm._id}, function(err, hm) {
+        hm.gradedmembers.push(currentUser._id);
+        currentHm = hm;
+        hm.save();
+    });
+    return res.sendFile(__dirname + '/client/course.html');
+});
+
+app.get('/profGradeView',function(req,res){
+    return res.sendFile(__dirname + '/client/gradeProf.html');
 });
 
 app.listen(3000);
