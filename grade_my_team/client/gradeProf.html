@@ -125,16 +125,13 @@
         <h2 style="text-align:center">Grade students and homework</h2>
         <form id="myForm">
             <table id="metricsTable">
-                <tr id="firstRow">
-                    <td class="space">&nbsp;</td>
-                    <td>Member1</td>
+                <tr id="row_0">
                 </tr>
-                <!--<tr id="secondRow">-->
-                    <!--<td>Avg metrics 1</td>-->
-                    <!--<td></td>-->
-                <!--</tr>-->
             </table><br>
         </form>
+        <div id ="avg_grades">
+
+        </div>
     </div>
 </div>
 
@@ -178,112 +175,97 @@
         document.getElementById("sidebar").innerHTML = sidebar;
     }
 
-    function createform() {
+    function createform(metrics, grades) {
+        console.log(metrics)
         $.ajax({
             type: "GET",
             url: "/getHm",
             cache: false,
             success: function(res){ // res = [currentHm,teamMembersNames]
-//                var content = "";
-//                for(var i = 0; i < res[0].members.length; i++){
-//                    content+= ''
-//
-//                    content += '<input id="field_' + i + '" type="text" name="field_' + i + '" readonly="readonly">' +
-//                        '<input style="border: solid; width: 10%" type="number" name="studGrade_'+ i + '" id="studGrade_' + i + '" min="0" value="10" required>';
-//                }
-//
-//                content += '<input type="submit" value="Create">';
-//
-//                document.getElementById("myForm").innerHTML = content;
-//
-//                for(var i = 0; i < res[0].members.length; i++){
-//                    document.getElementById("studName_" + i).value = res[1][i];
-//                }
+                var numberMembers = res[1].length;
+                var entry = "row_";
+                var colEntry = "col_";
+                var counter = 1;
+                var nmembers = res[1].length;
+
+                // Create rows
+                var first_row = $('#row_0');
+                while(nmembers-- > 0) {
+                    var next_row = first_row.clone();
+                    next_row.prop('id',entry + counter);
+                    next_row.appendTo('#metricsTable');
+                    counter++;
+                }
+                // Create columns
+                var row_counter = 0;
+                $("#metricsTable tr").each(function(){
+                    for(var i= 0;i<4 ;i++){
+                        $(this).append("<td id='" + colEntry + row_counter + '_' + i + "'>test</td>");
+                    }
+                    row_counter++;
+                });
+
+                document.getElementById("col_0_0").innerHTML = "&nbsp";
+                document.getElementById("col_0_1").innerHTML = "Avg grade to self";
+                document.getElementById("col_0_2").innerHTML = "Avg grade to others";
+                document.getElementById("col_0_3").innerHTML = "Avg grade from others";
+
+                var nmembers = res[1].length;
+                for(var i= 0; i<nmembers;i++){
+                    var temp = "col_" + i+1 + "_0";
+                    document.getElementById(temp).innerHTML = res[1][i];
+                }
+                var avg_content = "<p> Average grades computed based on teammates and self-assessment, with equal weights: </p><br>";
+                for(var i = 0; i< nmembers; i++){
+                    avg_content += '<p>' + res[1][i] + ' </p>' + '<p id="member_'+ i +'">' + grades[i] + '</p> <br>';
+                }
+                document.getElementById("avg_grades").innerHTML = avg_content;
+                return;
 
             }
         });
-//        return false;
-        var entry = "entry_";
-        var counter = 0;
-        var nmembers = 3;
-        var first_row = $('#firstRow');
-        while(nmembers-- > 0) {
-            var next_row = first_row.clone();
-            next_row.id = entry + counter;
-            next_row.appendTo('#metricsTable');
-            counter++;
-        }
-        var nmembers = 3;
-        while(nmembers-- > 1){
-            $("#metricsTable tr").each(function(){
-                $(this).append("<td>test</td>");
-            })
-        }
-
-
-
     }
-
-//
-//        $('#btnAdd').click(function () {
-//            var count = 3, first_row = $('#Row2');
-//            while(count-- > 0) first_row.clone().appendTo('#blacklistgrid');
-//        });
-//
-//
-//        $('#btnAddCol').click(function () {
-//            $("#metricsTable tr").each(function(){
-//                $(this).append("<td>test</td>");
-//            })
-//        });
-
-
-
-
-
-
-//    $("#myForm").on('submit',function (e,res) {
-//        ///
-//        var values = $(this).serializeArray();
-//
-//        var hm_id;
-//        var currentUserUsername;
-//
-//        // Number of members
-//        var nmember = values.length/2;
-//
-//        $.ajax({
-//            type: "GET",
-//            url: "/toBlockchainData",
-//            cache: false,
-//            success: function(res){
-//                hm_id = res[0]._id;
-//                currentUserUsername = res[1].username;
-//            }
-//        });
-//
-//        ///
-//        if (typeof web3 !== 'undefined') {
-//            web3 = new Web3(web3.currentProvider);
-//        } else {
-//            web3 = new Web3(new Web3.providers.HttpProvider("http://localhost:8545"));
-//        }
-//        $.getJSON("../build/contracts/Grading.json", function(grading_json) {
-//            var Grading = TruffleContract(grading_json);
-//            Grading.setProvider(new Web3.providers.HttpProvider("http://localhost:8545"));
-//            Grading.deployed().then(function(instance) {
-//                for(var i=0 ; i< nmember; i++){
-//                    instance.addGradeTo(hm_id, currentUserUsername, values[2*i].value, values[2*i+1].value, false ,{from: web3.eth.accounts[0], gas:3000000});
-//                }
-//
-//            });
-//        });
-//        e.preventDefault();
-//    })
 
     window.onload = function() {
         getUser();
-        createform();
+        var metrics = [];
+        var grades = [];
+        $.ajax({
+            type: "GET",
+            url: "/toBlockchainData",
+            cache: false,
+            success: function(res){
+                // res = [currentHm,currentUser, teamMembersNames]
+                var hm_id = res[0]._id;
+                var currentUserUsername = res[1].username;
+                var nmember = res[2].length;
+
+                // Blockchain
+                if (typeof web3 !== 'undefined') {
+                    web3 = new Web3(web3.currentProvider);
+                } else {
+                    web3 = new Web3(new Web3.providers.HttpProvider("http://localhost:8545"));
+                }
+                $.getJSON("../build/contracts/Grading.json", function(grading_json) {
+                    var Grading = TruffleContract(grading_json);
+                    Grading.setProvider(new Web3.providers.HttpProvider("http://localhost:8545"));
+                    Grading.deployed().then(function(instance) {
+                        for(var i=0 ; i< nmember; i++){
+                            instance.getMetrics.call(res[2][i],{from: web3.eth.accounts[0], gas:3000000}).then(result => metrics.push(Array.from(result)));
+                            instance.getGradeFor.call(hm_id,res[2][i],{from: web3.eth.accounts[0], gas:3000000}).then(function(result) {
+                                                        grades.push(result.toNumber());
+                                                        //console.log(result.toNumber());
+                            });
+                        }
+
+                    });
+                });
+                setTimeout(function() {
+                    createform(metrics,grades)
+                }, 1000);
+            }
+        });
+//        createform();
     };
 </script>
 </body>

@@ -21,12 +21,11 @@ contract Grading {
     mapping(bytes32 => Grade[]) private professor_grades;
     mapping(bytes32 => uint) private overall_grade;
     mapping(bytes32 => Metrics) private student_metrics;
-
-
+    
     function addOverallGrade(bytes32 _assignment_id, uint _grade) public{
         if(overall_grade[_assignment_id] == 0) {
             overall_grade[_assignment_id] = _grade;
-        }
+        } 
     }
 
     function getOverallGrade(bytes32 _assignment_id) public returns (uint) {
@@ -65,7 +64,7 @@ contract Grading {
     }
 
     function updateMetricToSelf(bytes32 user, uint _grade) private {
-        uint current_grade = getMetricAverageToSelf(user);
+        uint current_grade = getMetricAverageToSelf(user); 
         if(current_grade == 0) {
             setMetricAverageToSelf(user,_grade);
         } else {
@@ -82,7 +81,7 @@ contract Grading {
     }
 
     function updateMetricFromOthers(bytes32 user, uint _grade) private {
-        uint current_grade = getMetricAverageFromOthers(user);
+        uint current_grade = getMetricAverageFromOthers(user); 
         if(current_grade == 0) {
             setMetricAverageFromOthers(user,_grade);
         } else {
@@ -99,7 +98,7 @@ contract Grading {
     }
 
     function updateMetricToOthers(bytes32 user, uint _grade) private {
-        uint current_grade = getMetricAverageToOthers(user);
+        uint current_grade = getMetricAverageToOthers(user); 
         if(current_grade == 0) {
             setMetricAverageToOthers(user,_grade);
         } else {
@@ -115,18 +114,8 @@ contract Grading {
         student_metrics[user].average_grade_to_others = value;
     }
 
-    function getGradesStudents(bytes32 _assignment_id)
-        public
-        returns (bytes32[], uint[])
-    {
-        uint assignment_length = assignment_grades[_assignment_id].length;
-        bytes32[] memory students = new bytes32[](assignment_length);
-        uint[] memory grades = new uint[](assignment_length);
-        for (uint i = 0; i < assignment_length; i++) {
-            students[i] = assignment_grades[_assignment_id][i].to;
-            grades[i] = assignment_grades[_assignment_id][i].grade;
-        }
-        return (students, grades);
+    function getMetrics(bytes32 user) public returns (uint,uint,uint){
+        return (getMetricAverageToSelf(user), getMetricAverageFromOthers(user),getMetricAverageToSelf(user));
     }
 
     function getGradesProfessor(bytes32 _assignment_id)
@@ -142,7 +131,7 @@ contract Grading {
         return (students, grades);
     }
 
-    function getGradeFor(bytes32 _assignment_id, bytes32 _student_id) private returns (uint){
+    function getGradeFor(bytes32 _assignment_id, bytes32 _student_id) public returns (uint){
         uint assignment_length_students = assignment_grades[_assignment_id].length;
         uint student_average = 0;
         uint count = 0;
@@ -153,7 +142,7 @@ contract Grading {
             }
         }
         student_average = student_average / count;
-        return student_average;
+        return student_average; 
     }
 
     function getProfessorGrade(bytes32 _assignment_id, bytes32 _student_id) private returns (uint){
@@ -166,14 +155,14 @@ contract Grading {
     }
 
     function getMalus(int grade) private returns (uint){
-        if (grade < 0){
+        if (grade < 0){ 
             if(grade <= -10 && grade > -25){
                 return 5;
             } else if (grade <= -25 && grade > -50){
                 return 10;
             } else if (grade <= -50){
                 return 15;
-            }
+            } 
         }
         return 0;
     }
