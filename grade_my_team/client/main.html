@@ -130,29 +130,12 @@
 <script>
 
      window.onload = function() {
-//         console.log($("user_name").text())
-      if (typeof web3 !== 'undefined') {
-        web3 = new Web3(web3.currentProvider);
-      } else {
-        // set the provider you want from Web3.providers
-        web3 = new Web3(new Web3.providers.HttpProvider("http://localhost:8545"));
-      }
-      $.getJSON("../build/contracts/Grading.json", function(grading_json) {
-        var Grading = TruffleContract(grading_json );
-        Grading.setProvider(new Web3.providers.HttpProvider("http://localhost:8545"));
-        Grading.deployed().then(function(instance) {
-            //instance.addGrade("Bianca").then(function(result) {});
-            instance.gradesCount().then(balance => {console.log(balance.toNumber())})       
-        });
-      });
-
+//         console.log($("user_name").text()
       // GET PAGE CONTENT
       getUser();
-
     };
 
 </script>
 <script src="http://modernizr.com/downloads/modernizr-latest.js"></script>
-
 </body>
 </html>

@@ -4,37 +4,10 @@
     {
       "constant": true,
       "inputs": [],
-      "name": "gradesCount",
+      "name": "assignmentsCount",
       "outputs": [
         {
           "name": "",
-          "type": "uint256"
-        }
-      ],
-      "payable": false,
-      "stateMutability": "view",
-      "type": "function"
-    },
-    {
-      "constant": true,
-      "inputs": [
-        {
-          "name": "",
-          "type": "uint256"
-        }
-      ],
-      "name": "grades",
-      "outputs": [
-        {
-          "name": "id",
-          "type": "uint256"
-        },
-        {
-          "name": "name",
-          "type": "string"
-        },
-        {
-          "name": "grade",
           "type": "uint256"
         }
       ],
@@ -52,31 +25,76 @@
       "constant": false,
       "inputs": [
         {
-          "name": "_name",
-          "type": "string"
+          "name": "_assignment_id",
+          "type": "bytes32"
         }
       ],
-      "name": "addGrade",
+      "name": "addAssignment",
       "outputs": [],
+      "payable": false,
+      "stateMutability": "nonpayable",
+      "type": "function"
+    },
+    {
+      "constant": false,
+      "inputs": [
+        {
+          "name": "_assignment_id",
+          "type": "bytes32"
+        },
+        {
+          "name": "_from",
+          "type": "bytes32"
+        },
+        {
+          "name": "_to",
+          "type": "bytes32"
+        },
+        {
+          "name": "_grade",
+          "type": "uint256"
+        }
+      ],
+      "name": "addGradeTo",
+      "outputs": [],
+      "payable": false,
+      "stateMutability": "nonpayable",
+      "type": "function"
+    },
+    {
+      "constant": false,
+      "inputs": [
+        {
+          "name": "_assignment_id",
+          "type": "bytes32"
+        }
+      ],
+      "name": "getGradesCount",
+      "outputs": [
+        {
+          "name": "",
+          "type": "uint256[]"
+        }
+      ],
       "payable": false,
       "stateMutability": "nonpayable",
       "type": "function"
     }
   ],
-  "bytecode": "0x608060405234801561001057600080fd5b5061005e6040805190810160405280600b81526020017f43616e64696461746520310000000000000000000000000000000000000000008152506100b0640100000000026401000000009004565b6100ab6040805190810160405280600b81526020017f43616e64696461746520320000000000000000000000000000000000000000008152506100b0640100000000026401000000009004565b6101d1565b60016000815480929190600101919050555060606040519081016040528060015481526020018281526020016000815250600080600154815260200190815260200160002060008201518160000155602082015181600101908051906020019061011b92919061012c565b506040820151816002015590505050565b828054600181600116156101000203166002900490600052602060002090601f016020900481019282601f1061016d57805160ff191683800117855561019b565b8280016001018555821561019b579182015b8281111561019a57825182559160200191906001019061017f565b5b5090506101a891906101ac565b5090565b6101ce91905b808211156101ca5760008160009055506001016101b2565b5090565b90565b6103b9806101e06000396000f300608060405260043610610057576000357c0100000000000000000000000000000000000000000000000000000000900463ffffffff1680631a02fab41461005c5780634b22fc6214610087578063d7ce48931461013b575b600080fd5b34801561006857600080fd5b506100716101a4565b6040518082815260200191505060405180910390f35b34801561009357600080fd5b506100b2600480360381019080803590602001909291905050506101aa565b6040518084815260200180602001838152602001828103825284818151815260200191508051906020019080838360005b838110156100fe5780820151818401526020810190506100e3565b50505050905090810190601f16801561012b5780820380516001836020036101000a031916815260200191505b5094505050505060405180910390f35b34801561014757600080fd5b506101a2600480360381019080803590602001908201803590602001908080601f016020809104026020016040519081016040528093929190818152602001838380828437820191505050505050919291929050505061026c565b005b60015481565b6000602052806000526040600020600091509050806000015490806001018054600181600116156101000203166002900480601f01602080910402602001604051908101604052809291908181526020018280546001816001161561010002031660029004801561025c5780601f106102315761010080835404028352916020019161025c565b820191906000526020600020905b81548152906001019060200180831161023f57829003601f168201915b5050505050908060020154905083565b6001600081548092919060010191905055506060604051908101604052806001548152602001828152602001600081525060008060015481526020019081526020016000206000820151816000015560208201518160010190805190602001906102d79291906102e8565b506040820151816002015590505050565b828054600181600116156101000203166002900490600052602060002090601f016020900481019282601f1061032957805160ff1916838001178555610357565b82800160010185558215610357579182015b8281111561035657825182559160200191906001019061033b565b5b5090506103649190610368565b5090565b61038a91905b8082111561038657600081600090555060010161036e565b5090565b905600a165627a7a72305820a0ac125b92cfb8703f1177c9361ea8661303f7b29754875995b1d1766606cfe00029",
-  "deployedBytecode": "0x608060405260043610610057576000357c0100000000000000000000000000000000000000000000000000000000900463ffffffff1680631a02fab41461005c5780634b22fc6214610087578063d7ce48931461013b575b600080fd5b34801561006857600080fd5b506100716101a4565b6040518082815260200191505060405180910390f35b34801561009357600080fd5b506100b2600480360381019080803590602001909291905050506101aa565b6040518084815260200180602001838152602001828103825284818151815260200191508051906020019080838360005b838110156100fe5780820151818401526020810190506100e3565b50505050905090810190601f16801561012b5780820380516001836020036101000a031916815260200191505b5094505050505060405180910390f35b34801561014757600080fd5b506101a2600480360381019080803590602001908201803590602001908080601f016020809104026020016040519081016040528093929190818152602001838380828437820191505050505050919291929050505061026c565b005b60015481565b6000602052806000526040600020600091509050806000015490806001018054600181600116156101000203166002900480601f01602080910402602001604051908101604052809291908181526020018280546001816001161561010002031660029004801561025c5780601f106102315761010080835404028352916020019161025c565b820191906000526020600020905b81548152906001019060200180831161023f57829003601f168201915b5050505050908060020154905083565b6001600081548092919060010191905055506060604051908101604052806001548152602001828152602001600081525060008060015481526020019081526020016000206000820151816000015560208201518160010190805190602001906102d79291906102e8565b506040820151816002015590505050565b828054600181600116156101000203166002900490600052602060002090601f016020900481019282601f1061032957805160ff1916838001178555610357565b82800160010185558215610357579182015b8281111561035657825182559160200191906001019061033b565b5b5090506103649190610368565b5090565b61038a91905b8082111561038657600081600090555060010161036e565b5090565b905600a165627a7a72305820a0ac125b92cfb8703f1177c9361ea8661303f7b29754875995b1d1766606cfe00029",
-  "sourceMap": "26:467:0:-;;;137:94;8:9:-1;5:2;;;30:1;27;20:12;5:2;137:94:0;168:23;;;;;;;;;;;;;;;;;;;:8;;;:23;;;:::i;:::-;201;;;;;;;;;;;;;;;;;;;:8;;;:23;;;:::i;:::-;26:467;;360:131;410:11;;:14;;;;;;;;;;;;;456:28;;;;;;;;;462:11;;456:28;;;;475:5;456:28;;;;482:1;456:28;;;434:6;:19;441:11;;434:19;;;;;;;;;;;:50;;;;;;;;;;;;;;;;;;;;;;;;;;;:::i;:::-;;;;;;;;;;;;;360:131;:::o;26:467::-;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;:::i;:::-;;;:::o;:::-;;;;;;;;;;;;;;;;;;;;;;;;;;;:::o;:::-;;;;;;;",
-  "deployedSourceMap": "26:467:0:-;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;330:23;;8:9:-1;5:2;;;30:1;27;20:12;5:2;330:23:0;;;;;;;;;;;;;;;;;;;;;;;261:36;;8:9:-1;5:2;;;30:1;27;20:12;5:2;261:36:0;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;23:1:-1;8:100;33:3;30:1;27:10;8:100;;;99:1;94:3;90:11;84:18;80:1;75:3;71:11;64:39;52:2;49:1;45:10;40:15;;8:100;;;12:14;261:36:0;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;360:131;;8:9:-1;5:2;;;30:1;27;20:12;5:2;360:131:0;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;330:23;;;;:::o;261:36::-;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;:::o;360:131::-;410:11;;:14;;;;;;;;;;;;;456:28;;;;;;;;;462:11;;456:28;;;;475:5;456:28;;;;482:1;456:28;;;434:6;:19;441:11;;434:19;;;;;;;;;;;:50;;;;;;;;;;;;;;;;;;;;;;;;;;;:::i;:::-;;;;;;;;;;;;;360:131;:::o;26:467::-;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;:::i;:::-;;;:::o;:::-;;;;;;;;;;;;;;;;;;;;;;;;;;;:::o",
-  "source": "pragma solidity ^0.4.18;\n\ncontract Grading {\n    struct Grade {\n        uint id;\n        string name;\n        uint grade;\n    }\n    \n    constructor() public {\n        addGrade(\"Candidate 1\");\n        addGrade(\"Candidate 2\");\n    }\n    // Read/write Grades\n    mapping(uint => Grade) public grades;\n\n    // Store Grades Count\n    uint public gradesCount;\n\n    function addGrade (string _name) public {\n        gradesCount ++;\n        grades[gradesCount] = Grade(gradesCount, _name, 0);\n    }\n}\n",
-  "sourcePath": "/Users/biancas/Desktop/grade_my_team/contracts/Grading.sol",
+  "bytecode": "0x608060405234801561001057600080fd5b506104e2806100206000396000f300608060405260043610610062576000357c0100000000000000000000000000000000000000000000000000000000900463ffffffff16806318b940251461006757806358d67b36146100be578063a349e47b146100ef578063db59860d14610175575b600080fd5b34801561007357600080fd5b506100bc600480360381019080803560001916906020019092919080356000191690602001909291908035600019169060200190929190803590602001909291905050506101a0565b005b3480156100ca57600080fd5b506100ed6004803603810190808035600019169060200190929190505050610249565b005b3480156100fb57600080fd5b5061011e600480360381019080803560001916906020019092919050505061028c565b6040518080602001828103825283818151815260200191508051906020019060200280838360005b83811015610161578082015181840152602081019050610146565b505050509050019250505060405180910390f35b34801561018157600080fd5b5061018a6103cf565b6040518082815260200191505060405180910390f35b6101a86103d5565b606060405190810160405280856000191681526020018460001916815260200183815250905060016000866000191660001916815260200190815260200160002081908060018154018082558091505090600182039060005260206000209060030201600090919290919091506000820151816000019060001916905560208201518160010190600019169055604082015181600201555050505050505050565b6000600260008154809291906001019190505550806001600084600019166000191681526020019081526020016000209080546102879291906103fd565b505050565b6060600080600090505b6001600085600019166000191681526020019081526020016000208054905081101561032d5781600160008660001916600019168152602001908152602001600020828154811015156102e557fe5b90600052602060002090600302016002015490806001815401808255809150509060018203906000526020600020016000909192909190915055508080600101915050610296565b81600160008660001916600019168152602001908152602001600020805490509080600181540180825580915050906001820390600052602060002001600090919290919091505550818054806020026020016040519081016040528092919081815260200182805480156103c157602002820191906000526020600020905b8154815260200190600101908083116103ad575b505050505092505050919050565b60025481565b6060604051908101604052806000801916815260200160008019168152602001600081525090565b82805482825590600052602060002090600302810192821561046e5760005260206000209160030282015b8281111561046d578282600082015481600001906000191690556001820154816001019060001916905560028201548160020155505091600301919060030190610428565b5b50905061047b919061047f565b5090565b6104b391905b808211156104af576000808201600090556001820160009055600282016000905550600301610485565b5090565b905600a165627a7a723058200baad31c381ff9050b3f83198e6c2d9ccef807d37526ff8913ea15c9905dc16e0029",
+  "deployedBytecode": "0x608060405260043610610062576000357c0100000000000000000000000000000000000000000000000000000000900463ffffffff16806318b940251461006757806358d67b36146100be578063a349e47b146100ef578063db59860d14610175575b600080fd5b34801561007357600080fd5b506100bc600480360381019080803560001916906020019092919080356000191690602001909291908035600019169060200190929190803590602001909291905050506101a0565b005b3480156100ca57600080fd5b506100ed6004803603810190808035600019169060200190929190505050610249565b005b3480156100fb57600080fd5b5061011e600480360381019080803560001916906020019092919050505061028c565b6040518080602001828103825283818151815260200191508051906020019060200280838360005b83811015610161578082015181840152602081019050610146565b505050509050019250505060405180910390f35b34801561018157600080fd5b5061018a6103cf565b6040518082815260200191505060405180910390f35b6101a86103d5565b606060405190810160405280856000191681526020018460001916815260200183815250905060016000866000191660001916815260200190815260200160002081908060018154018082558091505090600182039060005260206000209060030201600090919290919091506000820151816000019060001916905560208201518160010190600019169055604082015181600201555050505050505050565b6000600260008154809291906001019190505550806001600084600019166000191681526020019081526020016000209080546102879291906103fd565b505050565b6060600080600090505b6001600085600019166000191681526020019081526020016000208054905081101561032d5781600160008660001916600019168152602001908152602001600020828154811015156102e557fe5b90600052602060002090600302016002015490806001815401808255809150509060018203906000526020600020016000909192909190915055508080600101915050610296565b81600160008660001916600019168152602001908152602001600020805490509080600181540180825580915050906001820390600052602060002001600090919290919091505550818054806020026020016040519081016040528092919081815260200182805480156103c157602002820191906000526020600020905b8154815260200190600101908083116103ad575b505050505092505050919050565b60025481565b6060604051908101604052806000801916815260200160008019168152602001600081525090565b82805482825590600052602060002090600302810192821561046e5760005260206000209160030282015b8281111561046d578282600082015481600001906000191690556001820154816001019060001916905560028201548160020155505091600301919060030190610428565b5b50905061047b919061047f565b5090565b6104b391905b808211156104af576000808201600090556001820160009055600282016000905550600301610485565b5090565b905600a165627a7a723058200baad31c381ff9050b3f83198e6c2d9ccef807d37526ff8913ea15c9905dc16e0029",
+  "sourceMap": "26:1010:0:-;;;137:28;8:9:-1;5:2;;;30:1;27;20:12;5:2;137:28:0;26:1010;;;;;;",
+  "deployedSourceMap": "26:1010:0:-;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;420:202;;8:9:-1;5:2;;;30:1;27;20:12;5:2;420:202:0;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;256:158;;8:9:-1;5:2;;;30:1;27;20:12;5:2;256:158:0;;;;;;;;;;;;;;;;;;;;;;;;;;;;;663:371;;8:9:-1;5:2;;;30:1;27;20:12;5:2;663:371:0;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;23:1:-1;8:100;33:3;30:1;27:10;8:100;;;99:1;94:3;90:11;84:18;80:1;75:3;71:11;64:39;52:2;49:1;45:10;40:15;;8:100;;;12:14;663:371:0;;;;;;;;;;;;;;;;;628:28;;8:9:-1;5:2;;;30:1;27;20:12;5:2;628:28:0;;;;;;;;;;;;;;;;;;;;;;;420:202;522:18;;:::i;:::-;543:23;;;;;;;;;549:5;543:23;;;;;;;555:3;543:23;;;;;;;559:6;543:23;;;522:44;;576:11;:27;588:14;576:27;;;;;;;;;;;;;;;;;609:5;576:39;;39:1:-1;33:3;27:10;23:18;57:10;52:3;45:23;79:10;72:17;;0:93;576:39:0;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;420:202;;;;;:::o;256:158::-;321:13;344:16;;:18;;;;;;;;;;;;;402:5;372:11;:27;384:14;372:27;;;;;;;;;;;;;;;;;:35;;;;;;;;:::i;:::-;;256:158;;:::o;663:371::-;726:6;744:18;777:6;786:1;777:10;;772:165;793:11;:27;805:14;793:27;;;;;;;;;;;;;;;;;:34;;;;789:1;:38;772:165;;;872:11;889;:27;901:14;889:27;;;;;;;;;;;;;;;;;917:1;889:30;;;;;;;;;;;;;;;;;;;;:36;;;872:54;;39:1:-1;33:3;27:10;23:18;57:10;52:3;45:23;79:10;72:17;;0:93;872:54:0;;;;;;;;;;;;;;;;;;;;;;829:3;;;;;;;772:165;;;947:11;964;:27;976:14;964:27;;;;;;;;;;;;;;;;;:34;;;;947:52;;39:1:-1;33:3;27:10;23:18;57:10;52:3;45:23;79:10;72:17;;0:93;947:52:0;;;;;;;;;;;;;;;;;;;;;;1016:11;1009:18;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;663:371;;;;;:::o;628:28::-;;;;:::o;26:1010::-;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;:::o;:::-;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;:::i;:::-;;;:::o;:::-;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;:::o",
+  "source": "pragma solidity ^0.4.18;\n\ncontract Grading {\n    struct Grade {\n        bytes32 from;\n        bytes32 to;\n        uint grade;\n    }\n\n    constructor() public {\n    }\n\n    bytes32[] assignment_ids;\n\n    mapping(bytes32 => Grade[]) private assignments;\n\n    function addAssignment (bytes32 _assignment_id) public {\n        Grade[] _init;\n        assignmentsCount++;\n        assignments[_assignment_id] = _init;\n    }\n\n    function addGradeTo(bytes32 _assignment_id, bytes32 _from, bytes32 _to, uint _grade) public {\n        Grade memory grade = Grade(_from,_to,_grade);\n        assignments[_assignment_id].push(grade);\n    }\n\n    uint public assignmentsCount;\n\n    function getGradesCount(bytes32 _assignment_id) public returns(uint[]) {\n        uint[] gradesCount;\n        for (uint i = 0; i < assignments[_assignment_id].length; i++) {                        \n            gradesCount.push(assignments[_assignment_id][i].grade);\n        } \n        gradesCount.push(assignments[_assignment_id].length);\n        return gradesCount;\n    }\n}\n",
+  "sourcePath": "/Users/biancas/DS_PROJECT/grade_my_team/contracts/Grading.sol",
   "ast": {
-    "absolutePath": "/Users/biancas/Desktop/grade_my_team/contracts/Grading.sol",
+    "absolutePath": "/Users/biancas/DS_PROJECT/grade_my_team/contracts/Grading.sol",
     "exportedSymbols": {
       "Grading": [
-        46
+        121
       ]
     },
-    "id": 47,
+    "id": 122,
     "nodeType": "SourceUnit",
     "nodes": [
       {
@@ -96,9 +114,9 @@
         "contractKind": "contract",
         "documentation": null,
         "fullyImplemented": true,
-        "id": 46,
+        "id": 121,
         "linearizedBaseContracts": [
-          46
+          121
         ],
         "name": "Grading",
         "nodeType": "ContractDefinition",
@@ -110,24 +128,24 @@
               {
                 "constant": false,
                 "id": 3,
-                "name": "id",
+                "name": "from",
                 "nodeType": "VariableDeclaration",
                 "scope": 8,
-                "src": "72:7:0",
+                "src": "72:12:0",
                 "stateVariable": false,
                 "storageLocation": "default",
                 "typeDescriptions": {
-                  "typeIdentifier": "t_uint256",
-                  "typeString": "uint256"
+                  "typeIdentifier": "t_bytes32",
+                  "typeString": "bytes32"
                 },
                 "typeName": {
                   "id": 2,
-                  "name": "uint",
+                  "name": "bytes32",
                   "nodeType": "ElementaryTypeName",
-                  "src": "72:4:0",
+                  "src": "72:7:0",
                   "typeDescriptions": {
-                    "typeIdentifier": "t_uint256",
-                    "typeString": "uint256"
+                    "typeIdentifier": "t_bytes32",
+                    "typeString": "bytes32"
                   }
                 },
                 "value": null,
@@ -136,24 +154,24 @@
               {
                 "constant": false,
                 "id": 5,
-                "name": "name",
+                "name": "to",
                 "nodeType": "VariableDeclaration",
                 "scope": 8,
-                "src": "89:11:0",
+                "src": "94:10:0",
                 "stateVariable": false,
                 "storageLocation": "default",
                 "typeDescriptions": {
-                  "typeIdentifier": "t_string_storage_ptr",
-                  "typeString": "string"
+                  "typeIdentifier": "t_bytes32",
+                  "typeString": "bytes32"
                 },
                 "typeName": {
                   "id": 4,
-                  "name": "string",
+                  "name": "bytes32",
                   "nodeType": "ElementaryTypeName",
-                  "src": "89:6:0",
+                  "src": "94:7:0",
                   "typeDescriptions": {
-                    "typeIdentifier": "t_string_storage_ptr",
-                    "typeString": "string"
+                    "typeIdentifier": "t_bytes32",
+                    "typeString": "bytes32"
                   }
                 },
                 "value": null,
@@ -165,7 +183,7 @@
                 "name": "grade",
                 "nodeType": "VariableDeclaration",
                 "scope": 8,
-                "src": "110:10:0",
+                "src": "114:10:0",
                 "stateVariable": false,
                 "storageLocation": "default",
                 "typeDescriptions": {
@@ -176,7 +194,7 @@
                   "id": 6,
                   "name": "uint",
                   "nodeType": "ElementaryTypeName",
-                  "src": "110:4:0",
+                  "src": "114:4:0",
                   "typeDescriptions": {
                     "typeIdentifier": "t_uint256",
                     "typeString": "uint256"
@@ -188,138 +206,19 @@
             ],
             "name": "Grade",
             "nodeType": "StructDefinition",
-            "scope": 46,
-            "src": "49:78:0",
+            "scope": 121,
+            "src": "49:82:0",
             "visibility": "public"
           },
           {
             "body": {
-              "id": 19,
+              "id": 11,
               "nodeType": "Block",
-              "src": "158:73:0",
-              "statements": [
-                {
-                  "expression": {
-                    "argumentTypes": null,
-                    "arguments": [
-                      {
-                        "argumentTypes": null,
-                        "hexValue": "43616e6469646174652031",
-                        "id": 12,
-                        "isConstant": false,
-                        "isLValue": false,
-                        "isPure": true,
-                        "kind": "string",
-                        "lValueRequested": false,
-                        "nodeType": "Literal",
-                        "src": "177:13:0",
-                        "subdenomination": null,
-                        "typeDescriptions": {
-                          "typeIdentifier": "t_stringliteral_41f9dcbd43e9b33194759b5a51b1df9864cdc2b2138ff106f03091eb79861f0c",
-                          "typeString": "literal_string \"Candidate 1\""
-                        },
-                        "value": "Candidate 1"
-                      }
-                    ],
-                    "expression": {
-                      "argumentTypes": [
-                        {
-                          "typeIdentifier": "t_stringliteral_41f9dcbd43e9b33194759b5a51b1df9864cdc2b2138ff106f03091eb79861f0c",
-                          "typeString": "literal_string \"Candidate 1\""
-                        }
-                      ],
-                      "id": 11,
-                      "name": "addGrade",
-                      "nodeType": "Identifier",
-                      "overloadedDeclarations": [],
-                      "referencedDeclaration": 45,
-                      "src": "168:8:0",
-                      "typeDescriptions": {
-                        "typeIdentifier": "t_function_internal_nonpayable$_t_string_memory_ptr_$returns$__$",
-                        "typeString": "function (string memory)"
-                      }
-                    },
-                    "id": 13,
-                    "isConstant": false,
-                    "isLValue": false,
-                    "isPure": false,
-                    "kind": "functionCall",
-                    "lValueRequested": false,
-                    "names": [],
-                    "nodeType": "FunctionCall",
-                    "src": "168:23:0",
-                    "typeDescriptions": {
-                      "typeIdentifier": "t_tuple$__$",
-                      "typeString": "tuple()"
-                    }
-                  },
-                  "id": 14,
-                  "nodeType": "ExpressionStatement",
-                  "src": "168:23:0"
-                },
-                {
-                  "expression": {
-                    "argumentTypes": null,
-                    "arguments": [
-                      {
-                        "argumentTypes": null,
-                        "hexValue": "43616e6469646174652032",
-                        "id": 16,
-                        "isConstant": false,
-                        "isLValue": false,
-                        "isPure": true,
-                        "kind": "string",
-                        "lValueRequested": false,
-                        "nodeType": "Literal",
-                        "src": "210:13:0",
-                        "subdenomination": null,
-                        "typeDescriptions": {
-                          "typeIdentifier": "t_stringliteral_f1f17440f69835dafba5c9fd0e4caa6c780807a80f8d1745ec7af1408d6cca4a",
-                          "typeString": "literal_string \"Candidate 2\""
-                        },
-                        "value": "Candidate 2"
-                      }
-                    ],
-                    "expression": {
-                      "argumentTypes": [
-                        {
-                          "typeIdentifier": "t_stringliteral_f1f17440f69835dafba5c9fd0e4caa6c780807a80f8d1745ec7af1408d6cca4a",
-                          "typeString": "literal_string \"Candidate 2\""
-                        }
-                      ],
-                      "id": 15,
-                      "name": "addGrade",
-                      "nodeType": "Identifier",
-                      "overloadedDeclarations": [],
-                      "referencedDeclaration": 45,
-                      "src": "201:8:0",
-                      "typeDescriptions": {
-                        "typeIdentifier": "t_function_internal_nonpayable$_t_string_memory_ptr_$returns$__$",
-                        "typeString": "function (string memory)"
-                      }
-                    },
-                    "id": 17,
-                    "isConstant": false,
-                    "isLValue": false,
-                    "isPure": false,
-                    "kind": "functionCall",
-                    "lValueRequested": false,
-                    "names": [],
-                    "nodeType": "FunctionCall",
-                    "src": "201:23:0",
-                    "typeDescriptions": {
-                      "typeIdentifier": "t_tuple$__$",
-                      "typeString": "tuple()"
-                    }
-                  },
-                  "id": 18,
-                  "nodeType": "ExpressionStatement",
-                  "src": "201:23:0"
-                }
-              ]
+              "src": "158:7:0",
+              "statements": []
             },
             "documentation": null,
-            "id": 20,
+            "id": 12,
             "implemented": true,
             "isConstructor": true,
             "isDeclaredConst": false,
@@ -339,95 +238,162 @@
               "parameters": [],
               "src": "158:0:0"
             },
-            "scope": 46,
-            "src": "137:94:0",
+            "scope": 121,
+            "src": "137:28:0",
             "stateMutability": "nonpayable",
             "superFunction": null,
             "visibility": "public"
           },
           {
             "constant": false,
-            "id": 24,
-            "name": "grades",
+            "id": 15,
+            "name": "assignment_ids",
             "nodeType": "VariableDeclaration",
-            "scope": 46,
-            "src": "261:36:0",
+            "scope": 121,
+            "src": "171:24:0",
             "stateVariable": true,
             "storageLocation": "default",
             "typeDescriptions": {
-              "typeIdentifier": "t_mapping$_t_uint256_$_t_struct$_Grade_$8_storage_$",
-              "typeString": "mapping(uint256 => struct Grading.Grade)"
+              "typeIdentifier": "t_array$_t_bytes32_$dyn_storage",
+              "typeString": "bytes32[]"
             },
             "typeName": {
-              "id": 23,
-              "keyType": {
-                "id": 21,
-                "name": "uint",
+              "baseType": {
+                "id": 13,
+                "name": "bytes32",
                 "nodeType": "ElementaryTypeName",
-                "src": "269:4:0",
+                "src": "171:7:0",
                 "typeDescriptions": {
-                  "typeIdentifier": "t_uint256",
-                  "typeString": "uint256"
+                  "typeIdentifier": "t_bytes32",
+                  "typeString": "bytes32"
                 }
               },
-              "nodeType": "Mapping",
-              "src": "261:22:0",
+              "id": 14,
+              "length": null,
+              "nodeType": "ArrayTypeName",
+              "src": "171:9:0",
               "typeDescriptions": {
-                "typeIdentifier": "t_mapping$_t_uint256_$_t_struct$_Grade_$8_storage_$",
-                "typeString": "mapping(uint256 => struct Grading.Grade)"
-              },
-              "valueType": {
-                "contractScope": null,
-                "id": 22,
-                "name": "Grade",
-                "nodeType": "UserDefinedTypeName",
-                "referencedDeclaration": 8,
-                "src": "277:5:0",
-                "typeDescriptions": {
-                  "typeIdentifier": "t_struct$_Grade_$8_storage_ptr",
-                  "typeString": "struct Grading.Grade"
-                }
+                "typeIdentifier": "t_array$_t_bytes32_$dyn_storage_ptr",
+                "typeString": "bytes32[]"
               }
             },
             "value": null,
-            "visibility": "public"
+            "visibility": "internal"
           },
           {
             "constant": false,
-            "id": 26,
-            "name": "gradesCount",
+            "id": 20,
+            "name": "assignments",
             "nodeType": "VariableDeclaration",
-            "scope": 46,
-            "src": "330:23:0",
+            "scope": 121,
+            "src": "202:47:0",
             "stateVariable": true,
             "storageLocation": "default",
             "typeDescriptions": {
-              "typeIdentifier": "t_uint256",
-              "typeString": "uint256"
+              "typeIdentifier": "t_mapping$_t_bytes32_$_t_array$_t_struct$_Grade_$8_storage_$dyn_storage_$",
+              "typeString": "mapping(bytes32 => struct Grading.Grade[])"
             },
             "typeName": {
-              "id": 25,
-              "name": "uint",
-              "nodeType": "ElementaryTypeName",
-              "src": "330:4:0",
+              "id": 19,
+              "keyType": {
+                "id": 16,
+                "name": "bytes32",
+                "nodeType": "ElementaryTypeName",
+                "src": "210:7:0",
+                "typeDescriptions": {
+                  "typeIdentifier": "t_bytes32",
+                  "typeString": "bytes32"
+                }
+              },
+              "nodeType": "Mapping",
+              "src": "202:27:0",
               "typeDescriptions": {
-                "typeIdentifier": "t_uint256",
-                "typeString": "uint256"
+                "typeIdentifier": "t_mapping$_t_bytes32_$_t_array$_t_struct$_Grade_$8_storage_$dyn_storage_$",
+                "typeString": "mapping(bytes32 => struct Grading.Grade[])"
+              },
+              "valueType": {
+                "baseType": {
+                  "contractScope": null,
+                  "id": 17,
+                  "name": "Grade",
+                  "nodeType": "UserDefinedTypeName",
+                  "referencedDeclaration": 8,
+                  "src": "221:5:0",
+                  "typeDescriptions": {
+                    "typeIdentifier": "t_struct$_Grade_$8_storage_ptr",
+                    "typeString": "struct Grading.Grade"
+                  }
+                },
+                "id": 18,
+                "length": null,
+                "nodeType": "ArrayTypeName",
+                "src": "221:7:0",
+                "typeDescriptions": {
+                  "typeIdentifier": "t_array$_t_struct$_Grade_$8_storage_$dyn_storage_ptr",
+                  "typeString": "struct Grading.Grade[]"
+                }
               }
             },
             "value": null,
-            "visibility": "public"
+            "visibility": "private"
           },
           {
             "body": {
-              "id": 44,
+              "id": 39,
               "nodeType": "Block",
-              "src": "400:91:0",
+              "src": "311:103:0",
               "statements": [
+                {
+                  "assignments": [],
+                  "declarations": [
+                    {
+                      "constant": false,
+                      "id": 28,
+                      "name": "_init",
+                      "nodeType": "VariableDeclaration",
+                      "scope": 40,
+                      "src": "321:13:0",
+                      "stateVariable": false,
+                      "storageLocation": "default",
+                      "typeDescriptions": {
+                        "typeIdentifier": "t_array$_t_struct$_Grade_$8_storage_$dyn_storage_ptr",
+                        "typeString": "struct Grading.Grade[]"
+                      },
+                      "typeName": {
+                        "baseType": {
+                          "contractScope": null,
+                          "id": 26,
+                          "name": "Grade",
+                          "nodeType": "UserDefinedTypeName",
+                          "referencedDeclaration": 8,
+                          "src": "321:5:0",
+                          "typeDescriptions": {
+                            "typeIdentifier": "t_struct$_Grade_$8_storage_ptr",
+                            "typeString": "struct Grading.Grade"
+                          }
+                        },
+                        "id": 27,
+                        "length": null,
+                        "nodeType": "ArrayTypeName",
+                        "src": "321:7:0",
+                        "typeDescriptions": {
+                          "typeIdentifier": "t_array$_t_struct$_Grade_$8_storage_$dyn_storage_ptr",
+                          "typeString": "struct Grading.Grade[]"
+                        }
+                      },
+                      "value": null,
+                      "visibility": "internal"
+                    }
+                  ],
+                  "id": 29,
+                  "initialValue": null,
+                  "nodeType": "VariableDeclarationStatement",
+                  "src": "321:13:0"
+                },
                 {
                   "expression": {
                     "argumentTypes": null,
-                    "id": 32,
+                    "id": 31,
                     "isConstant": false,
                     "isLValue": false,
                     "isPure": false,
@@ -435,15 +401,15 @@
                     "nodeType": "UnaryOperation",
                     "operator": "++",
                     "prefix": false,
-                    "src": "410:14:0",
+                    "src": "344:18:0",
                     "subExpression": {
                       "argumentTypes": null,
-                      "id": 31,
-                      "name": "gradesCount",
+                      "id": 30,
+                      "name": "assignmentsCount",
                       "nodeType": "Identifier",
                       "overloadedDeclarations": [],
-                      "referencedDeclaration": 26,
-                      "src": "410:11:0",
+                      "referencedDeclaration": 69,
+                      "src": "344:16:0",
                       "typeDescriptions": {
                         "typeIdentifier": "t_uint256",
                         "typeString": "uint256"
@@ -454,14 +420,14 @@
                       "typeString": "uint256"
                     }
                   },
-                  "id": 33,
+                  "id": 32,
                   "nodeType": "ExpressionStatement",
-                  "src": "410:14:0"
+                  "src": "344:18:0"
                 },
                 {
                   "expression": {
                     "argumentTypes": null,
-                    "id": 42,
+                    "id": 37,
                     "isConstant": false,
                     "isLValue": false,
                     "isPure": false,
@@ -470,29 +436,29 @@
                       "argumentTypes": null,
                       "baseExpression": {
                         "argumentTypes": null,
-                        "id": 34,
-                        "name": "grades",
+                        "id": 33,
+                        "name": "assignments",
                         "nodeType": "Identifier",
                         "overloadedDeclarations": [],
-                        "referencedDeclaration": 24,
-                        "src": "434:6:0",
+                        "referencedDeclaration": 20,
+                        "src": "372:11:0",
                         "typeDescriptions": {
-                          "typeIdentifier": "t_mapping$_t_uint256_$_t_struct$_Grade_$8_storage_$",
-                          "typeString": "mapping(uint256 => struct Grading.Grade storage ref)"
+                          "typeIdentifier": "t_mapping$_t_bytes32_$_t_array$_t_struct$_Grade_$8_storage_$dyn_storage_$",
+                          "typeString": "mapping(bytes32 => struct Grading.Grade storage ref[] storage ref)"
                         }
                       },
-                      "id": 36,
+                      "id": 35,
                       "indexExpression": {
                         "argumentTypes": null,
-                        "id": 35,
-                        "name": "gradesCount",
+                        "id": 34,
+                        "name": "_assignment_id",
                         "nodeType": "Identifier",
                         "overloadedDeclarations": [],
-                        "referencedDeclaration": 26,
-                        "src": "441:11:0",
+                        "referencedDeclaration": 22,
+                        "src": "384:14:0",
                         "typeDescriptions": {
-                          "typeIdentifier": "t_uint256",
-                          "typeString": "uint256"
+                          "typeIdentifier": "t_bytes32",
+                          "typeString": "bytes32"
                         }
                       },
                       "isConstant": false,
@@ -500,183 +466,1096 @@
                       "isPure": false,
                       "lValueRequested": true,
                       "nodeType": "IndexAccess",
-                      "src": "434:19:0",
+                      "src": "372:27:0",
                       "typeDescriptions": {
-                        "typeIdentifier": "t_struct$_Grade_$8_storage",
-                        "typeString": "struct Grading.Grade storage ref"
+                        "typeIdentifier": "t_array$_t_struct$_Grade_$8_storage_$dyn_storage",
+                        "typeString": "struct Grading.Grade storage ref[] storage ref"
                       }
                     },
                     "nodeType": "Assignment",
                     "operator": "=",
                     "rightHandSide": {
                       "argumentTypes": null,
-                      "arguments": [
-                        {
-                          "argumentTypes": null,
-                          "id": 38,
-                          "name": "gradesCount",
-                          "nodeType": "Identifier",
-                          "overloadedDeclarations": [],
-                          "referencedDeclaration": 26,
-                          "src": "462:11:0",
-                          "typeDescriptions": {
-                            "typeIdentifier": "t_uint256",
-                            "typeString": "uint256"
-                          }
-                        },
-                        {
-                          "argumentTypes": null,
-                          "id": 39,
-                          "name": "_name",
-                          "nodeType": "Identifier",
-                          "overloadedDeclarations": [],
-                          "referencedDeclaration": 28,
-                          "src": "475:5:0",
-                          "typeDescriptions": {
-                            "typeIdentifier": "t_string_memory_ptr",
-                            "typeString": "string memory"
-                          }
-                        },
-                        {
-                          "argumentTypes": null,
-                          "hexValue": "30",
-                          "id": 40,
-                          "isConstant": false,
-                          "isLValue": false,
-                          "isPure": true,
-                          "kind": "number",
-                          "lValueRequested": false,
-                          "nodeType": "Literal",
-                          "src": "482:1:0",
-                          "subdenomination": null,
-                          "typeDescriptions": {
-                            "typeIdentifier": "t_rational_0_by_1",
-                            "typeString": "int_const 0"
-                          },
-                          "value": "0"
-                        }
-                      ],
-                      "expression": {
-                        "argumentTypes": [
-                          {
-                            "typeIdentifier": "t_uint256",
-                            "typeString": "uint256"
-                          },
-                          {
-                            "typeIdentifier": "t_string_memory_ptr",
-                            "typeString": "string memory"
-                          },
-                          {
-                            "typeIdentifier": "t_rational_0_by_1",
-                            "typeString": "int_const 0"
-                          }
-                        ],
-                        "id": 37,
-                        "name": "Grade",
-                        "nodeType": "Identifier",
-                        "overloadedDeclarations": [],
-                        "referencedDeclaration": 8,
-                        "src": "456:5:0",
-                        "typeDescriptions": {
-                          "typeIdentifier": "t_type$_t_struct$_Grade_$8_storage_ptr_$",
-                          "typeString": "type(struct Grading.Grade storage pointer)"
-                        }
-                      },
-                      "id": 41,
-                      "isConstant": false,
-                      "isLValue": false,
-                      "isPure": false,
-                      "kind": "structConstructorCall",
-                      "lValueRequested": false,
-                      "names": [],
-                      "nodeType": "FunctionCall",
-                      "src": "456:28:0",
+                      "id": 36,
+                      "name": "_init",
+                      "nodeType": "Identifier",
+                      "overloadedDeclarations": [],
+                      "referencedDeclaration": 28,
+                      "src": "402:5:0",
                       "typeDescriptions": {
-                        "typeIdentifier": "t_struct$_Grade_$8_memory",
-                        "typeString": "struct Grading.Grade memory"
+                        "typeIdentifier": "t_array$_t_struct$_Grade_$8_storage_$dyn_storage_ptr",
+                        "typeString": "struct Grading.Grade storage ref[] storage pointer"
                       }
                     },
-                    "src": "434:50:0",
+                    "src": "372:35:0",
                     "typeDescriptions": {
-                      "typeIdentifier": "t_struct$_Grade_$8_storage",
-                      "typeString": "struct Grading.Grade storage ref"
+                      "typeIdentifier": "t_array$_t_struct$_Grade_$8_storage_$dyn_storage",
+                      "typeString": "struct Grading.Grade storage ref[] storage ref"
                     }
                   },
-                  "id": 43,
+                  "id": 38,
                   "nodeType": "ExpressionStatement",
-                  "src": "434:50:0"
+                  "src": "372:35:0"
                 }
               ]
             },
             "documentation": null,
-            "id": 45,
+            "id": 40,
             "implemented": true,
             "isConstructor": false,
             "isDeclaredConst": false,
             "modifiers": [],
-            "name": "addGrade",
+            "name": "addAssignment",
             "nodeType": "FunctionDefinition",
             "parameters": {
-              "id": 29,
+              "id": 23,
               "nodeType": "ParameterList",
               "parameters": [
                 {
                   "constant": false,
-                  "id": 28,
-                  "name": "_name",
+                  "id": 22,
+                  "name": "_assignment_id",
                   "nodeType": "VariableDeclaration",
-                  "scope": 45,
-                  "src": "379:12:0",
+                  "scope": 40,
+                  "src": "280:22:0",
                   "stateVariable": false,
                   "storageLocation": "default",
                   "typeDescriptions": {
-                    "typeIdentifier": "t_string_memory_ptr",
-                    "typeString": "string"
+                    "typeIdentifier": "t_bytes32",
+                    "typeString": "bytes32"
                   },
                   "typeName": {
-                    "id": 27,
-                    "name": "string",
+                    "id": 21,
+                    "name": "bytes32",
                     "nodeType": "ElementaryTypeName",
-                    "src": "379:6:0",
+                    "src": "280:7:0",
                     "typeDescriptions": {
-                      "typeIdentifier": "t_string_storage_ptr",
-                      "typeString": "string"
+                      "typeIdentifier": "t_bytes32",
+                      "typeString": "bytes32"
                     }
                   },
                   "value": null,
                   "visibility": "internal"
                 }
               ],
-              "src": "378:14:0"
+              "src": "279:24:0"
             },
             "payable": false,
             "returnParameters": {
-              "id": 30,
+              "id": 24,
               "nodeType": "ParameterList",
               "parameters": [],
-              "src": "400:0:0"
+              "src": "311:0:0"
             },
-            "scope": 46,
-            "src": "360:131:0",
+            "scope": 121,
+            "src": "256:158:0",
+            "stateMutability": "nonpayable",
+            "superFunction": null,
+            "visibility": "public"
+          },
+          {
+            "body": {
+              "id": 66,
+              "nodeType": "Block",
+              "src": "512:110:0",
+              "statements": [
+                {
+                  "assignments": [
+                    52
+                  ],
+                  "declarations": [
+                    {
+                      "constant": false,
+                      "id": 52,
+                      "name": "grade",
+                      "nodeType": "VariableDeclaration",
+                      "scope": 67,
+                      "src": "522:18:0",
+                      "stateVariable": false,
+                      "storageLocation": "memory",
+                      "typeDescriptions": {
+                        "typeIdentifier": "t_struct$_Grade_$8_memory_ptr",
+                        "typeString": "struct Grading.Grade"
+                      },
+                      "typeName": {
+                        "contractScope": null,
+                        "id": 51,
+                        "name": "Grade",
+                        "nodeType": "UserDefinedTypeName",
+                        "referencedDeclaration": 8,
+                        "src": "522:5:0",
+                        "typeDescriptions": {
+                          "typeIdentifier": "t_struct$_Grade_$8_storage_ptr",
+                          "typeString": "struct Grading.Grade"
+                        }
+                      },
+                      "value": null,
+                      "visibility": "internal"
+                    }
+                  ],
+                  "id": 58,
+                  "initialValue": {
+                    "argumentTypes": null,
+                    "arguments": [
+                      {
+                        "argumentTypes": null,
+                        "id": 54,
+                        "name": "_from",
+                        "nodeType": "Identifier",
+                        "overloadedDeclarations": [],
+                        "referencedDeclaration": 44,
+                        "src": "549:5:0",
+                        "typeDescriptions": {
+                          "typeIdentifier": "t_bytes32",
+                          "typeString": "bytes32"
+                        }
+                      },
+                      {
+                        "argumentTypes": null,
+                        "id": 55,
+                        "name": "_to",
+                        "nodeType": "Identifier",
+                        "overloadedDeclarations": [],
+                        "referencedDeclaration": 46,
+                        "src": "555:3:0",
+                        "typeDescriptions": {
+                          "typeIdentifier": "t_bytes32",
+                          "typeString": "bytes32"
+                        }
+                      },
+                      {
+                        "argumentTypes": null,
+                        "id": 56,
+                        "name": "_grade",
+                        "nodeType": "Identifier",
+                        "overloadedDeclarations": [],
+                        "referencedDeclaration": 48,
+                        "src": "559:6:0",
+                        "typeDescriptions": {
+                          "typeIdentifier": "t_uint256",
+                          "typeString": "uint256"
+                        }
+                      }
+                    ],
+                    "expression": {
+                      "argumentTypes": [
+                        {
+                          "typeIdentifier": "t_bytes32",
+                          "typeString": "bytes32"
+                        },
+                        {
+                          "typeIdentifier": "t_bytes32",
+                          "typeString": "bytes32"
+                        },
+                        {
+                          "typeIdentifier": "t_uint256",
+                          "typeString": "uint256"
+                        }
+                      ],
+                      "id": 53,
+                      "name": "Grade",
+                      "nodeType": "Identifier",
+                      "overloadedDeclarations": [],
+                      "referencedDeclaration": 8,
+                      "src": "543:5:0",
+                      "typeDescriptions": {
+                        "typeIdentifier": "t_type$_t_struct$_Grade_$8_storage_ptr_$",
+                        "typeString": "type(struct Grading.Grade storage pointer)"
+                      }
+                    },
+                    "id": 57,
+                    "isConstant": false,
+                    "isLValue": false,
+                    "isPure": false,
+                    "kind": "structConstructorCall",
+                    "lValueRequested": false,
+                    "names": [],
+                    "nodeType": "FunctionCall",
+                    "src": "543:23:0",
+                    "typeDescriptions": {
+                      "typeIdentifier": "t_struct$_Grade_$8_memory",
+                      "typeString": "struct Grading.Grade memory"
+                    }
+                  },
+                  "nodeType": "VariableDeclarationStatement",
+                  "src": "522:44:0"
+                },
+                {
+                  "expression": {
+                    "argumentTypes": null,
+                    "arguments": [
+                      {
+                        "argumentTypes": null,
+                        "id": 63,
+                        "name": "grade",
+                        "nodeType": "Identifier",
+                        "overloadedDeclarations": [],
+                        "referencedDeclaration": 52,
+                        "src": "609:5:0",
+                        "typeDescriptions": {
+                          "typeIdentifier": "t_struct$_Grade_$8_memory_ptr",
+                          "typeString": "struct Grading.Grade memory"
+                        }
+                      }
+                    ],
+                    "expression": {
+                      "argumentTypes": [
+                        {
+                          "typeIdentifier": "t_struct$_Grade_$8_memory_ptr",
+                          "typeString": "struct Grading.Grade memory"
+                        }
+                      ],
+                      "expression": {
+                        "argumentTypes": null,
+                        "baseExpression": {
+                          "argumentTypes": null,
+                          "id": 59,
+                          "name": "assignments",
+                          "nodeType": "Identifier",
+                          "overloadedDeclarations": [],
+                          "referencedDeclaration": 20,
+                          "src": "576:11:0",
+                          "typeDescriptions": {
+                            "typeIdentifier": "t_mapping$_t_bytes32_$_t_array$_t_struct$_Grade_$8_storage_$dyn_storage_$",
+                            "typeString": "mapping(bytes32 => struct Grading.Grade storage ref[] storage ref)"
+                          }
+                        },
+                        "id": 61,
+                        "indexExpression": {
+                          "argumentTypes": null,
+                          "id": 60,
+                          "name": "_assignment_id",
+                          "nodeType": "Identifier",
+                          "overloadedDeclarations": [],
+                          "referencedDeclaration": 42,
+                          "src": "588:14:0",
+                          "typeDescriptions": {
+                            "typeIdentifier": "t_bytes32",
+                            "typeString": "bytes32"
+                          }
+                        },
+                        "isConstant": false,
+                        "isLValue": true,
+                        "isPure": false,
+                        "lValueRequested": false,
+                        "nodeType": "IndexAccess",
+                        "src": "576:27:0",
+                        "typeDescriptions": {
+                          "typeIdentifier": "t_array$_t_struct$_Grade_$8_storage_$dyn_storage",
+                          "typeString": "struct Grading.Grade storage ref[] storage ref"
+                        }
+                      },
+                      "id": 62,
+                      "isConstant": false,
+                      "isLValue": false,
+                      "isPure": false,
+                      "lValueRequested": false,
+                      "memberName": "push",
+                      "nodeType": "MemberAccess",
+                      "referencedDeclaration": null,
+                      "src": "576:32:0",
+                      "typeDescriptions": {
+                        "typeIdentifier": "t_function_arraypush_nonpayable$_t_struct$_Grade_$8_storage_$returns$_t_uint256_$",
+                        "typeString": "function (struct Grading.Grade storage ref) returns (uint256)"
+                      }
+                    },
+                    "id": 64,
+                    "isConstant": false,
+                    "isLValue": false,
+                    "isPure": false,
+                    "kind": "functionCall",
+                    "lValueRequested": false,
+                    "names": [],
+                    "nodeType": "FunctionCall",
+                    "src": "576:39:0",
+                    "typeDescriptions": {
+                      "typeIdentifier": "t_uint256",
+                      "typeString": "uint256"
+                    }
+                  },
+                  "id": 65,
+                  "nodeType": "ExpressionStatement",
+                  "src": "576:39:0"
+                }
+              ]
+            },
+            "documentation": null,
+            "id": 67,
+            "implemented": true,
+            "isConstructor": false,
+            "isDeclaredConst": false,
+            "modifiers": [],
+            "name": "addGradeTo",
+            "nodeType": "FunctionDefinition",
+            "parameters": {
+              "id": 49,
+              "nodeType": "ParameterList",
+              "parameters": [
+                {
+                  "constant": false,
+                  "id": 42,
+                  "name": "_assignment_id",
+                  "nodeType": "VariableDeclaration",
+                  "scope": 67,
+                  "src": "440:22:0",
+                  "stateVariable": false,
+                  "storageLocation": "default",
+                  "typeDescriptions": {
+                    "typeIdentifier": "t_bytes32",
+                    "typeString": "bytes32"
+                  },
+                  "typeName": {
+                    "id": 41,
+                    "name": "bytes32",
+                    "nodeType": "ElementaryTypeName",
+                    "src": "440:7:0",
+                    "typeDescriptions": {
+                      "typeIdentifier": "t_bytes32",
+                      "typeString": "bytes32"
+                    }
+                  },
+                  "value": null,
+                  "visibility": "internal"
+                },
+                {
+                  "constant": false,
+                  "id": 44,
+                  "name": "_from",
+                  "nodeType": "VariableDeclaration",
+                  "scope": 67,
+                  "src": "464:13:0",
+                  "stateVariable": false,
+                  "storageLocation": "default",
+                  "typeDescriptions": {
+                    "typeIdentifier": "t_bytes32",
+                    "typeString": "bytes32"
+                  },
+                  "typeName": {
+                    "id": 43,
+                    "name": "bytes32",
+                    "nodeType": "ElementaryTypeName",
+                    "src": "464:7:0",
+                    "typeDescriptions": {
+                      "typeIdentifier": "t_bytes32",
+                      "typeString": "bytes32"
+                    }
+                  },
+                  "value": null,
+                  "visibility": "internal"
+                },
+                {
+                  "constant": false,
+                  "id": 46,
+                  "name": "_to",
+                  "nodeType": "VariableDeclaration",
+                  "scope": 67,
+                  "src": "479:11:0",
+                  "stateVariable": false,
+                  "storageLocation": "default",
+                  "typeDescriptions": {
+                    "typeIdentifier": "t_bytes32",
+                    "typeString": "bytes32"
+                  },
+                  "typeName": {
+                    "id": 45,
+                    "name": "bytes32",
+                    "nodeType": "ElementaryTypeName",
+                    "src": "479:7:0",
+                    "typeDescriptions": {
+                      "typeIdentifier": "t_bytes32",
+                      "typeString": "bytes32"
+                    }
+                  },
+                  "value": null,
+                  "visibility": "internal"
+                },
+                {
+                  "constant": false,
+                  "id": 48,
+                  "name": "_grade",
+                  "nodeType": "VariableDeclaration",
+                  "scope": 67,
+                  "src": "492:11:0",
+                  "stateVariable": false,
+                  "storageLocation": "default",
+                  "typeDescriptions": {
+                    "typeIdentifier": "t_uint256",
+                    "typeString": "uint256"
+                  },
+                  "typeName": {
+                    "id": 47,
+                    "name": "uint",
+                    "nodeType": "ElementaryTypeName",
+                    "src": "492:4:0",
+                    "typeDescriptions": {
+                      "typeIdentifier": "t_uint256",
+                      "typeString": "uint256"
+                    }
+                  },
+                  "value": null,
+                  "visibility": "internal"
+                }
+              ],
+              "src": "439:65:0"
+            },
+            "payable": false,
+            "returnParameters": {
+              "id": 50,
+              "nodeType": "ParameterList",
+              "parameters": [],
+              "src": "512:0:0"
+            },
+            "scope": 121,
+            "src": "420:202:0",
+            "stateMutability": "nonpayable",
+            "superFunction": null,
+            "visibility": "public"
+          },
+          {
+            "constant": false,
+            "id": 69,
+            "name": "assignmentsCount",
+            "nodeType": "VariableDeclaration",
+            "scope": 121,
+            "src": "628:28:0",
+            "stateVariable": true,
+            "storageLocation": "default",
+            "typeDescriptions": {
+              "typeIdentifier": "t_uint256",
+              "typeString": "uint256"
+            },
+            "typeName": {
+              "id": 68,
+              "name": "uint",
+              "nodeType": "ElementaryTypeName",
+              "src": "628:4:0",
+              "typeDescriptions": {
+                "typeIdentifier": "t_uint256",
+                "typeString": "uint256"
+              }
+            },
+            "value": null,
+            "visibility": "public"
+          },
+          {
+            "body": {
+              "id": 119,
+              "nodeType": "Block",
+              "src": "734:300:0",
+              "statements": [
+                {
+                  "assignments": [],
+                  "declarations": [
+                    {
+                      "constant": false,
+                      "id": 80,
+                      "name": "gradesCount",
+                      "nodeType": "VariableDeclaration",
+                      "scope": 120,
+                      "src": "744:18:0",
+                      "stateVariable": false,
+                      "storageLocation": "default",
+                      "typeDescriptions": {
+                        "typeIdentifier": "t_array$_t_uint256_$dyn_storage_ptr",
+                        "typeString": "uint256[]"
+                      },
+                      "typeName": {
+                        "baseType": {
+                          "id": 78,
+                          "name": "uint",
+                          "nodeType": "ElementaryTypeName",
+                          "src": "744:4:0",
+                          "typeDescriptions": {
+                            "typeIdentifier": "t_uint256",
+                            "typeString": "uint256"
+                          }
+                        },
+                        "id": 79,
+                        "length": null,
+                        "nodeType": "ArrayTypeName",
+                        "src": "744:6:0",
+                        "typeDescriptions": {
+                          "typeIdentifier": "t_array$_t_uint256_$dyn_storage_ptr",
+                          "typeString": "uint256[]"
+                        }
+                      },
+                      "value": null,
+                      "visibility": "internal"
+                    }
+                  ],
+                  "id": 81,
+                  "initialValue": null,
+                  "nodeType": "VariableDeclarationStatement",
+                  "src": "744:18:0"
+                },
+                {
+                  "body": {
+                    "id": 106,
+                    "nodeType": "Block",
+                    "src": "834:103:0",
+                    "statements": [
+                      {
+                        "expression": {
+                          "argumentTypes": null,
+                          "arguments": [
+                            {
+                              "argumentTypes": null,
+                              "expression": {
+                                "argumentTypes": null,
+                                "baseExpression": {
+                                  "argumentTypes": null,
+                                  "baseExpression": {
+                                    "argumentTypes": null,
+                                    "id": 98,
+                                    "name": "assignments",
+                                    "nodeType": "Identifier",
+                                    "overloadedDeclarations": [],
+                                    "referencedDeclaration": 20,
+                                    "src": "889:11:0",
+                                    "typeDescriptions": {
+                                      "typeIdentifier": "t_mapping$_t_bytes32_$_t_array$_t_struct$_Grade_$8_storage_$dyn_storage_$",
+                                      "typeString": "mapping(bytes32 => struct Grading.Grade storage ref[] storage ref)"
+                                    }
+                                  },
+                                  "id": 100,
+                                  "indexExpression": {
+                                    "argumentTypes": null,
+                                    "id": 99,
+                                    "name": "_assignment_id",
+                                    "nodeType": "Identifier",
+                                    "overloadedDeclarations": [],
+                                    "referencedDeclaration": 71,
+                                    "src": "901:14:0",
+                                    "typeDescriptions": {
+                                      "typeIdentifier": "t_bytes32",
+                                      "typeString": "bytes32"
+                                    }
+                                  },
+                                  "isConstant": false,
+                                  "isLValue": true,
+                                  "isPure": false,
+                                  "lValueRequested": false,
+                                  "nodeType": "IndexAccess",
+                                  "src": "889:27:0",
+                                  "typeDescriptions": {
+                                    "typeIdentifier": "t_array$_t_struct$_Grade_$8_storage_$dyn_storage",
+                                    "typeString": "struct Grading.Grade storage ref[] storage ref"
+                                  }
+                                },
+                                "id": 102,
+                                "indexExpression": {
+                                  "argumentTypes": null,
+                                  "id": 101,
+                                  "name": "i",
+                                  "nodeType": "Identifier",
+                                  "overloadedDeclarations": [],
+                                  "referencedDeclaration": 83,
+                                  "src": "917:1:0",
+                                  "typeDescriptions": {
+                                    "typeIdentifier": "t_uint256",
+                                    "typeString": "uint256"
+                                  }
+                                },
+                                "isConstant": false,
+                                "isLValue": true,
+                                "isPure": false,
+                                "lValueRequested": false,
+                                "nodeType": "IndexAccess",
+                                "src": "889:30:0",
+                                "typeDescriptions": {
+                                  "typeIdentifier": "t_struct$_Grade_$8_storage",
+                                  "typeString": "struct Grading.Grade storage ref"
+                                }
+                              },
+                              "id": 103,
+                              "isConstant": false,
+                              "isLValue": true,
+                              "isPure": false,
+                              "lValueRequested": false,
+                              "memberName": "grade",
+                              "nodeType": "MemberAccess",
+                              "referencedDeclaration": 7,
+                              "src": "889:36:0",
+                              "typeDescriptions": {
+                                "typeIdentifier": "t_uint256",
+                                "typeString": "uint256"
+                              }
+                            }
+                          ],
+                          "expression": {
+                            "argumentTypes": [
+                              {
+                                "typeIdentifier": "t_uint256",
+                                "typeString": "uint256"
+                              }
+                            ],
+                            "expression": {
+                              "argumentTypes": null,
+                              "id": 95,
+                              "name": "gradesCount",
+                              "nodeType": "Identifier",
+                              "overloadedDeclarations": [],
+                              "referencedDeclaration": 80,
+                              "src": "872:11:0",
+                              "typeDescriptions": {
+                                "typeIdentifier": "t_array$_t_uint256_$dyn_storage_ptr",
+                                "typeString": "uint256[] storage pointer"
+                              }
+                            },
+                            "id": 97,
+                            "isConstant": false,
+                            "isLValue": false,
+                            "isPure": false,
+                            "lValueRequested": false,
+                            "memberName": "push",
+                            "nodeType": "MemberAccess",
+                            "referencedDeclaration": null,
+                            "src": "872:16:0",
+                            "typeDescriptions": {
+                              "typeIdentifier": "t_function_arraypush_nonpayable$_t_uint256_$returns$_t_uint256_$",
+                              "typeString": "function (uint256) returns (uint256)"
+                            }
+                          },
+                          "id": 104,
+                          "isConstant": false,
+                          "isLValue": false,
+                          "isPure": false,
+                          "kind": "functionCall",
+                          "lValueRequested": false,
+                          "names": [],
+                          "nodeType": "FunctionCall",
+                          "src": "872:54:0",
+                          "typeDescriptions": {
+                            "typeIdentifier": "t_uint256",
+                            "typeString": "uint256"
+                          }
+                        },
+                        "id": 105,
+                        "nodeType": "ExpressionStatement",
+                        "src": "872:54:0"
+                      }
+                    ]
+                  },
+                  "condition": {
+                    "argumentTypes": null,
+                    "commonType": {
+                      "typeIdentifier": "t_uint256",
+                      "typeString": "uint256"
+                    },
+                    "id": 91,
+                    "isConstant": false,
+                    "isLValue": false,
+                    "isPure": false,
+                    "lValueRequested": false,
+                    "leftExpression": {
+                      "argumentTypes": null,
+                      "id": 86,
+                      "name": "i",
+                      "nodeType": "Identifier",
+                      "overloadedDeclarations": [],
+                      "referencedDeclaration": 83,
+                      "src": "789:1:0",
+                      "typeDescriptions": {
+                        "typeIdentifier": "t_uint256",
+                        "typeString": "uint256"
+                      }
+                    },
+                    "nodeType": "BinaryOperation",
+                    "operator": "<",
+                    "rightExpression": {
+                      "argumentTypes": null,
+                      "expression": {
+                        "argumentTypes": null,
+                        "baseExpression": {
+                          "argumentTypes": null,
+                          "id": 87,
+                          "name": "assignments",
+                          "nodeType": "Identifier",
+                          "overloadedDeclarations": [],
+                          "referencedDeclaration": 20,
+                          "src": "793:11:0",
+                          "typeDescriptions": {
+                            "typeIdentifier": "t_mapping$_t_bytes32_$_t_array$_t_struct$_Grade_$8_storage_$dyn_storage_$",
+                            "typeString": "mapping(bytes32 => struct Grading.Grade storage ref[] storage ref)"
+                          }
+                        },
+                        "id": 89,
+                        "indexExpression": {
+                          "argumentTypes": null,
+                          "id": 88,
+                          "name": "_assignment_id",
+                          "nodeType": "Identifier",
+                          "overloadedDeclarations": [],
+                          "referencedDeclaration": 71,
+                          "src": "805:14:0",
+                          "typeDescriptions": {
+                            "typeIdentifier": "t_bytes32",
+                            "typeString": "bytes32"
+                          }
+                        },
+                        "isConstant": false,
+                        "isLValue": true,
+                        "isPure": false,
+                        "lValueRequested": false,
+                        "nodeType": "IndexAccess",
+                        "src": "793:27:0",
+                        "typeDescriptions": {
+                          "typeIdentifier": "t_array$_t_struct$_Grade_$8_storage_$dyn_storage",
+                          "typeString": "struct Grading.Grade storage ref[] storage ref"
+                        }
+                      },
+                      "id": 90,
+                      "isConstant": false,
+                      "isLValue": true,
+                      "isPure": false,
+                      "lValueRequested": false,
+                      "memberName": "length",
+                      "nodeType": "MemberAccess",
+                      "referencedDeclaration": null,
+                      "src": "793:34:0",
+                      "typeDescriptions": {
+                        "typeIdentifier": "t_uint256",
+                        "typeString": "uint256"
+                      }
+                    },
+                    "src": "789:38:0",
+                    "typeDescriptions": {
+                      "typeIdentifier": "t_bool",
+                      "typeString": "bool"
+                    }
+                  },
+                  "id": 107,
+                  "initializationExpression": {
+                    "assignments": [
+                      83
+                    ],
+                    "declarations": [
+                      {
+                        "constant": false,
+                        "id": 83,
+                        "name": "i",
+                        "nodeType": "VariableDeclaration",
+                        "scope": 120,
+                        "src": "777:6:0",
+                        "stateVariable": false,
+                        "storageLocation": "default",
+                        "typeDescriptions": {
+                          "typeIdentifier": "t_uint256",
+                          "typeString": "uint256"
+                        },
+                        "typeName": {
+                          "id": 82,
+                          "name": "uint",
+                          "nodeType": "ElementaryTypeName",
+                          "src": "777:4:0",
+                          "typeDescriptions": {
+                            "typeIdentifier": "t_uint256",
+                            "typeString": "uint256"
+                          }
+                        },
+                        "value": null,
+                        "visibility": "internal"
+                      }
+                    ],
+                    "id": 85,
+                    "initialValue": {
+                      "argumentTypes": null,
+                      "hexValue": "30",
+                      "id": 84,
+                      "isConstant": false,
+                      "isLValue": false,
+                      "isPure": true,
+                      "kind": "number",
+                      "lValueRequested": false,
+                      "nodeType": "Literal",
+                      "src": "786:1:0",
+                      "subdenomination": null,
+                      "typeDescriptions": {
+                        "typeIdentifier": "t_rational_0_by_1",
+                        "typeString": "int_const 0"
+                      },
+                      "value": "0"
+                    },
+                    "nodeType": "VariableDeclarationStatement",
+                    "src": "777:10:0"
+                  },
+                  "loopExpression": {
+                    "expression": {
+                      "argumentTypes": null,
+                      "id": 93,
+                      "isConstant": false,
+                      "isLValue": false,
+                      "isPure": false,
+                      "lValueRequested": false,
+                      "nodeType": "UnaryOperation",
+                      "operator": "++",
+                      "prefix": false,
+                      "src": "829:3:0",
+                      "subExpression": {
+                        "argumentTypes": null,
+                        "id": 92,
+                        "name": "i",
+                        "nodeType": "Identifier",
+                        "overloadedDeclarations": [],
+                        "referencedDeclaration": 83,
+                        "src": "829:1:0",
+                        "typeDescriptions": {
+                          "typeIdentifier": "t_uint256",
+                          "typeString": "uint256"
+                        }
+                      },
+                      "typeDescriptions": {
+                        "typeIdentifier": "t_uint256",
+                        "typeString": "uint256"
+                      }
+                    },
+                    "id": 94,
+                    "nodeType": "ExpressionStatement",
+                    "src": "829:3:0"
+                  },
+                  "nodeType": "ForStatement",
+                  "src": "772:165:0"
+                },
+                {
+                  "expression": {
+                    "argumentTypes": null,
+                    "arguments": [
+                      {
+                        "argumentTypes": null,
+                        "expression": {
+                          "argumentTypes": null,
+                          "baseExpression": {
+                            "argumentTypes": null,
+                            "id": 111,
+                            "name": "assignments",
+                            "nodeType": "Identifier",
+                            "overloadedDeclarations": [],
+                            "referencedDeclaration": 20,
+                            "src": "964:11:0",
+                            "typeDescriptions": {
+                              "typeIdentifier": "t_mapping$_t_bytes32_$_t_array$_t_struct$_Grade_$8_storage_$dyn_storage_$",
+                              "typeString": "mapping(bytes32 => struct Grading.Grade storage ref[] storage ref)"
+                            }
+                          },
+                          "id": 113,
+                          "indexExpression": {
+                            "argumentTypes": null,
+                            "id": 112,
+                            "name": "_assignment_id",
+                            "nodeType": "Identifier",
+                            "overloadedDeclarations": [],
+                            "referencedDeclaration": 71,
+                            "src": "976:14:0",
+                            "typeDescriptions": {
+                              "typeIdentifier": "t_bytes32",
+                              "typeString": "bytes32"
+                            }
+                          },
+                          "isConstant": false,
+                          "isLValue": true,
+                          "isPure": false,
+                          "lValueRequested": false,
+                          "nodeType": "IndexAccess",
+                          "src": "964:27:0",
+                          "typeDescriptions": {
+                            "typeIdentifier": "t_array$_t_struct$_Grade_$8_storage_$dyn_storage",
+                            "typeString": "struct Grading.Grade storage ref[] storage ref"
+                          }
+                        },
+                        "id": 114,
+                        "isConstant": false,
+                        "isLValue": true,
+                        "isPure": false,
+                        "lValueRequested": false,
+                        "memberName": "length",
+                        "nodeType": "MemberAccess",
+                        "referencedDeclaration": null,
+                        "src": "964:34:0",
+                        "typeDescriptions": {
+                          "typeIdentifier": "t_uint256",
+                          "typeString": "uint256"
+                        }
+                      }
+                    ],
+                    "expression": {
+                      "argumentTypes": [
+                        {
+                          "typeIdentifier": "t_uint256",
+                          "typeString": "uint256"
+                        }
+                      ],
+                      "expression": {
+                        "argumentTypes": null,
+                        "id": 108,
+                        "name": "gradesCount",
+                        "nodeType": "Identifier",
+                        "overloadedDeclarations": [],
+                        "referencedDeclaration": 80,
+                        "src": "947:11:0",
+                        "typeDescriptions": {
+                          "typeIdentifier": "t_array$_t_uint256_$dyn_storage_ptr",
+                          "typeString": "uint256[] storage pointer"
+                        }
+                      },
+                      "id": 110,
+                      "isConstant": false,
+                      "isLValue": false,
+                      "isPure": false,
+                      "lValueRequested": false,
+                      "memberName": "push",
+                      "nodeType": "MemberAccess",
+                      "referencedDeclaration": null,
+                      "src": "947:16:0",
+                      "typeDescriptions": {
+                        "typeIdentifier": "t_function_arraypush_nonpayable$_t_uint256_$returns$_t_uint256_$",
+                        "typeString": "function (uint256) returns (uint256)"
+                      }
+                    },
+                    "id": 115,
+                    "isConstant": false,
+                    "isLValue": false,
+                    "isPure": false,
+                    "kind": "functionCall",
+                    "lValueRequested": false,
+                    "names": [],
+                    "nodeType": "FunctionCall",
+                    "src": "947:52:0",
+                    "typeDescriptions": {
+                      "typeIdentifier": "t_uint256",
+                      "typeString": "uint256"
+                    }
+                  },
+                  "id": 116,
+                  "nodeType": "ExpressionStatement",
+                  "src": "947:52:0"
+                },
+                {
+                  "expression": {
+                    "argumentTypes": null,
+                    "id": 117,
+                    "name": "gradesCount",
+                    "nodeType": "Identifier",
+                    "overloadedDeclarations": [],
+                    "referencedDeclaration": 80,
+                    "src": "1016:11:0",
+                    "typeDescriptions": {
+                      "typeIdentifier": "t_array$_t_uint256_$dyn_storage_ptr",
+                      "typeString": "uint256[] storage pointer"
+                    }
+                  },
+                  "functionReturnParameters": 76,
+                  "id": 118,
+                  "nodeType": "Return",
+                  "src": "1009:18:0"
+                }
+              ]
+            },
+            "documentation": null,
+            "id": 120,
+            "implemented": true,
+            "isConstructor": false,
+            "isDeclaredConst": false,
+            "modifiers": [],
+            "name": "getGradesCount",
+            "nodeType": "FunctionDefinition",
+            "parameters": {
+              "id": 72,
+              "nodeType": "ParameterList",
+              "parameters": [
+                {
+                  "constant": false,
+                  "id": 71,
+                  "name": "_assignment_id",
+                  "nodeType": "VariableDeclaration",
+                  "scope": 120,
+                  "src": "687:22:0",
+                  "stateVariable": false,
+                  "storageLocation": "default",
+                  "typeDescriptions": {
+                    "typeIdentifier": "t_bytes32",
+                    "typeString": "bytes32"
+                  },
+                  "typeName": {
+                    "id": 70,
+                    "name": "bytes32",
+                    "nodeType": "ElementaryTypeName",
+                    "src": "687:7:0",
+                    "typeDescriptions": {
+                      "typeIdentifier": "t_bytes32",
+                      "typeString": "bytes32"
+                    }
+                  },
+                  "value": null,
+                  "visibility": "internal"
+                }
+              ],
+              "src": "686:24:0"
+            },
+            "payable": false,
+            "returnParameters": {
+              "id": 76,
+              "nodeType": "ParameterList",
+              "parameters": [
+                {
+                  "constant": false,
+                  "id": 75,
+                  "name": "",
+                  "nodeType": "VariableDeclaration",
+                  "scope": 120,
+                  "src": "726:6:0",
+                  "stateVariable": false,
+                  "storageLocation": "default",
+                  "typeDescriptions": {
+                    "typeIdentifier": "t_array$_t_uint256_$dyn_memory_ptr",
+                    "typeString": "uint256[]"
+                  },
+                  "typeName": {
+                    "baseType": {
+                      "id": 73,
+                      "name": "uint",
+                      "nodeType": "ElementaryTypeName",
+                      "src": "726:4:0",
+                      "typeDescriptions": {
+                        "typeIdentifier": "t_uint256",
+                        "typeString": "uint256"
+                      }
+                    },
+                    "id": 74,
+                    "length": null,
+                    "nodeType": "ArrayTypeName",
+                    "src": "726:6:0",
+                    "typeDescriptions": {
+                      "typeIdentifier": "t_array$_t_uint256_$dyn_storage_ptr",
+                      "typeString": "uint256[]"
+                    }
+                  },
+                  "value": null,
+                  "visibility": "internal"
+                }
+              ],
+              "src": "725:8:0"
+            },
+            "scope": 121,
+            "src": "663:371:0",
             "stateMutability": "nonpayable",
             "superFunction": null,
             "visibility": "public"
           }
         ],
-        "scope": 47,
-        "src": "26:467:0"
+        "scope": 122,
+        "src": "26:1010:0"
       }
     ],
-    "src": "0:494:0"
+    "src": "0:1037:0"
   },
   "legacyAST": {
-    "absolutePath": "/Users/biancas/Desktop/grade_my_team/contracts/Grading.sol",
+    "absolutePath": "/Users/biancas/DS_PROJECT/grade_my_team/contracts/Grading.sol",
     "exportedSymbols": {
       "Grading": [
-        46
+        121
       ]
     },
-    "id": 47,
+    "id": 122,
     "nodeType": "SourceUnit",
     "nodes": [
       {
@@ -696,9 +1575,9 @@
         "contractKind": "contract",
         "documentation": null,
         "fullyImplemented": true,
-        "id": 46,
+        "id": 121,
         "linearizedBaseContracts": [
-          46
+          121
         ],
         "name": "Grading",
         "nodeType": "ContractDefinition",
@@ -710,24 +1589,24 @@
               {
                 "constant": false,
                 "id": 3,
-                "name": "id",
+                "name": "from",
                 "nodeType": "VariableDeclaration",
                 "scope": 8,
-                "src": "72:7:0",
+                "src": "72:12:0",
                 "stateVariable": false,
                 "storageLocation": "default",
                 "typeDescriptions": {
-                  "typeIdentifier": "t_uint256",
-                  "typeString": "uint256"
+                  "typeIdentifier": "t_bytes32",
+                  "typeString": "bytes32"
                 },
                 "typeName": {
                   "id": 2,
-                  "name": "uint",
+                  "name": "bytes32",
                   "nodeType": "ElementaryTypeName",
-                  "src": "72:4:0",
+                  "src": "72:7:0",
                   "typeDescriptions": {
-                    "typeIdentifier": "t_uint256",
-                    "typeString": "uint256"
+                    "typeIdentifier": "t_bytes32",
+                    "typeString": "bytes32"
                   }
                 },
                 "value": null,
@@ -736,24 +1615,24 @@
               {
                 "constant": false,
                 "id": 5,
-                "name": "name",
+                "name": "to",
                 "nodeType": "VariableDeclaration",
                 "scope": 8,
-                "src": "89:11:0",
+                "src": "94:10:0",
                 "stateVariable": false,
                 "storageLocation": "default",
                 "typeDescriptions": {
-                  "typeIdentifier": "t_string_storage_ptr",
-                  "typeString": "string"
+                  "typeIdentifier": "t_bytes32",
+                  "typeString": "bytes32"
                 },
                 "typeName": {
                   "id": 4,
-                  "name": "string",
+                  "name": "bytes32",
                   "nodeType": "ElementaryTypeName",
-                  "src": "89:6:0",
+                  "src": "94:7:0",
                   "typeDescriptions": {
-                    "typeIdentifier": "t_string_storage_ptr",
-                    "typeString": "string"
+                    "typeIdentifier": "t_bytes32",
+                    "typeString": "bytes32"
                   }
                 },
                 "value": null,
@@ -765,7 +1644,7 @@
                 "name": "grade",
                 "nodeType": "VariableDeclaration",
                 "scope": 8,
-                "src": "110:10:0",
+                "src": "114:10:0",
                 "stateVariable": false,
                 "storageLocation": "default",
                 "typeDescriptions": {
@@ -776,7 +1655,7 @@
                   "id": 6,
                   "name": "uint",
                   "nodeType": "ElementaryTypeName",
-                  "src": "110:4:0",
+                  "src": "114:4:0",
                   "typeDescriptions": {
                     "typeIdentifier": "t_uint256",
                     "typeString": "uint256"
@@ -788,138 +1667,19 @@
             ],
             "name": "Grade",
             "nodeType": "StructDefinition",
-            "scope": 46,
-            "src": "49:78:0",
+            "scope": 121,
+            "src": "49:82:0",
             "visibility": "public"
           },
           {
             "body": {
-              "id": 19,
+              "id": 11,
               "nodeType": "Block",
-              "src": "158:73:0",
-              "statements": [
-                {
-                  "expression": {
-                    "argumentTypes": null,
-                    "arguments": [
-                      {
-                        "argumentTypes": null,
-                        "hexValue": "43616e6469646174652031",
-                        "id": 12,
-                        "isConstant": false,
-                        "isLValue": false,
-                        "isPure": true,
-                        "kind": "string",
-                        "lValueRequested": false,
-                        "nodeType": "Literal",
-                        "src": "177:13:0",
-                        "subdenomination": null,
-                        "typeDescriptions": {
-                          "typeIdentifier": "t_stringliteral_41f9dcbd43e9b33194759b5a51b1df9864cdc2b2138ff106f03091eb79861f0c",
-                          "typeString": "literal_string \"Candidate 1\""
-                        },
-                        "value": "Candidate 1"
-                      }
-                    ],
-                    "expression": {
-                      "argumentTypes": [
-                        {
-                          "typeIdentifier": "t_stringliteral_41f9dcbd43e9b33194759b5a51b1df9864cdc2b2138ff106f03091eb79861f0c",
-                          "typeString": "literal_string \"Candidate 1\""
-                        }
-                      ],
-                      "id": 11,
-                      "name": "addGrade",
-                      "nodeType": "Identifier",
-                      "overloadedDeclarations": [],
-                      "referencedDeclaration": 45,
-                      "src": "168:8:0",
-                      "typeDescriptions": {
-                        "typeIdentifier": "t_function_internal_nonpayable$_t_string_memory_ptr_$returns$__$",
-                        "typeString": "function (string memory)"
-                      }
-                    },
-                    "id": 13,
-                    "isConstant": false,
-                    "isLValue": false,
-                    "isPure": false,
-                    "kind": "functionCall",
-                    "lValueRequested": false,
-                    "names": [],
-                    "nodeType": "FunctionCall",
-                    "src": "168:23:0",
-                    "typeDescriptions": {
-                      "typeIdentifier": "t_tuple$__$",
-                      "typeString": "tuple()"
-                    }
-                  },
-                  "id": 14,
-                  "nodeType": "ExpressionStatement",
-                  "src": "168:23:0"
-                },
-                {
-                  "expression": {
-                    "argumentTypes": null,
-                    "arguments": [
-                      {
-                        "argumentTypes": null,
-                        "hexValue": "43616e6469646174652032",
-                        "id": 16,
-                        "isConstant": false,
-                        "isLValue": false,
-                        "isPure": true,
-                        "kind": "string",
-                        "lValueRequested": false,
-                        "nodeType": "Literal",
-                        "src": "210:13:0",
-                        "subdenomination": null,
-                        "typeDescriptions": {
-                          "typeIdentifier": "t_stringliteral_f1f17440f69835dafba5c9fd0e4caa6c780807a80f8d1745ec7af1408d6cca4a",
-                          "typeString": "literal_string \"Candidate 2\""
-                        },
-                        "value": "Candidate 2"
-                      }
-                    ],
-                    "expression": {
-                      "argumentTypes": [
-                        {
-                          "typeIdentifier": "t_stringliteral_f1f17440f69835dafba5c9fd0e4caa6c780807a80f8d1745ec7af1408d6cca4a",
-                          "typeString": "literal_string \"Candidate 2\""
-                        }
-                      ],
-                      "id": 15,
-                      "name": "addGrade",
-                      "nodeType": "Identifier",
-                      "overloadedDeclarations": [],
-                      "referencedDeclaration": 45,
-                      "src": "201:8:0",
-                      "typeDescriptions": {
-                        "typeIdentifier": "t_function_internal_nonpayable$_t_string_memory_ptr_$returns$__$",
-                        "typeString": "function (string memory)"
-                      }
-                    },
-                    "id": 17,
-                    "isConstant": false,
-                    "isLValue": false,
-                    "isPure": false,
-                    "kind": "functionCall",
-                    "lValueRequested": false,
-                    "names": [],
-                    "nodeType": "FunctionCall",
-                    "src": "201:23:0",
-                    "typeDescriptions": {
-                      "typeIdentifier": "t_tuple$__$",
-                      "typeString": "tuple()"
-                    }
-                  },
-                  "id": 18,
-                  "nodeType": "ExpressionStatement",
-                  "src": "201:23:0"
-                }
-              ]
+              "src": "158:7:0",
+              "statements": []
             },
             "documentation": null,
-            "id": 20,
+            "id": 12,
             "implemented": true,
             "isConstructor": true,
             "isDeclaredConst": false,
@@ -939,95 +1699,162 @@
               "parameters": [],
               "src": "158:0:0"
             },
-            "scope": 46,
-            "src": "137:94:0",
+            "scope": 121,
+            "src": "137:28:0",
             "stateMutability": "nonpayable",
             "superFunction": null,
             "visibility": "public"
           },
           {
             "constant": false,
-            "id": 24,
-            "name": "grades",
+            "id": 15,
+            "name": "assignment_ids",
             "nodeType": "VariableDeclaration",
-            "scope": 46,
-            "src": "261:36:0",
+            "scope": 121,
+            "src": "171:24:0",
             "stateVariable": true,
             "storageLocation": "default",
             "typeDescriptions": {
-              "typeIdentifier": "t_mapping$_t_uint256_$_t_struct$_Grade_$8_storage_$",
-              "typeString": "mapping(uint256 => struct Grading.Grade)"
+              "typeIdentifier": "t_array$_t_bytes32_$dyn_storage",
+              "typeString": "bytes32[]"
             },
             "typeName": {
-              "id": 23,
-              "keyType": {
-                "id": 21,
-                "name": "uint",
+              "baseType": {
+                "id": 13,
+                "name": "bytes32",
                 "nodeType": "ElementaryTypeName",
-                "src": "269:4:0",
+                "src": "171:7:0",
                 "typeDescriptions": {
-                  "typeIdentifier": "t_uint256",
-                  "typeString": "uint256"
+                  "typeIdentifier": "t_bytes32",
+                  "typeString": "bytes32"
                 }
               },
-              "nodeType": "Mapping",
-              "src": "261:22:0",
+              "id": 14,
+              "length": null,
+              "nodeType": "ArrayTypeName",
+              "src": "171:9:0",
               "typeDescriptions": {
-                "typeIdentifier": "t_mapping$_t_uint256_$_t_struct$_Grade_$8_storage_$",
-                "typeString": "mapping(uint256 => struct Grading.Grade)"
-              },
-              "valueType": {
-                "contractScope": null,
-                "id": 22,
-                "name": "Grade",
-                "nodeType": "UserDefinedTypeName",
-                "referencedDeclaration": 8,
-                "src": "277:5:0",
-                "typeDescriptions": {
-                  "typeIdentifier": "t_struct$_Grade_$8_storage_ptr",
-                  "typeString": "struct Grading.Grade"
-                }
+                "typeIdentifier": "t_array$_t_bytes32_$dyn_storage_ptr",
+                "typeString": "bytes32[]"
               }
             },
             "value": null,
-            "visibility": "public"
+            "visibility": "internal"
           },
           {
             "constant": false,
-            "id": 26,
-            "name": "gradesCount",
+            "id": 20,
+            "name": "assignments",
             "nodeType": "VariableDeclaration",
-            "scope": 46,
-            "src": "330:23:0",
+            "scope": 121,
+            "src": "202:47:0",
             "stateVariable": true,
             "storageLocation": "default",
             "typeDescriptions": {
-              "typeIdentifier": "t_uint256",
-              "typeString": "uint256"
+              "typeIdentifier": "t_mapping$_t_bytes32_$_t_array$_t_struct$_Grade_$8_storage_$dyn_storage_$",
+              "typeString": "mapping(bytes32 => struct Grading.Grade[])"
             },
             "typeName": {
-              "id": 25,
-              "name": "uint",
-              "nodeType": "ElementaryTypeName",
-              "src": "330:4:0",
+              "id": 19,
+              "keyType": {
+                "id": 16,
+                "name": "bytes32",
+                "nodeType": "ElementaryTypeName",
+                "src": "210:7:0",
+                "typeDescriptions": {
+                  "typeIdentifier": "t_bytes32",
+                  "typeString": "bytes32"
+                }
+              },
+              "nodeType": "Mapping",
+              "src": "202:27:0",
               "typeDescriptions": {
-                "typeIdentifier": "t_uint256",
-                "typeString": "uint256"
+                "typeIdentifier": "t_mapping$_t_bytes32_$_t_array$_t_struct$_Grade_$8_storage_$dyn_storage_$",
+                "typeString": "mapping(bytes32 => struct Grading.Grade[])"
+              },
+              "valueType": {
+                "baseType": {
+                  "contractScope": null,
+                  "id": 17,
+                  "name": "Grade",
+                  "nodeType": "UserDefinedTypeName",
+                  "referencedDeclaration": 8,
+                  "src": "221:5:0",
+                  "typeDescriptions": {
+                    "typeIdentifier": "t_struct$_Grade_$8_storage_ptr",
+                    "typeString": "struct Grading.Grade"
+                  }
+                },
+                "id": 18,
+                "length": null,
+                "nodeType": "ArrayTypeName",
+                "src": "221:7:0",
+                "typeDescriptions": {
+                  "typeIdentifier": "t_array$_t_struct$_Grade_$8_storage_$dyn_storage_ptr",
+                  "typeString": "struct Grading.Grade[]"
+                }
               }
             },
             "value": null,
-            "visibility": "public"
+            "visibility": "private"
           },
           {
             "body": {
-              "id": 44,
+              "id": 39,
               "nodeType": "Block",
-              "src": "400:91:0",
+              "src": "311:103:0",
               "statements": [
+                {
+                  "assignments": [],
+                  "declarations": [
+                    {
+                      "constant": false,
+                      "id": 28,
+                      "name": "_init",
+                      "nodeType": "VariableDeclaration",
+                      "scope": 40,
+                      "src": "321:13:0",
+                      "stateVariable": false,
+                      "storageLocation": "default",
+                      "typeDescriptions": {
+                        "typeIdentifier": "t_array$_t_struct$_Grade_$8_storage_$dyn_storage_ptr",
+                        "typeString": "struct Grading.Grade[]"
+                      },
+                      "typeName": {
+                        "baseType": {
+                          "contractScope": null,
+                          "id": 26,
+                          "name": "Grade",
+                          "nodeType": "UserDefinedTypeName",
+                          "referencedDeclaration": 8,
+                          "src": "321:5:0",
+                          "typeDescriptions": {
+                            "typeIdentifier": "t_struct$_Grade_$8_storage_ptr",
+                            "typeString": "struct Grading.Grade"
+                          }
+                        },
+                        "id": 27,
+                        "length": null,
+                        "nodeType": "ArrayTypeName",
+                        "src": "321:7:0",
+                        "typeDescriptions": {
+                          "typeIdentifier": "t_array$_t_struct$_Grade_$8_storage_$dyn_storage_ptr",
+                          "typeString": "struct Grading.Grade[]"
+                        }
+                      },
+                      "value": null,
+                      "visibility": "internal"
+                    }
+                  ],
+                  "id": 29,
+                  "initialValue": null,
+                  "nodeType": "VariableDeclarationStatement",
+                  "src": "321:13:0"
+                },
                 {
                   "expression": {
                     "argumentTypes": null,
-                    "id": 32,
+                    "id": 31,
                     "isConstant": false,
                     "isLValue": false,
                     "isPure": false,
@@ -1035,15 +1862,15 @@
                     "nodeType": "UnaryOperation",
                     "operator": "++",
                     "prefix": false,
-                    "src": "410:14:0",
+                    "src": "344:18:0",
                     "subExpression": {
                       "argumentTypes": null,
-                      "id": 31,
-                      "name": "gradesCount",
+                      "id": 30,
+                      "name": "assignmentsCount",
                       "nodeType": "Identifier",
                       "overloadedDeclarations": [],
-                      "referencedDeclaration": 26,
-                      "src": "410:11:0",
+                      "referencedDeclaration": 69,
+                      "src": "344:16:0",
                       "typeDescriptions": {
                         "typeIdentifier": "t_uint256",
                         "typeString": "uint256"
@@ -1054,14 +1881,14 @@
                       "typeString": "uint256"
                     }
                   },
-                  "id": 33,
+                  "id": 32,
                   "nodeType": "ExpressionStatement",
-                  "src": "410:14:0"
+                  "src": "344:18:0"
                 },
                 {
                   "expression": {
                     "argumentTypes": null,
-                    "id": 42,
+                    "id": 37,
                     "isConstant": false,
                     "isLValue": false,
                     "isPure": false,
@@ -1070,29 +1897,29 @@
                       "argumentTypes": null,
                       "baseExpression": {
                         "argumentTypes": null,
-                        "id": 34,
-                        "name": "grades",
+                        "id": 33,
+                        "name": "assignments",
                         "nodeType": "Identifier",
                         "overloadedDeclarations": [],
-                        "referencedDeclaration": 24,
-                        "src": "434:6:0",
+                        "referencedDeclaration": 20,
+                        "src": "372:11:0",
                         "typeDescriptions": {
-                          "typeIdentifier": "t_mapping$_t_uint256_$_t_struct$_Grade_$8_storage_$",
-                          "typeString": "mapping(uint256 => struct Grading.Grade storage ref)"
+                          "typeIdentifier": "t_mapping$_t_bytes32_$_t_array$_t_struct$_Grade_$8_storage_$dyn_storage_$",
+                          "typeString": "mapping(bytes32 => struct Grading.Grade storage ref[] storage ref)"
                         }
                       },
-                      "id": 36,
+                      "id": 35,
                       "indexExpression": {
                         "argumentTypes": null,
-                        "id": 35,
-                        "name": "gradesCount",
+                        "id": 34,
+                        "name": "_assignment_id",
                         "nodeType": "Identifier",
                         "overloadedDeclarations": [],
-                        "referencedDeclaration": 26,
-                        "src": "441:11:0",
+                        "referencedDeclaration": 22,
+                        "src": "384:14:0",
                         "typeDescriptions": {
-                          "typeIdentifier": "t_uint256",
-                          "typeString": "uint256"
+                          "typeIdentifier": "t_bytes32",
+                          "typeString": "bytes32"
                         }
                       },
                       "isConstant": false,
@@ -1100,180 +1927,1099 @@
                       "isPure": false,
                       "lValueRequested": true,
                       "nodeType": "IndexAccess",
-                      "src": "434:19:0",
+                      "src": "372:27:0",
                       "typeDescriptions": {
-                        "typeIdentifier": "t_struct$_Grade_$8_storage",
-                        "typeString": "struct Grading.Grade storage ref"
+                        "typeIdentifier": "t_array$_t_struct$_Grade_$8_storage_$dyn_storage",
+                        "typeString": "struct Grading.Grade storage ref[] storage ref"
                       }
                     },
                     "nodeType": "Assignment",
                     "operator": "=",
                     "rightHandSide": {
                       "argumentTypes": null,
-                      "arguments": [
-                        {
-                          "argumentTypes": null,
-                          "id": 38,
-                          "name": "gradesCount",
-                          "nodeType": "Identifier",
-                          "overloadedDeclarations": [],
-                          "referencedDeclaration": 26,
-                          "src": "462:11:0",
-                          "typeDescriptions": {
-                            "typeIdentifier": "t_uint256",
-                            "typeString": "uint256"
-                          }
-                        },
-                        {
-                          "argumentTypes": null,
-                          "id": 39,
-                          "name": "_name",
-                          "nodeType": "Identifier",
-                          "overloadedDeclarations": [],
-                          "referencedDeclaration": 28,
-                          "src": "475:5:0",
-                          "typeDescriptions": {
-                            "typeIdentifier": "t_string_memory_ptr",
-                            "typeString": "string memory"
-                          }
-                        },
-                        {
-                          "argumentTypes": null,
-                          "hexValue": "30",
-                          "id": 40,
-                          "isConstant": false,
-                          "isLValue": false,
-                          "isPure": true,
-                          "kind": "number",
-                          "lValueRequested": false,
-                          "nodeType": "Literal",
-                          "src": "482:1:0",
-                          "subdenomination": null,
-                          "typeDescriptions": {
-                            "typeIdentifier": "t_rational_0_by_1",
-                            "typeString": "int_const 0"
-                          },
-                          "value": "0"
-                        }
-                      ],
-                      "expression": {
-                        "argumentTypes": [
-                          {
-                            "typeIdentifier": "t_uint256",
-                            "typeString": "uint256"
-                          },
-                          {
-                            "typeIdentifier": "t_string_memory_ptr",
-                            "typeString": "string memory"
-                          },
-                          {
-                            "typeIdentifier": "t_rational_0_by_1",
-                            "typeString": "int_const 0"
-                          }
-                        ],
-                        "id": 37,
-                        "name": "Grade",
-                        "nodeType": "Identifier",
-                        "overloadedDeclarations": [],
-                        "referencedDeclaration": 8,
-                        "src": "456:5:0",
-                        "typeDescriptions": {
-                          "typeIdentifier": "t_type$_t_struct$_Grade_$8_storage_ptr_$",
-                          "typeString": "type(struct Grading.Grade storage pointer)"
-                        }
-                      },
-                      "id": 41,
-                      "isConstant": false,
-                      "isLValue": false,
-                      "isPure": false,
-                      "kind": "structConstructorCall",
-                      "lValueRequested": false,
-                      "names": [],
-                      "nodeType": "FunctionCall",
-                      "src": "456:28:0",
+                      "id": 36,
+                      "name": "_init",
+                      "nodeType": "Identifier",
+                      "overloadedDeclarations": [],
+                      "referencedDeclaration": 28,
+                      "src": "402:5:0",
                       "typeDescriptions": {
-                        "typeIdentifier": "t_struct$_Grade_$8_memory",
-                        "typeString": "struct Grading.Grade memory"
+                        "typeIdentifier": "t_array$_t_struct$_Grade_$8_storage_$dyn_storage_ptr",
+                        "typeString": "struct Grading.Grade storage ref[] storage pointer"
                       }
                     },
-                    "src": "434:50:0",
+                    "src": "372:35:0",
                     "typeDescriptions": {
-                      "typeIdentifier": "t_struct$_Grade_$8_storage",
-                      "typeString": "struct Grading.Grade storage ref"
+                      "typeIdentifier": "t_array$_t_struct$_Grade_$8_storage_$dyn_storage",
+                      "typeString": "struct Grading.Grade storage ref[] storage ref"
                     }
                   },
-                  "id": 43,
+                  "id": 38,
                   "nodeType": "ExpressionStatement",
-                  "src": "434:50:0"
+                  "src": "372:35:0"
                 }
               ]
             },
             "documentation": null,
-            "id": 45,
+            "id": 40,
             "implemented": true,
             "isConstructor": false,
             "isDeclaredConst": false,
             "modifiers": [],
-            "name": "addGrade",
+            "name": "addAssignment",
             "nodeType": "FunctionDefinition",
             "parameters": {
-              "id": 29,
+              "id": 23,
               "nodeType": "ParameterList",
               "parameters": [
                 {
                   "constant": false,
-                  "id": 28,
-                  "name": "_name",
+                  "id": 22,
+                  "name": "_assignment_id",
                   "nodeType": "VariableDeclaration",
-                  "scope": 45,
-                  "src": "379:12:0",
+                  "scope": 40,
+                  "src": "280:22:0",
                   "stateVariable": false,
                   "storageLocation": "default",
                   "typeDescriptions": {
-                    "typeIdentifier": "t_string_memory_ptr",
-                    "typeString": "string"
+                    "typeIdentifier": "t_bytes32",
+                    "typeString": "bytes32"
                   },
                   "typeName": {
-                    "id": 27,
-                    "name": "string",
+                    "id": 21,
+                    "name": "bytes32",
                     "nodeType": "ElementaryTypeName",
-                    "src": "379:6:0",
+                    "src": "280:7:0",
                     "typeDescriptions": {
-                      "typeIdentifier": "t_string_storage_ptr",
-                      "typeString": "string"
+                      "typeIdentifier": "t_bytes32",
+                      "typeString": "bytes32"
                     }
                   },
                   "value": null,
                   "visibility": "internal"
                 }
               ],
-              "src": "378:14:0"
+              "src": "279:24:0"
             },
             "payable": false,
             "returnParameters": {
-              "id": 30,
+              "id": 24,
               "nodeType": "ParameterList",
               "parameters": [],
-              "src": "400:0:0"
+              "src": "311:0:0"
             },
-            "scope": 46,
-            "src": "360:131:0",
+            "scope": 121,
+            "src": "256:158:0",
+            "stateMutability": "nonpayable",
+            "superFunction": null,
+            "visibility": "public"
+          },
+          {
+            "body": {
+              "id": 66,
+              "nodeType": "Block",
+              "src": "512:110:0",
+              "statements": [
+                {
+                  "assignments": [
+                    52
+                  ],
+                  "declarations": [
+                    {
+                      "constant": false,
+                      "id": 52,
+                      "name": "grade",
+                      "nodeType": "VariableDeclaration",
+                      "scope": 67,
+                      "src": "522:18:0",
+                      "stateVariable": false,
+                      "storageLocation": "memory",
+                      "typeDescriptions": {
+                        "typeIdentifier": "t_struct$_Grade_$8_memory_ptr",
+                        "typeString": "struct Grading.Grade"
+                      },
+                      "typeName": {
+                        "contractScope": null,
+                        "id": 51,
+                        "name": "Grade",
+                        "nodeType": "UserDefinedTypeName",
+                        "referencedDeclaration": 8,
+                        "src": "522:5:0",
+                        "typeDescriptions": {
+                          "typeIdentifier": "t_struct$_Grade_$8_storage_ptr",
+                          "typeString": "struct Grading.Grade"
+                        }
+                      },
+                      "value": null,
+                      "visibility": "internal"
+                    }
+                  ],
+                  "id": 58,
+                  "initialValue": {
+                    "argumentTypes": null,
+                    "arguments": [
+                      {
+                        "argumentTypes": null,
+                        "id": 54,
+                        "name": "_from",
+                        "nodeType": "Identifier",
+                        "overloadedDeclarations": [],
+                        "referencedDeclaration": 44,
+                        "src": "549:5:0",
+                        "typeDescriptions": {
+                          "typeIdentifier": "t_bytes32",
+                          "typeString": "bytes32"
+                        }
+                      },
+                      {
+                        "argumentTypes": null,
+                        "id": 55,
+                        "name": "_to",
+                        "nodeType": "Identifier",
+                        "overloadedDeclarations": [],
+                        "referencedDeclaration": 46,
+                        "src": "555:3:0",
+                        "typeDescriptions": {
+                          "typeIdentifier": "t_bytes32",
+                          "typeString": "bytes32"
+                        }
+                      },
+                      {
+                        "argumentTypes": null,
+                        "id": 56,
+                        "name": "_grade",
+                        "nodeType": "Identifier",
+                        "overloadedDeclarations": [],
+                        "referencedDeclaration": 48,
+                        "src": "559:6:0",
+                        "typeDescriptions": {
+                          "typeIdentifier": "t_uint256",
+                          "typeString": "uint256"
+                        }
+                      }
+                    ],
+                    "expression": {
+                      "argumentTypes": [
+                        {
+                          "typeIdentifier": "t_bytes32",
+                          "typeString": "bytes32"
+                        },
+                        {
+                          "typeIdentifier": "t_bytes32",
+                          "typeString": "bytes32"
+                        },
+                        {
+                          "typeIdentifier": "t_uint256",
+                          "typeString": "uint256"
+                        }
+                      ],
+                      "id": 53,
+                      "name": "Grade",
+                      "nodeType": "Identifier",
+                      "overloadedDeclarations": [],
+                      "referencedDeclaration": 8,
+                      "src": "543:5:0",
+                      "typeDescriptions": {
+                        "typeIdentifier": "t_type$_t_struct$_Grade_$8_storage_ptr_$",
+                        "typeString": "type(struct Grading.Grade storage pointer)"
+                      }
+                    },
+                    "id": 57,
+                    "isConstant": false,
+                    "isLValue": false,
+                    "isPure": false,
+                    "kind": "structConstructorCall",
+                    "lValueRequested": false,
+                    "names": [],
+                    "nodeType": "FunctionCall",
+                    "src": "543:23:0",
+                    "typeDescriptions": {
+                      "typeIdentifier": "t_struct$_Grade_$8_memory",
+                      "typeString": "struct Grading.Grade memory"
+                    }
+                  },
+                  "nodeType": "VariableDeclarationStatement",
+                  "src": "522:44:0"
+                },
+                {
+                  "expression": {
+                    "argumentTypes": null,
+                    "arguments": [
+                      {
+                        "argumentTypes": null,
+                        "id": 63,
+                        "name": "grade",
+                        "nodeType": "Identifier",
+                        "overloadedDeclarations": [],
+                        "referencedDeclaration": 52,
+                        "src": "609:5:0",
+                        "typeDescriptions": {
+                          "typeIdentifier": "t_struct$_Grade_$8_memory_ptr",
+                          "typeString": "struct Grading.Grade memory"
+                        }
+                      }
+                    ],
+                    "expression": {
+                      "argumentTypes": [
+                        {
+                          "typeIdentifier": "t_struct$_Grade_$8_memory_ptr",
+                          "typeString": "struct Grading.Grade memory"
+                        }
+                      ],
+                      "expression": {
+                        "argumentTypes": null,
+                        "baseExpression": {
+                          "argumentTypes": null,
+                          "id": 59,
+                          "name": "assignments",
+                          "nodeType": "Identifier",
+                          "overloadedDeclarations": [],
+                          "referencedDeclaration": 20,
+                          "src": "576:11:0",
+                          "typeDescriptions": {
+                            "typeIdentifier": "t_mapping$_t_bytes32_$_t_array$_t_struct$_Grade_$8_storage_$dyn_storage_$",
+                            "typeString": "mapping(bytes32 => struct Grading.Grade storage ref[] storage ref)"
+                          }
+                        },
+                        "id": 61,
+                        "indexExpression": {
+                          "argumentTypes": null,
+                          "id": 60,
+                          "name": "_assignment_id",
+                          "nodeType": "Identifier",
+                          "overloadedDeclarations": [],
+                          "referencedDeclaration": 42,
+                          "src": "588:14:0",
+                          "typeDescriptions": {
+                            "typeIdentifier": "t_bytes32",
+                            "typeString": "bytes32"
+                          }
+                        },
+                        "isConstant": false,
+                        "isLValue": true,
+                        "isPure": false,
+                        "lValueRequested": false,
+                        "nodeType": "IndexAccess",
+                        "src": "576:27:0",
+                        "typeDescriptions": {
+                          "typeIdentifier": "t_array$_t_struct$_Grade_$8_storage_$dyn_storage",
+                          "typeString": "struct Grading.Grade storage ref[] storage ref"
+                        }
+                      },
+                      "id": 62,
+                      "isConstant": false,
+                      "isLValue": false,
+                      "isPure": false,
+                      "lValueRequested": false,
+                      "memberName": "push",
+                      "nodeType": "MemberAccess",
+                      "referencedDeclaration": null,
+                      "src": "576:32:0",
+                      "typeDescriptions": {
+                        "typeIdentifier": "t_function_arraypush_nonpayable$_t_struct$_Grade_$8_storage_$returns$_t_uint256_$",
+                        "typeString": "function (struct Grading.Grade storage ref) returns (uint256)"
+                      }
+                    },
+                    "id": 64,
+                    "isConstant": false,
+                    "isLValue": false,
+                    "isPure": false,
+                    "kind": "functionCall",
+                    "lValueRequested": false,
+                    "names": [],
+                    "nodeType": "FunctionCall",
+                    "src": "576:39:0",
+                    "typeDescriptions": {
+                      "typeIdentifier": "t_uint256",
+                      "typeString": "uint256"
+                    }
+                  },
+                  "id": 65,
+                  "nodeType": "ExpressionStatement",
+                  "src": "576:39:0"
+                }
+              ]
+            },
+            "documentation": null,
+            "id": 67,
+            "implemented": true,
+            "isConstructor": false,
+            "isDeclaredConst": false,
+            "modifiers": [],
+            "name": "addGradeTo",
+            "nodeType": "FunctionDefinition",
+            "parameters": {
+              "id": 49,
+              "nodeType": "ParameterList",
+              "parameters": [
+                {
+                  "constant": false,
+                  "id": 42,
+                  "name": "_assignment_id",
+                  "nodeType": "VariableDeclaration",
+                  "scope": 67,
+                  "src": "440:22:0",
+                  "stateVariable": false,
+                  "storageLocation": "default",
+                  "typeDescriptions": {
+                    "typeIdentifier": "t_bytes32",
+                    "typeString": "bytes32"
+                  },
+                  "typeName": {
+                    "id": 41,
+                    "name": "bytes32",
+                    "nodeType": "ElementaryTypeName",
+                    "src": "440:7:0",
+                    "typeDescriptions": {
+                      "typeIdentifier": "t_bytes32",
+                      "typeString": "bytes32"
+                    }
+                  },
+                  "value": null,
+                  "visibility": "internal"
+                },
+                {
+                  "constant": false,
+                  "id": 44,
+                  "name": "_from",
+                  "nodeType": "VariableDeclaration",
+                  "scope": 67,
+                  "src": "464:13:0",
+                  "stateVariable": false,
+                  "storageLocation": "default",
+                  "typeDescriptions": {
+                    "typeIdentifier": "t_bytes32",
+                    "typeString": "bytes32"
+                  },
+                  "typeName": {
+                    "id": 43,
+                    "name": "bytes32",
+                    "nodeType": "ElementaryTypeName",
+                    "src": "464:7:0",
+                    "typeDescriptions": {
+                      "typeIdentifier": "t_bytes32",
+                      "typeString": "bytes32"
+                    }
+                  },
+                  "value": null,
+                  "visibility": "internal"
+                },
+                {
+                  "constant": false,
+                  "id": 46,
+                  "name": "_to",
+                  "nodeType": "VariableDeclaration",
+                  "scope": 67,
+                  "src": "479:11:0",
+                  "stateVariable": false,
+                  "storageLocation": "default",
+                  "typeDescriptions": {
+                    "typeIdentifier": "t_bytes32",
+                    "typeString": "bytes32"
+                  },
+                  "typeName": {
+                    "id": 45,
+                    "name": "bytes32",
+                    "nodeType": "ElementaryTypeName",
+                    "src": "479:7:0",
+                    "typeDescriptions": {
+                      "typeIdentifier": "t_bytes32",
+                      "typeString": "bytes32"
+                    }
+                  },
+                  "value": null,
+                  "visibility": "internal"
+                },
+                {
+                  "constant": false,
+                  "id": 48,
+                  "name": "_grade",
+                  "nodeType": "VariableDeclaration",
+                  "scope": 67,
+                  "src": "492:11:0",
+                  "stateVariable": false,
+                  "storageLocation": "default",
+                  "typeDescriptions": {
+                    "typeIdentifier": "t_uint256",
+                    "typeString": "uint256"
+                  },
+                  "typeName": {
+                    "id": 47,
+                    "name": "uint",
+                    "nodeType": "ElementaryTypeName",
+                    "src": "492:4:0",
+                    "typeDescriptions": {
+                      "typeIdentifier": "t_uint256",
+                      "typeString": "uint256"
+                    }
+                  },
+                  "value": null,
+                  "visibility": "internal"
+                }
+              ],
+              "src": "439:65:0"
+            },
+            "payable": false,
+            "returnParameters": {
+              "id": 50,
+              "nodeType": "ParameterList",
+              "parameters": [],
+              "src": "512:0:0"
+            },
+            "scope": 121,
+            "src": "420:202:0",
+            "stateMutability": "nonpayable",
+            "superFunction": null,
+            "visibility": "public"
+          },
+          {
+            "constant": false,
+            "id": 69,
+            "name": "assignmentsCount",
+            "nodeType": "VariableDeclaration",
+            "scope": 121,
+            "src": "628:28:0",
+            "stateVariable": true,
+            "storageLocation": "default",
+            "typeDescriptions": {
+              "typeIdentifier": "t_uint256",
+              "typeString": "uint256"
+            },
+            "typeName": {
+              "id": 68,
+              "name": "uint",
+              "nodeType": "ElementaryTypeName",
+              "src": "628:4:0",
+              "typeDescriptions": {
+                "typeIdentifier": "t_uint256",
+                "typeString": "uint256"
+              }
+            },
+            "value": null,
+            "visibility": "public"
+          },
+          {
+            "body": {
+              "id": 119,
+              "nodeType": "Block",
+              "src": "734:300:0",
+              "statements": [
+                {
+                  "assignments": [],
+                  "declarations": [
+                    {
+                      "constant": false,
+                      "id": 80,
+                      "name": "gradesCount",
+                      "nodeType": "VariableDeclaration",
+                      "scope": 120,
+                      "src": "744:18:0",
+                      "stateVariable": false,
+                      "storageLocation": "default",
+                      "typeDescriptions": {
+                        "typeIdentifier": "t_array$_t_uint256_$dyn_storage_ptr",
+                        "typeString": "uint256[]"
+                      },
+                      "typeName": {
+                        "baseType": {
+                          "id": 78,
+                          "name": "uint",
+                          "nodeType": "ElementaryTypeName",
+                          "src": "744:4:0",
+                          "typeDescriptions": {
+                            "typeIdentifier": "t_uint256",
+                            "typeString": "uint256"
+                          }
+                        },
+                        "id": 79,
+                        "length": null,
+                        "nodeType": "ArrayTypeName",
+                        "src": "744:6:0",
+                        "typeDescriptions": {
+                          "typeIdentifier": "t_array$_t_uint256_$dyn_storage_ptr",
+                          "typeString": "uint256[]"
+                        }
+                      },
+                      "value": null,
+                      "visibility": "internal"
+                    }
+                  ],
+                  "id": 81,
+                  "initialValue": null,
+                  "nodeType": "VariableDeclarationStatement",
+                  "src": "744:18:0"
+                },
+                {
+                  "body": {
+                    "id": 106,
+                    "nodeType": "Block",
+                    "src": "834:103:0",
+                    "statements": [
+                      {
+                        "expression": {
+                          "argumentTypes": null,
+                          "arguments": [
+                            {
+                              "argumentTypes": null,
+                              "expression": {
+                                "argumentTypes": null,
+                                "baseExpression": {
+                                  "argumentTypes": null,
+                                  "baseExpression": {
+                                    "argumentTypes": null,
+                                    "id": 98,
+                                    "name": "assignments",
+                                    "nodeType": "Identifier",
+                                    "overloadedDeclarations": [],
+                                    "referencedDeclaration": 20,
+                                    "src": "889:11:0",
+                                    "typeDescriptions": {
+                                      "typeIdentifier": "t_mapping$_t_bytes32_$_t_array$_t_struct$_Grade_$8_storage_$dyn_storage_$",
+                                      "typeString": "mapping(bytes32 => struct Grading.Grade storage ref[] storage ref)"
+                                    }
+                                  },
+                                  "id": 100,
+                                  "indexExpression": {
+                                    "argumentTypes": null,
+                                    "id": 99,
+                                    "name": "_assignment_id",
+                                    "nodeType": "Identifier",
+                                    "overloadedDeclarations": [],
+                                    "referencedDeclaration": 71,
+                                    "src": "901:14:0",
+                                    "typeDescriptions": {
+                                      "typeIdentifier": "t_bytes32",
+                                      "typeString": "bytes32"
+                                    }
+                                  },
+                                  "isConstant": false,
+                                  "isLValue": true,
+                                  "isPure": false,
+                                  "lValueRequested": false,
+                                  "nodeType": "IndexAccess",
+                                  "src": "889:27:0",
+                                  "typeDescriptions": {
+                                    "typeIdentifier": "t_array$_t_struct$_Grade_$8_storage_$dyn_storage",
+                                    "typeString": "struct Grading.Grade storage ref[] storage ref"
+                                  }
+                                },
+                                "id": 102,
+                                "indexExpression": {
+                                  "argumentTypes": null,
+                                  "id": 101,
+                                  "name": "i",
+                                  "nodeType": "Identifier",
+                                  "overloadedDeclarations": [],
+                                  "referencedDeclaration": 83,
+                                  "src": "917:1:0",
+                                  "typeDescriptions": {
+                                    "typeIdentifier": "t_uint256",
+                                    "typeString": "uint256"
+                                  }
+                                },
+                                "isConstant": false,
+                                "isLValue": true,
+                                "isPure": false,
+                                "lValueRequested": false,
+                                "nodeType": "IndexAccess",
+                                "src": "889:30:0",
+                                "typeDescriptions": {
+                                  "typeIdentifier": "t_struct$_Grade_$8_storage",
+                                  "typeString": "struct Grading.Grade storage ref"
+                                }
+                              },
+                              "id": 103,
+                              "isConstant": false,
+                              "isLValue": true,
+                              "isPure": false,
+                              "lValueRequested": false,
+                              "memberName": "grade",
+                              "nodeType": "MemberAccess",
+                              "referencedDeclaration": 7,
+                              "src": "889:36:0",
+                              "typeDescriptions": {
+                                "typeIdentifier": "t_uint256",
+                                "typeString": "uint256"
+                              }
+                            }
+                          ],
+                          "expression": {
+                            "argumentTypes": [
+                              {
+                                "typeIdentifier": "t_uint256",
+                                "typeString": "uint256"
+                              }
+                            ],
+                            "expression": {
+                              "argumentTypes": null,
+                              "id": 95,
+                              "name": "gradesCount",
+                              "nodeType": "Identifier",
+                              "overloadedDeclarations": [],
+                              "referencedDeclaration": 80,
+                              "src": "872:11:0",
+                              "typeDescriptions": {
+                                "typeIdentifier": "t_array$_t_uint256_$dyn_storage_ptr",
+                                "typeString": "uint256[] storage pointer"
+                              }
+                            },
+                            "id": 97,
+                            "isConstant": false,
+                            "isLValue": false,
+                            "isPure": false,
+                            "lValueRequested": false,
+                            "memberName": "push",
+                            "nodeType": "MemberAccess",
+                            "referencedDeclaration": null,
+                            "src": "872:16:0",
+                            "typeDescriptions": {
+                              "typeIdentifier": "t_function_arraypush_nonpayable$_t_uint256_$returns$_t_uint256_$",
+                              "typeString": "function (uint256) returns (uint256)"
+                            }
+                          },
+                          "id": 104,
+                          "isConstant": false,
+                          "isLValue": false,
+                          "isPure": false,
+                          "kind": "functionCall",
+                          "lValueRequested": false,
+                          "names": [],
+                          "nodeType": "FunctionCall",
+                          "src": "872:54:0",
+                          "typeDescriptions": {
+                            "typeIdentifier": "t_uint256",
+                            "typeString": "uint256"
+                          }
+                        },
+                        "id": 105,
+                        "nodeType": "ExpressionStatement",
+                        "src": "872:54:0"
+                      }
+                    ]
+                  },
+                  "condition": {
+                    "argumentTypes": null,
+                    "commonType": {
+                      "typeIdentifier": "t_uint256",
+                      "typeString": "uint256"
+                    },
+                    "id": 91,
+                    "isConstant": false,
+                    "isLValue": false,
+                    "isPure": false,
+                    "lValueRequested": false,
+                    "leftExpression": {
+                      "argumentTypes": null,
+                      "id": 86,
+                      "name": "i",
+                      "nodeType": "Identifier",
+                      "overloadedDeclarations": [],
+                      "referencedDeclaration": 83,
+                      "src": "789:1:0",
+                      "typeDescriptions": {
+                        "typeIdentifier": "t_uint256",
+                        "typeString": "uint256"
+                      }
+                    },
+                    "nodeType": "BinaryOperation",
+                    "operator": "<",
+                    "rightExpression": {
+                      "argumentTypes": null,
+                      "expression": {
+                        "argumentTypes": null,
+                        "baseExpression": {
+                          "argumentTypes": null,
+                          "id": 87,
+                          "name": "assignments",
+                          "nodeType": "Identifier",
+                          "overloadedDeclarations": [],
+                          "referencedDeclaration": 20,
+                          "src": "793:11:0",
+                          "typeDescriptions": {
+                            "typeIdentifier": "t_mapping$_t_bytes32_$_t_array$_t_struct$_Grade_$8_storage_$dyn_storage_$",
+                            "typeString": "mapping(bytes32 => struct Grading.Grade storage ref[] storage ref)"
+                          }
+                        },
+                        "id": 89,
+                        "indexExpression": {
+                          "argumentTypes": null,
+                          "id": 88,
+                          "name": "_assignment_id",
+                          "nodeType": "Identifier",
+                          "overloadedDeclarations": [],
+                          "referencedDeclaration": 71,
+                          "src": "805:14:0",
+                          "typeDescriptions": {
+                            "typeIdentifier": "t_bytes32",
+                            "typeString": "bytes32"
+                          }
+                        },
+                        "isConstant": false,
+                        "isLValue": true,
+                        "isPure": false,
+                        "lValueRequested": false,
+                        "nodeType": "IndexAccess",
+                        "src": "793:27:0",
+                        "typeDescriptions": {
+                          "typeIdentifier": "t_array$_t_struct$_Grade_$8_storage_$dyn_storage",
+                          "typeString": "struct Grading.Grade storage ref[] storage ref"
+                        }
+                      },
+                      "id": 90,
+                      "isConstant": false,
+                      "isLValue": true,
+                      "isPure": false,
+                      "lValueRequested": false,
+                      "memberName": "length",
+                      "nodeType": "MemberAccess",
+                      "referencedDeclaration": null,
+                      "src": "793:34:0",
+                      "typeDescriptions": {
+                        "typeIdentifier": "t_uint256",
+                        "typeString": "uint256"
+                      }
+                    },
+                    "src": "789:38:0",
+                    "typeDescriptions": {
+                      "typeIdentifier": "t_bool",
+                      "typeString": "bool"
+                    }
+                  },
+                  "id": 107,
+                  "initializationExpression": {
+                    "assignments": [
+                      83
+                    ],
+                    "declarations": [
+                      {
+                        "constant": false,
+                        "id": 83,
+                        "name": "i",
+                        "nodeType": "VariableDeclaration",
+                        "scope": 120,
+                        "src": "777:6:0",
+                        "stateVariable": false,
+                        "storageLocation": "default",
+                        "typeDescriptions": {
+                          "typeIdentifier": "t_uint256",
+                          "typeString": "uint256"
+                        },
+                        "typeName": {
+                          "id": 82,
+                          "name": "uint",
+                          "nodeType": "ElementaryTypeName",
+                          "src": "777:4:0",
+                          "typeDescriptions": {
+                            "typeIdentifier": "t_uint256",
+                            "typeString": "uint256"
+                          }
+                        },
+                        "value": null,
+                        "visibility": "internal"
+                      }
+                    ],
+                    "id": 85,
+                    "initialValue": {
+                      "argumentTypes": null,
+                      "hexValue": "30",
+                      "id": 84,
+                      "isConstant": false,
+                      "isLValue": false,
+                      "isPure": true,
+                      "kind": "number",
+                      "lValueRequested": false,
+                      "nodeType": "Literal",
+                      "src": "786:1:0",
+                      "subdenomination": null,
+                      "typeDescriptions": {
+                        "typeIdentifier": "t_rational_0_by_1",
+                        "typeString": "int_const 0"
+                      },
+                      "value": "0"
+                    },
+                    "nodeType": "VariableDeclarationStatement",
+                    "src": "777:10:0"
+                  },
+                  "loopExpression": {
+                    "expression": {
+                      "argumentTypes": null,
+                      "id": 93,
+                      "isConstant": false,
+                      "isLValue": false,
+                      "isPure": false,
+                      "lValueRequested": false,
+                      "nodeType": "UnaryOperation",
+                      "operator": "++",
+                      "prefix": false,
+                      "src": "829:3:0",
+                      "subExpression": {
+                        "argumentTypes": null,
+                        "id": 92,
+                        "name": "i",
+                        "nodeType": "Identifier",
+                        "overloadedDeclarations": [],
+                        "referencedDeclaration": 83,
+                        "src": "829:1:0",
+                        "typeDescriptions": {
+                          "typeIdentifier": "t_uint256",
+                          "typeString": "uint256"
+                        }
+                      },
+                      "typeDescriptions": {
+                        "typeIdentifier": "t_uint256",
+                        "typeString": "uint256"
+                      }
+                    },
+                    "id": 94,
+                    "nodeType": "ExpressionStatement",
+                    "src": "829:3:0"
+                  },
+                  "nodeType": "ForStatement",
+                  "src": "772:165:0"
+                },
+                {
+                  "expression": {
+                    "argumentTypes": null,
+                    "arguments": [
+                      {
+                        "argumentTypes": null,
+                        "expression": {
+                          "argumentTypes": null,
+                          "baseExpression": {
+                            "argumentTypes": null,
+                            "id": 111,
+                            "name": "assignments",
+                            "nodeType": "Identifier",
+                            "overloadedDeclarations": [],
+                            "referencedDeclaration": 20,
+                            "src": "964:11:0",
+                            "typeDescriptions": {
+                              "typeIdentifier": "t_mapping$_t_bytes32_$_t_array$_t_struct$_Grade_$8_storage_$dyn_storage_$",
+                              "typeString": "mapping(bytes32 => struct Grading.Grade storage ref[] storage ref)"
+                            }
+                          },
+                          "id": 113,
+                          "indexExpression": {
+                            "argumentTypes": null,
+                            "id": 112,
+                            "name": "_assignment_id",
+                            "nodeType": "Identifier",
+                            "overloadedDeclarations": [],
+                            "referencedDeclaration": 71,
+                            "src": "976:14:0",
+                            "typeDescriptions": {
+                              "typeIdentifier": "t_bytes32",
+                              "typeString": "bytes32"
+                            }
+                          },
+                          "isConstant": false,
+                          "isLValue": true,
+                          "isPure": false,
+                          "lValueRequested": false,
+                          "nodeType": "IndexAccess",
+                          "src": "964:27:0",
+                          "typeDescriptions": {
+                            "typeIdentifier": "t_array$_t_struct$_Grade_$8_storage_$dyn_storage",
+                            "typeString": "struct Grading.Grade storage ref[] storage ref"
+                          }
+                        },
+                        "id": 114,
+                        "isConstant": false,
+                        "isLValue": true,
+                        "isPure": false,
+                        "lValueRequested": false,
+                        "memberName": "length",
+                        "nodeType": "MemberAccess",
+                        "referencedDeclaration": null,
+                        "src": "964:34:0",
+                        "typeDescriptions": {
+                          "typeIdentifier": "t_uint256",
+                          "typeString": "uint256"
+                        }
+                      }
+                    ],
+                    "expression": {
+                      "argumentTypes": [
+                        {
+                          "typeIdentifier": "t_uint256",
+                          "typeString": "uint256"
+                        }
+                      ],
+                      "expression": {
+                        "argumentTypes": null,
+                        "id": 108,
+                        "name": "gradesCount",
+                        "nodeType": "Identifier",
+                        "overloadedDeclarations": [],
+                        "referencedDeclaration": 80,
+                        "src": "947:11:0",
+                        "typeDescriptions": {
+                          "typeIdentifier": "t_array$_t_uint256_$dyn_storage_ptr",
+                          "typeString": "uint256[] storage pointer"
+                        }
+                      },
+                      "id": 110,
+                      "isConstant": false,
+                      "isLValue": false,
+                      "isPure": false,
+                      "lValueRequested": false,
+                      "memberName": "push",
+                      "nodeType": "MemberAccess",
+                      "referencedDeclaration": null,
+                      "src": "947:16:0",
+                      "typeDescriptions": {
+                        "typeIdentifier": "t_function_arraypush_nonpayable$_t_uint256_$returns$_t_uint256_$",
+                        "typeString": "function (uint256) returns (uint256)"
+                      }
+                    },
+                    "id": 115,
+                    "isConstant": false,
+                    "isLValue": false,
+                    "isPure": false,
+                    "kind": "functionCall",
+                    "lValueRequested": false,
+                    "names": [],
+                    "nodeType": "FunctionCall",
+                    "src": "947:52:0",
+                    "typeDescriptions": {
+                      "typeIdentifier": "t_uint256",
+                      "typeString": "uint256"
+                    }
+                  },
+                  "id": 116,
+                  "nodeType": "ExpressionStatement",
+                  "src": "947:52:0"
+                },
+                {
+                  "expression": {
+                    "argumentTypes": null,
+                    "id": 117,
+                    "name": "gradesCount",
+                    "nodeType": "Identifier",
+                    "overloadedDeclarations": [],
+                    "referencedDeclaration": 80,
+                    "src": "1016:11:0",
+                    "typeDescriptions": {
+                      "typeIdentifier": "t_array$_t_uint256_$dyn_storage_ptr",
+                      "typeString": "uint256[] storage pointer"
+                    }
+                  },
+                  "functionReturnParameters": 76,
+                  "id": 118,
+                  "nodeType": "Return",
+                  "src": "1009:18:0"
+                }
+              ]
+            },
+            "documentation": null,
+            "id": 120,
+            "implemented": true,
+            "isConstructor": false,
+            "isDeclaredConst": false,
+            "modifiers": [],
+            "name": "getGradesCount",
+            "nodeType": "FunctionDefinition",
+            "parameters": {
+              "id": 72,
+              "nodeType": "ParameterList",
+              "parameters": [
+                {
+                  "constant": false,
+                  "id": 71,
+                  "name": "_assignment_id",
+                  "nodeType": "VariableDeclaration",
+                  "scope": 120,
+                  "src": "687:22:0",
+                  "stateVariable": false,
+                  "storageLocation": "default",
+                  "typeDescriptions": {
+                    "typeIdentifier": "t_bytes32",
+                    "typeString": "bytes32"
+                  },
+                  "typeName": {
+                    "id": 70,
+                    "name": "bytes32",
+                    "nodeType": "ElementaryTypeName",
+                    "src": "687:7:0",
+                    "typeDescriptions": {
+                      "typeIdentifier": "t_bytes32",
+                      "typeString": "bytes32"
+                    }
+                  },
+                  "value": null,
+                  "visibility": "internal"
+                }
+              ],
+              "src": "686:24:0"
+            },
+            "payable": false,
+            "returnParameters": {
+              "id": 76,
+              "nodeType": "ParameterList",
+              "parameters": [
+                {
+                  "constant": false,
+                  "id": 75,
+                  "name": "",
+                  "nodeType": "VariableDeclaration",
+                  "scope": 120,
+                  "src": "726:6:0",
+                  "stateVariable": false,
+                  "storageLocation": "default",
+                  "typeDescriptions": {
+                    "typeIdentifier": "t_array$_t_uint256_$dyn_memory_ptr",
+                    "typeString": "uint256[]"
+                  },
+                  "typeName": {
+                    "baseType": {
+                      "id": 73,
+                      "name": "uint",
+                      "nodeType": "ElementaryTypeName",
+                      "src": "726:4:0",
+                      "typeDescriptions": {
+                        "typeIdentifier": "t_uint256",
+                        "typeString": "uint256"
+                      }
+                    },
+                    "id": 74,
+                    "length": null,
+                    "nodeType": "ArrayTypeName",
+                    "src": "726:6:0",
+                    "typeDescriptions": {
+                      "typeIdentifier": "t_array$_t_uint256_$dyn_storage_ptr",
+                      "typeString": "uint256[]"
+                    }
+                  },
+                  "value": null,
+                  "visibility": "internal"
+                }
+              ],
+              "src": "725:8:0"
+            },
+            "scope": 121,
+            "src": "663:371:0",
             "stateMutability": "nonpayable",
             "superFunction": null,
             "visibility": "public"
           }
         ],
-        "scope": 47,
-        "src": "26:467:0"
+        "scope": 122,
+        "src": "26:1010:0"
       }
     ],
-    "src": "0:494:0"
+    "src": "0:1037:0"
   },
   "compiler": {
     "name": "solc",
     "version": "0.4.24+commit.e67f0147.Emscripten.clang"
   },
   "networks": {
+    "4447": {
+      "events": {},
+      "links": {},
+      "address": "0x345ca3e014aaf5dca488057592ee47305d9b3e10",
+      "transactionHash": "0x0c1cc1d4e2bc3dcf624ef9e2ded9f257425e5571ab6c6b54609e31ce255f8582"
+    },
     "1542996002092": {
       "events": {},
       "links": {},
@@ -1291,8 +3037,14 @@
       "links": {},
       "address": "0xe7a54df3b0127a7a38372eb1567bafe7b73b04be",
       "transactionHash": "0x2ac69dabd6c4892b890705a22dae39de49484c7d60d391539a47fa292dbc3643"
+    },
+    "1543077456543": {
+      "events": {},
+      "links": {},
+      "address": "0x919f684f1bbbfff261e04ebd294dd9c24e85029d",
+      "transactionHash": "0xfa0d6462286230a63715eed68f7901e09aa5f115f3e332fb21c21ae98a532c5e"
     }
   },
   "schemaVersion": "2.0.1",
-  "updatedAt": "2018-11-24T01:54:06.870Z"
+  "updatedAt": "2018-11-24T18:36:02.383Z"
 }
