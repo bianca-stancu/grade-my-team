@@ -115,8 +115,10 @@ contract Grading {
     }
 
     function getMetrics(bytes32 user) public returns (uint,uint,uint){
-        return (getMetricAverageToSelf(user), getMetricAverageFromOthers(user),getMetricAverageToSelf(user));
+        return (getMetricAverageToSelf(user), getMetricAverageToOthers(user),getMetricAverageFromOthers(user));
     }
+
+
 
     function getGradesProfessor(bytes32 _assignment_id)
         public

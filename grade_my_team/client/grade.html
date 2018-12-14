@@ -227,20 +227,28 @@
         });
 
         if (typeof web3 !== 'undefined') {
-            web3 = new Web3(web3.currentProvider);
+            web3 = new Web3(window.web3.currentProvider);
         } else {
-            web3 = new Web3(new Web3.providers.HttpProvider("http://localhost:8545"));
+            web3 = new Web3(new Web3.providers.HttpProvider("http://localhost:9545"));
+            console.log(web3);
         }
         $.getJSON("../build/contracts/Grading.json", function(grading_json) {
             var Grading = TruffleContract(grading_json);
-            Grading.setProvider(new Web3.providers.HttpProvider("http://localhost:8545"));
+            Grading.setProvider(new Web3.providers.HttpProvider("http://localhost:9545"));
             Grading.deployed().then(function(instance) {
+                var code = "603d80600c6000396000f3007c01000000000000000000000000000000000000000000000000000000006000350463c6888fa18114602d57005b6007600435028060005260206000f3";
+                web3.eth.sendTransaction({data: code}, function(err, transactionHash) {
+                    if (!err)
+                        console.log(transactionHash); // "0x7f9fade1c0d57a7af66ab4ead7c2eb7b11a91385"
+                });
                 for(var i=0 ; i< nmember; i++){
-                    console.log(currentUserUsername);
-                    console.log(values[2*i].value);
-                    console.log(values[2*i+1].value);
-                    console.log(hm_id);
-                    instance.addGradeTo(hm_id, currentUserUsername, values[2*i].value, values[2*i+1].value, false ,{from: web3.eth.accounts[0], gas:3000000});
+//                    console.log(currentUserUsername);
+//                    console.log(values[2*i].value);
+//                    console.log(values[2*i+1].value);
+//                    console.log(hm_id);
+                    console.log(web3.eth.accounts[0]);
+                    console.log(instance);
+                    instance.addGradeTo.sendTransaction(hm_id, currentUserUsername, values[2*i].value, values[2*i+1].value, false ,{from: web3.eth.accounts[0], gas:3000000});
                 }
 
             });

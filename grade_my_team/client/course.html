@@ -236,7 +236,7 @@
                 else if((user[0].assignments[i].course == user[1]._id)  && user[0].assignments[i].gradedmembers.includes(user[0]._id)){
                     if(user[0].assignments[i].gradedmembers.length == (user[0].assignments[i].members.length+1)){
                         gradedHm += '<a href="../assignments/' + user[0].assignments[i].name +'" download>' + user[0].assignments[i].name + '</a><br/>' +
-                        '<button type="button" onclick="alert("Call block chain soon")">Click Me!</button>';
+                        '<button type="button" onclick="seeGrade()">Click Me!</button>';
 
 
                     }
@@ -255,6 +255,31 @@
 //            }
 
         }
+        
+        function seeGrade() {
+            console.log("See grade stuff");
+            // Blockchain
+            if (typeof web3 !== 'undefined') {
+                web3 = new Web3(web3.currentProvider);
+            } else {
+                web3 = new Web3(new Web3.providers.HttpProvider("http://localhost:8545"));
+            }
+            $.getJSON("../build/contracts/Grading.json", function(grading_json) {
+                var Grading = TruffleContract(grading_json);
+                Grading.setProvider(new Web3.providers.HttpProvider("http://localhost:8545"));
+                Grading.deployed().then(function(instance) {
+                    for(var i=0 ; i< nmember; i++){
+                        instance.getMetrics.call(res[2][i],{from: web3.eth.accounts[0], gas:3000000}).then(result => metrics.push(Array.from(result)));
+                        instance.getGradeFor.call(hm_id,res[2][i],{from: web3.eth.accounts[0], gas:3000000}).then(function(result) {
+                            grades.push(result.toNumber());
+                            //console.log(result.toNumber());
+                        });
+                    }
+
+                });
+            });
+        }
+        
 
         function createforms() {
             $.ajax({
