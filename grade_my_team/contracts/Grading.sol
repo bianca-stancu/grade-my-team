@@ -1,6 +1,9 @@
 pragma solidity ^0.4.18;
 
 contract Grading {
+
+    event Forgery(string what);
+
     struct Grade {
         bytes32 from;
         bytes32 to;
@@ -22,10 +25,12 @@ contract Grading {
     mapping(bytes32 => uint) private overall_grade;
     mapping(bytes32 => Metrics) private student_metrics;
     
-    function addOverallGrade(bytes32 _assignment_id, uint _grade) public{
+    function addOverallGrade(bytes32 _assignment_id, uint _grade) public {
         if(overall_grade[_assignment_id] == 0) {
             overall_grade[_assignment_id] = _grade;
-        } 
+        } else {
+            emit Forgery("nope");
+        }
     }
 
     function getOverallGrade(bytes32 _assignment_id) public returns (uint) {
@@ -50,7 +55,7 @@ contract Grading {
         professor_grades[_assignment_id].push(grade);
     }
 
-    function addGradeTo(bytes32 _assignment_id, bytes32 _from, bytes32 _to, uint _grade, bool _professor_grading) public {
+    function addGradeTo(bytes32 _assignment_id, bytes32 _from, bytes32 _to, uint _grade, bool _professor_grading) public returns(bool){
         if (_professor_grading == false){
             if(_from == _to) {
                 updateMetricToSelf(_from, _grade);
@@ -61,6 +66,7 @@ contract Grading {
         } else {
             addToProfessors(_assignment_id,_from,_to,_grade);
         }
+        return true;
     }
 
     function updateMetricToSelf(bytes32 user, uint _grade) private {
@@ -115,10 +121,8 @@ contract Grading {
     }
 
     function getMetrics(bytes32 user) public returns (uint,uint,uint){
-        return (getMetricAverageToSelf(user), getMetricAverageToOthers(user),getMetricAverageFromOthers(user));
+        return (getMetricAverageToSelf(user), getMetricAverageFromOthers(user),getMetricAverageToSelf(user));
     }
-
-
 
     function getGradesProfessor(bytes32 _assignment_id)
         public

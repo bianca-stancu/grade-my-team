@@ -255,16 +255,19 @@
             success: function(res){ // res = [currentHm,teamMembersNames]
                 var nmembers = res[1].length;
                 var overall_grade = document.getElementById("hmGrade").value;
-                if (typeof web3 !== 'undefined') {
-                    web3 = new Web3(web3.currentProvider);
-                } else {
-                    web3 = new Web3(new Web3.providers.HttpProvider("http://localhost:8545"));
-                }
                 $.getJSON("../build/contracts/Grading.json", function(grading_json) {
                     var Grading = TruffleContract(grading_json);
-                    Grading.setProvider(new Web3.providers.HttpProvider("http://localhost:8545"));
+                    Grading.setProvider(web3.currentProvider);
                     Grading.deployed().then(function(instance) {
-                        instance.addOverallGrade(res[0]._id,overall_grade*10,{from: web3.eth.accounts[0], gas:3000000});
+                        var instructorEvent = instance.Forgery();
+                        instructorEvent.watch(function(error, result){
+                            if (!error)
+                            {alert("all goody, forgery")} else {
+                    $("#loader").hide();
+                    console.log(error);
+                }
+        });
+                        return instance.addOverallGrade(res[0]._id,overall_grade*10,{from: web3.eth.accounts[0], gas:3000000});
                     });
                 });
 
@@ -317,15 +320,9 @@
                     url: "/getUser",
                     cache: false,
                     success: function(user){
-                        console.log(user)
-                        if (typeof web3 !== 'undefined') {
-                            web3 = new Web3(web3.currentProvider);
-                        } else {
-                            web3 = new Web3(new Web3.providers.HttpProvider("http://localhost:8545"));
-                        }
                         $.getJSON("../build/contracts/Grading.json", function(grading_json) {
                             var Grading = TruffleContract(grading_json);
-                            Grading.setProvider(new Web3.providers.HttpProvider("http://localhost:8545"));
+                            Grading.setProvider(web3.currentProvider);
                             Grading.deployed().then(function(instance) {
                                 for(var i = 0; i< nmember; i++){
                                     var tempUSer = "final_grade_" + i;
@@ -358,14 +355,9 @@
                 var nmember = res[2].length;
 
                 // Blockchain
-                if (typeof web3 !== 'undefined') {
-                    web3 = new Web3(web3.currentProvider);
-                } else {
-                    web3 = new Web3(new Web3.providers.HttpProvider("http://localhost:8545"));
-                }
                 $.getJSON("../build/contracts/Grading.json", function(grading_json) {
                     var Grading = TruffleContract(grading_json);
-                    Grading.setProvider(new Web3.providers.HttpProvider("http://localhost:8545"));
+                    Grading.setProvider(web3.currentProvider);
                     Grading.deployed().then(function(instance) {
                         for(var i=0 ; i< nmember; i++){
                             instance.getMetrics.call(res[2][i],{from: web3.eth.accounts[0], gas:3000000}).then(result => metrics.push(Array.from(result)));
