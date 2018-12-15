@@ -185,7 +185,7 @@
             url: "/getHm",
             cache: false,
             success: function(res){
-                var content = '<p>Distribute the '+ res[0].members.length*10 +' points between the team members</p>';
+                var content = '<p>Distribute the '+ res[0].members.length*10 +' points between the team members, based on how well you</p>';
 
                 for(var i = 0; i < res[0].members.length; i++){
                     content += '<input id="studName_' + i + '" type="text" name="studName_' + i + '" readonly="readonly">' +
@@ -226,31 +226,16 @@
             }
         });
 
-        // if (typeof web3 !== 'undefined') {
-        //     web3 = new Web3(window.web3.currentProvider);
-        // } else {
-        //     web3 = new Web3(new Web3.providers.HttpProvider("http://localhost:9545"));
-        // }
         $.getJSON("../build/contracts/Grading.json", function(grading_json) {
             var Grading = TruffleContract(grading_json);
             Grading.setProvider(window.web3.currentProvider);
             Grading.deployed().then(function(instance) {
                 for(var i=0 ; i< nmember; i++){
-                //     console.log(currentUserUsername);
-                //     console.log(values[2*i].value);
-                //    console.log(values[2*i+1].value);
-                //    console.log(hm_id);
-    
-                    instance.addGradeTo.sendTransaction(hm_id, currentUserUsername, values[2*i].value, values[2*i+1].value, false,{from: web3.eth.accounts[0]});
-                   //console.log(getData);
-                  // instance.addGradeTo(hm_id, currentUserUsername, values[2*i].value, values[2*i+1].value, false,{from: web3.eth.accounts[0],to: instance.address});
+                    instance.addGradeTo.sendTransaction(hm_id, currentUserUsername, values[2*i].value, values[2*i+1].value, false,{from: web3.eth.accounts[0]}).then(function(){
+                        window.location.assign("/courseView");
+                    });
                 }
-
-            }).then(function(result) {
-                console.log(result);
-      }).catch(function(err) {
-        console.log(err.message);
-    });
+            })
         });
 
         $.ajax({
@@ -258,8 +243,6 @@
             url: "/updateAssignment",
             cache: false,
             success: function(res){
-//                window.location.assign("/courseView");
-
             }
         });
 

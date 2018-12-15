@@ -2,7 +2,7 @@ pragma solidity ^0.4.18;
 
 contract Grading {
 
-    event Forgery(string what);
+    event Forgery();
 
     struct Grade {
         bytes32 from;
@@ -29,7 +29,7 @@ contract Grading {
         if(overall_grade[_assignment_id] == 0) {
             overall_grade[_assignment_id] = _grade;
         } else {
-            emit Forgery("nope");
+            emit Forgery();
         }
     }
 
@@ -137,7 +137,7 @@ contract Grading {
         return (students, grades);
     }
 
-    function getGradeFor(bytes32 _assignment_id, bytes32 _student_id) public returns (uint){
+    function getGradeFor(bytes32 _assignment_id, bytes32 _student_id) public returns (uint,uint){
         uint assignment_length_students = assignment_grades[_assignment_id].length;
         uint student_average = 0;
         uint count = 0;
@@ -148,7 +148,7 @@ contract Grading {
             }
         }
         student_average = student_average / count;
-        return student_average; 
+        return (student_average, count); 
     }
 
     function getProfessorGrade(bytes32 _assignment_id, bytes32 _student_id) private returns (uint){
@@ -174,7 +174,9 @@ contract Grading {
     }
 
     function getGrade(bytes32 _assignment_id, bytes32 _student_id) public returns (uint, uint){
-        uint student_average = getGradeFor(_assignment_id, _student_id);
+        uint student_average = 0;
+        uint ok = 0;
+        (student_average,ok) = getGradeFor(_assignment_id, _student_id);
         uint malus = getMalus((int(student_average) - 10) * 10);
         uint overall = overall_grade[_assignment_id];
         uint prof_grade = getProfessorGrade(_assignment_id, _student_id);
