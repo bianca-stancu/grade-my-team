@@ -2,7 +2,8 @@ pragma solidity ^0.4.18;
 
 contract Grading {
 
-    event Forgery(string what);
+    event Forgery();
+    event NotAuthorized();
 
     struct Grade {
         bytes32 from;
@@ -24,12 +25,63 @@ contract Grading {
     mapping(bytes32 => Grade[]) private professor_grades;
     mapping(bytes32 => uint) private overall_grade;
     mapping(bytes32 => Metrics) private student_metrics;
+    mapping(bytes32 => address) private keys;
+
+    function verify_identity(string message, uint8 v, bytes32 r, bytes32 s) public pure returns (address signer) {
+       // The message header; we will fill in the length next
+    string memory header = "\x19Ethereum Signed Message:\n000000";
+    uint256 lengthOffset;
+    uint256 length;
+    assembly {
+      length := mload(message)
+      lengthOffset := add(header, 57)
+    }
+    require(length <= 999999);
+    uint256 lengthLength = 0;
+    uint256 divisor = 100000;
+    while (divisor != 0) {
+      uint256 digit = length / divisor;
+      if (digit == 0) {
+        if (lengthLength == 0) {
+          divisor /= 10;
+          continue;
+        }
+      }
+      lengthLength++;
+      length -= digit * divisor;
+      divisor /= 10;
+      
+      digit += 0x30;
+      lengthOffset++;
+      assembly {
+        mstore8(lengthOffset, digit)
+      }
+    }
+    if (lengthLength == 0) {
+      lengthLength = 1 + 0x19 + 1;
+    } else {
+      lengthLength += 1 + 0x19;
+    }
+    assembly {
+      mstore(header, lengthLength)
+    }
+        bytes32 check = keccak256(header, message);
+        return ecrecover(check, v, r, s);
+    }
+
+    function registerKey(bytes32 _user, address user_address) public {
+        if(keys[_user] == 0){
+            keys[_user] = user_address;
+        } else {
+            emit Forgery();
+        }
+    }
     
     function addOverallGrade(bytes32 _assignment_id, uint _grade) public {
         if(overall_grade[_assignment_id] == 0) {
             overall_grade[_assignment_id] = _grade;
         } else {
-            emit Forgery("nope");
+            emit Forgery();
         }
     }
 
@@ -55,18 +107,23 @@ contract Grading {
         professor_grades[_assignment_id].push(grade);
     }
 
-    function addGradeTo(bytes32 _assignment_id, bytes32 _from, bytes32 _to, uint _grade, bool _professor_grading) public returns(bool){
-        if (_professor_grading == false){
-            if(_from == _to) {
-                updateMetricToSelf(_from, _grade);
+    function addGradeTo(bytes32 _assignment_id, bytes32 _from, bytes32 _to, uint _grade, bool _professor_grading,string message, uint8 v, bytes32 r, bytes32 s) public returns(address){
+        var sender = verify_identity(message,v,r,s);
+        if (sender == keys[_from]){
+            if (_professor_grading == false){
+                if(_from == _to) {
+                    updateMetricToSelf(_from, _grade);
+                }
+                updateMetricFromOthers(_to, _grade);
+                updateMetricToOthers(_from, _grade);
+                addToStudents(_assignment_id,_from,_to,_grade);
+            } else {
+                addToProfessors(_assignment_id,_from,_to,_grade);
             }
-            updateMetricFromOthers(_to, _grade);
-            updateMetricToOthers(_from, _grade);
-            addToStudents(_assignment_id,_from,_to,_grade);
         } else {
-            addToProfessors(_assignment_id,_from,_to,_grade);
+            emit NotAuthorized();
         }
-        return true;
+        return (sender);
     }
 
     function updateMetricToSelf(bytes32 user, uint _grade) private {
@@ -137,7 +194,7 @@ contract Grading {
         return (students, grades);
     }
 
-    function getGradeFor(bytes32 _assignment_id, bytes32 _student_id) public returns (uint){
+    function getGradeFor(bytes32 _assignment_id, bytes32 _student_id) public returns (uint,uint){
         uint assignment_length_students = assignment_grades[_assignment_id].length;
         uint student_average = 0;
         uint count = 0;
@@ -148,7 +205,7 @@ contract Grading {
             }
         }
         student_average = student_average / count;
-        return student_average; 
+        return (student_average, count); 
     }
 
     function getProfessorGrade(bytes32 _assignment_id, bytes32 _student_id) private returns (uint){
@@ -174,7 +231,9 @@ contract Grading {
     }
 
     function getGrade(bytes32 _assignment_id, bytes32 _student_id) public returns (uint, uint){
-        uint student_average = getGradeFor(_assignment_id, _student_id);
+        uint student_average = 0;
+        uint ok = 0;
+        (student_average,ok) = getGradeFor(_assignment_id, _student_id);
         uint malus = getMalus((int(student_average) - 10) * 10);
         uint overall = overall_grade[_assignment_id];
         uint prof_grade = getProfessorGrade(_assignment_id, _student_id);

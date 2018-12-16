@@ -7,6 +7,7 @@
 <link rel="stylesheet" href="https://fonts.googleapis.com/css?family=Poppins">
 <script src="https://ajax.googleapis.com/ajax/libs/jquery/1.12.0/jquery.min.js"> </script>
 <script src="./node_modules/truffle-contract/dist/truffle-contract.js"></script>
+<script src="./node_modules/ethers/dist/ethers.js"></script>
 <style>
     body,h1,h2,h3,h4,h5 {font-family: "Poppins", sans-serif}
     body {font-size:16px;}
@@ -185,7 +186,7 @@
             url: "/getHm",
             cache: false,
             success: function(res){
-                var content = '<p>Distribute the '+ res[0].members.length*10 +' points between the team members</p>';
+                var content = '<p>Distribute the '+ res[0].members.length*10 +' points between the team members, based on how well you</p>';
 
                 for(var i = 0; i < res[0].members.length; i++){
                     content += '<input id="studName_' + i + '" type="text" name="studName_' + i + '" readonly="readonly">' +
@@ -226,31 +227,44 @@
             }
         });
 
-        // if (typeof web3 !== 'undefined') {
-        //     web3 = new Web3(window.web3.currentProvider);
-        // } else {
-        //     web3 = new Web3(new Web3.providers.HttpProvider("http://localhost:9545"));
-        // }
         $.getJSON("../build/contracts/Grading.json", function(grading_json) {
             var Grading = TruffleContract(grading_json);
             Grading.setProvider(window.web3.currentProvider);
-            Grading.deployed().then(function(instance) {
-                for(var i=0 ; i< nmember; i++){
-                //     console.log(currentUserUsername);
-                //     console.log(values[2*i].value);
-                //    console.log(values[2*i+1].value);
-                //    console.log(hm_id);
-    
-                    instance.addGradeTo.sendTransaction(hm_id, currentUserUsername, values[2*i].value, values[2*i+1].value, false,{from: web3.eth.accounts[0]});
-                   //console.log(getData);
-                  // instance.addGradeTo(hm_id, currentUserUsername, values[2*i].value, values[2*i+1].value, false,{from: web3.eth.accounts[0],to: instance.address});
-                }
+            Grading.deployed().then(async function(instance) {
+                for(var i=0 ; i< nmember; i++){  
+                    var to = values[2*i].value;
+                    var grade = values[2*i+1].value;
+                    var text = "I ("+ currentUserUsername + ") am grading " +values[2*i].value + " the grade:" + values[2*i+1].value+".";
+                    await web3.personal.sign(text,web3.currentProvider.selectedAddress, async function(err,signature) {
+                        var sig = ethers.utils.splitSignature(signature);
+                        console.log(signature);
+                        console.log(">>>>");
+                        console.log(sig.v)
+                        console.log(sig.r)
+                        console.log(sig.s);
+                        /*var promise = instance.verify_identity(text, sig.v, web3.toHex(sig.r), web3.toHex(sig.s));
+                        promise.then(function(signer) {
+                            console.log(signer);*/
+                        var authorization = instance.NotAuthorized();
+                        authorization.watch(function(error, result){
+                            if (!error){
+                                alert("You are not authorized to perform this grading!");
+                                window.location.assign("/courseView");
 
-            }).then(function(result) {
-                console.log(result);
-      }).catch(function(err) {
-        console.log(err.message);
-    });
+                            } else {
+                                console.log(error);
+                            }
+                        });
+                        instance.addGradeTo.sendTransaction(hm_id, currentUserUsername, to, grade, false,text,sig.v, sig.r, sig.s,{from: web3.currentProvider.selectedAddress}).then(function(error,res){
+                            console.log(res);
+                            if(i==nmember-1){
+                              window.location.assign("/courseView");
+                            }
+                    }); 
+                    });
+                    
+                }
+            })
         });
 
         $.ajax({
@@ -258,8 +272,6 @@
             url: "/updateAssignment",
             cache: false,
             success: function(res){
-//                window.location.assign("/courseView");
-
             }
         });
 

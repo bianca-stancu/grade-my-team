@@ -12,6 +12,7 @@
   "dependencies": {
     "bcrypt": "^3.0.2",
     "body-parser": "^1.18.3",
+    "ethers": "^4.0.20",
     "express": "^4.16.4",
     "express-session": "^1.15.6",
     "file-system": "^2.2.2",
