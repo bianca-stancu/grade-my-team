@@ -281,19 +281,22 @@
                     var temp_grade_id = temp_Name+i;
                     var avg_grade_member_i = document.getElementById(temp_grade_id).innerHTML;
                     var grade = avg_grade_member_i - 10;
+                    console.log("member "+i);
+                    console.log(grade);
                     var malus = 0;
 
                     if (grade < 0){
-                        if(grade <= -10 && grade > -25){
+                        if(grade <= -1 && grade > -2.5){
                             malus = 0.5;
-                        } else if (grade <= -25 && grade > -50){
+                        } else if (grade <= -2.5 && grade > -5){
                             malus = 1;
-                        } else if (grade <= -50){
+                        } else if (grade <= -5){
                             malus = 1.5;
                         }
                     }
-
+                    console.log(malus);
                     var final_grade_member_i = overall_grade - malus;
+                    console.log(final_grade_member_i);
                     final_content += '<form id="finalGrade" action="#" onsubmit="sendFinalGrade(); return false;">' +
                         '<p class="col">' + res[1][i] + ' </p>' +
                         '<input class="col" style="border: solid; width: 10%" type="number" name="hmGrade" id="final_grade_' + i + '" min="0" value="' + final_grade_member_i + '" required>';
