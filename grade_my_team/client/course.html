@@ -12,28 +12,11 @@
         .w3-half img{margin-bottom:-6px;margin-top:16px;opacity:0.8;cursor:pointer}
         .w3-half img:hover{opacity:1}
         div{
-            overflow: auto;
+            overflow-y:scroll;
         }
 
         * {
             box-sizing: border-box;
-        }
-
-        /* style the container */
-        .container {
-            margin: auto;
-            width: 50%;
-            border-radius: 5px;
-            background-color: #f2f2f2;
-            padding: 20px 70px 50px 70px;
-            position: fixed;
-            top: 30%;
-            left: 50%;
-            transform: translate(-30%, -50%);
-            -webkit-transform: translate(-30%, -50%);
-            -moz-transform: translate(-30%, -50%);
-            -o-transform: translate(-30%, -50%);
-            -ms-transform: translate(-30%, -50%);
         }
 
         /* style inputs and link buttons */
@@ -155,7 +138,7 @@
     <div class="w3-overlay w3-hide-large " onclick="w3_close()" style="cursor:pointer" title="close side menu" id="myOverlay"></div>
 
     <!-- !PAGE CONTENT! -->
-    <div class="w3-main" style="margin-left:340px;margin-right:40px">
+    <div class="w3-container w3-main" style="margin-left:340px;margin-right:40px">
         <div id="intro"></div>
         <div>
             <h1 class="w3-xlarge w3-text-cyan"><b> Upload new homework</b></h1>
@@ -172,11 +155,11 @@
         </div>
         <div id="pendings"></div>
         <div id="graded"></div>
+        <div class="w3-light-grey w3-container" >
+            <p class="w3-right"> &copy; 2018 Distibuted systems. All rights reserved | Design by<br/> Jelena Budakovic, Bianca Stancu and Davide Matteri</p>
+        </div>
     </div>
     <!--  END PAGE CONTENT! -->
-
-    <!-- W3.CSS Container -->
-    <div class="w3-light-grey w3-bottom" ><p class="w3-right"> &copy; 2018 Distibuted systems. All rights reserved | Design by<br/> Jelena Budakovic, Bianca Stancu and Davide Matteri</p></div>
 
     <script>
         // Script to open and close sidebar
@@ -282,6 +265,16 @@
         
 
         function createforms() {
+            var currentUser;
+            $.ajax({
+                type: "GET",
+                url: "/getUser",
+                cache: false,
+                success: function(res){
+                    currentUser = res;
+                }
+            });
+
             $.ajax({
                 type: "GET",
                 url: "/getAllUsers",
@@ -306,9 +299,11 @@
 
                     document.getElementById("fileForm").innerHTML = content;
 
-                    /*initiate the autocomplete function on the "myInput" element, and pass along the countries array as possible autocomplete values:*/
-                    for(var i = 0; i < numberMembers; i++){
-                        content +='<input style="border: solid; width: 10%" type="text" name="member_'+ i + '" id="member_' + i + '">';
+                    /*initiate the autocomplete function on the "myInput" element, and pass along the users array as possible autocomplete values:*/
+                    document.getElementById("member_0").value = currentUser.username;
+                    document.getElementById("member_0").readOnly = true;
+                    for(var i = 1; i < numberMembers; i++){
+//                        content +='<input style="border: solid; width: 10%" type="text" name="member_'+ i + '" id="member_' + i + '">';
                         autocomplete(document.getElementById("member_" + i), res);
                     }
 

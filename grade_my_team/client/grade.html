@@ -222,7 +222,7 @@
         var points = 10 * nmember;
         var gradeSum = 0;
         for(var i=0 ; i< nmember; i++){
-            gradeSum += values[2*i+1].value;
+            gradeSum = gradeSum + parseInt(values[2*i+1].value);
         }
         if(points == gradeSum){
             $.ajax({
