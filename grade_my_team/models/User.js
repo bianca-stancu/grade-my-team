@@ -62,6 +62,7 @@ nameSchema.pre('save', function (next) {
         user.password = hash;
         return next();
     })
+
 });
 
 var User = mongoose.model("User", nameSchema);
