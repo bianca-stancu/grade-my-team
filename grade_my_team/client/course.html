@@ -283,7 +283,7 @@
                     var numberMembers = parseInt(document.getElementById("numMembers").value);
                     $("#numMembersForm").hide();
 
-                    var content = '<form autocomplete="off" action="/fileupload" method="post" enctype="multipart/form-data" id="my_form" onsubmit="return validateForm()">' +
+                    var content = '<form autocomplete="off" action="/fileupload" method="post" enctype="multipart/form-data" id="my_form">' +
                         '<div class="autocomplete">';
 
                     for(var i = 0; i < numberMembers; i++){
@@ -293,7 +293,7 @@
                     content += '</div>' +
                         '<input type="number" name="nmembers" id="nmembers" value="'+ numberMembers +'" hidden/>' +
                         '<input type="file" name="my_file" id="my_file"/>' +
-                        '<input type="submit" name="submit" value="Submit" />' +
+                        '<input type="button" style="background-color: cyan;color: white" name="btnSubmit" value="Submit" onclick="validateForm()"/>' +
                         '</form>' +
                         '<hr style="width:50px;border:5px solid cyan" class="w3-round">';
 
@@ -314,16 +314,27 @@
 
         }
 
-//        function validateForm() {
-//            var n = document.forms["my_form"]["nmembers"].value;
-//            for(var i = 0 ; i < n ; i++){
-//
-//            }
-////            if (x == "") {
-//                alert(x);
-//                return false;
-////            }
-//        }
+        function validateForm() {
+            $.ajax({
+                type: "GET",
+                url: "/getAllUsers",
+                cache: false,
+                success: function(res){
+                    var n = document.forms["my_form"]["nmembers"].value;
+                    var temp = "member_";
+                    for(var i = 0 ; i < n ; i++){
+                        var tempMember = temp + i;
+                        var username = document.getElementById(tempMember).value;
+                        if(res.indexOf(username) == -1){
+                            alert("Invalid username, '" + username + "', provided. Please try again.")
+                            return false;
+                        }
+                    }
+                    document.getElementById("my_form").submit();
+
+                }
+            });
+        }
 
         window.onload = function() {
             getHomoworks();
