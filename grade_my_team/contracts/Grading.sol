@@ -24,6 +24,15 @@ contract Grading {
     mapping(bytes32 => Grade[]) private professor_grades;
     mapping(bytes32 => uint) private overall_grade;
     mapping(bytes32 => Metrics) private student_metrics;
+    mapping(bytes32 => address) private keys;
+
+    function registerKey(bytes32 _user, address user_address) public {
+        if(keys[_user] == 0){
+            keys[_user] = user_address;
+        } else {
+            emit Forgery();
+        }
+    }
     
     function addOverallGrade(bytes32 _assignment_id, uint _grade) public {
         if(overall_grade[_assignment_id] == 0) {
