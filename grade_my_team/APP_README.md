@@ -1,6 +1,6 @@
 To run the application follow these steps:
 
-0. Add empty folders "data" and "assignments" in the root directory
+0. Add empty folder "data" in the root directory
 
 1. In a new terminal run "mongod --dbpath=./data"
 

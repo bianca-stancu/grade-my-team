@@ -168,7 +168,6 @@ app.post('/fileupload', function (req, res, next) {
     var newpath;
     form.parse(req, function (err, fields, files) {
         var members = Object.values(fields).slice(0, Object.values(fields).length-2);
-        console.log(members)
         var oldpath = files.my_file.path;
         newpath = __dirname + '/assignments/' + files.my_file.name;
         fs.rename(oldpath, newpath, function (err) {
@@ -296,11 +295,8 @@ app.post('/unenroll', function (req, res, next){
 });
 
 app.post('/getCourseView',function(req,res){
-    console.log(req.body.courseName)
     Course.findOne({ name: req.body.courseName }, function (err, course){
         currentCourse = course;
-        console.log(course)
-        console.log(currentCourse)
         if(currentUser.role == "Professor"){
             return res.redirect('/courseViewProf');
         }
@@ -402,7 +398,7 @@ app.get("/updateAssignment", function (req,res) {
 app.post("/goGradingProf", function (req,res) {
     teamMembersNames = [];
     Homework.findOne({ _id: req.body.ass_}, function(err, hm) {
-        console.log(hm)
+        // console.log(hm)
         for(var i=0; i<hm.members.length;i++){
             User.findOne({ _id: new mongoose.mongo.ObjectId(hm.members[i])}, function(err, user) {
                 teamMembersNames.push(user.username);
@@ -417,7 +413,12 @@ app.get('/profGradeView',function(req,res){
     return res.sendFile(__dirname + '/client/gradeProf.html');
 });
 
-app.listen(3000);
+app.listen(3000, function () {
+    var dirhm = './assignments/';
+    if (!fs.existsSync(dirhm)){
+        fs.mkdirSync(dirhm);
+    }
+});
 console.log("Running at Port 3000");
 
 module.exports = app;
