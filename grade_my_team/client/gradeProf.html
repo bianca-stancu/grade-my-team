@@ -7,6 +7,7 @@
 <link rel="stylesheet" href="https://fonts.googleapis.com/css?family=Poppins">
 <script src="https://ajax.googleapis.com/ajax/libs/jquery/1.12.0/jquery.min.js"> </script>
 <script src="./node_modules/truffle-contract/dist/truffle-contract.js"></script>
+<script src="./node_modules/ethers/dist/ethers.js"></script>
 <style>
     body,h1,h2,h3,h4,h5 {font-family: "Poppins", sans-serif}
     body {font-size:16px;}
@@ -81,319 +82,326 @@
         }
     }
 </style>
+
 <body>
 
-<!-- Sidebar/menu -->
-<nav class="w3-sidebar w3-cyan w3-collapse w3-top w3-large w3-padding" style="z-index:3;width:300px;font-weight:bold;" id="mySidebar"><br>
-    <a href="javascript:void(0)" onclick="w3_close()" class="w3-button w3-hide-large w3-display-topleft" style="width:100%;font-size:22px">Close Menu</a>
-    <div class="w3-container">
-        <h3 class="w3-padding-64"><b>ICorsi4 <br/>Online Grading System</b></h3>
-        <p class="w3-text-white" id="username"></p>
+    <!-- Sidebar/menu -->
+    <nav class="w3-sidebar w3-cyan w3-collapse w3-top w3-large w3-padding" style="z-index:3;width:300px;font-weight:bold;"
+        id="mySidebar"><br>
+        <a href="javascript:void(0)" onclick="w3_close()" class="w3-button w3-hide-large w3-display-topleft" style="width:100%;font-size:22px">Close
+            Menu</a>
+        <div class="w3-container">
+            <h3 class="w3-padding-64"><b>ICorsi4 <br />Online Grading System</b></h3>
+            <p class="w3-text-white" id="username"></p>
+        </div>
+        <div class="w3-bar-block" id="sidebar"></div>
+        <div class="w3-container w3-padding-64" id="extra"></div>
+        <div class="w3-container w3-padding-64">
+            <form action="/logout">
+                <input type="submit" style="background-color: #00bcd4; border: none" value="Logout">
+            </form>
+        </div>
+    </nav>
+
+    <!-- Top menu on small screens -->
+    <header class="w3-container w3-top w3-hide-large w3-cyan w3-xlarge w3-padding">
+        <a href="javascript:void(0)" class="w3-button w3-cyan w3-margin-right" onclick="w3_open()">☰</a>
+        <span>ICorsi4</span>
+    </header>
+
+    <!-- Overlay effect when opening sidebar on small screens -->
+    <div class="w3-overlay w3-hide-large " onclick="w3_close()" style="cursor:pointer" title="close side menu" id="myOverlay"></div>
+
+    <!-- !PAGE CONTENT! -->
+    <div class="container">
+        <div class="row">
+            <h2 style="text-align:center">Grade students and homework</h2>
+            <form id="myForm">
+                <table id="metricsTable">
+                    <tr id="row_0">
+                    </tr>
+                </table><br>
+            </form>
+            <div id="avg_grades"></div>
+            <div id="prof_input"></div>
+            <div id="final_grades"></div>
+        </div>
     </div>
-    <div class="w3-bar-block" id="sidebar"></div>
-    <div class="w3-container w3-padding-64" id="extra"></div>
-    <div class="w3-container w3-padding-64">
-        <form action="/logout">
-            <input type="submit" style="background-color: #00bcd4; border: none" value="Logout">
-        </form>
+
+    <!-- W3.CSS Container -->
+    <div class="w3-light-grey w3-container w3-padding-32 w3-bottom">
+        <p class="w3-right"> &copy; 2018 Distibuted systems. All rights reserved | Design by<br /> Jelena Budakovic,
+            Bianca Stancu and Davide Matteri</p>
     </div>
-</nav>
 
-<!-- Top menu on small screens -->
-<header class="w3-container w3-top w3-hide-large w3-cyan w3-xlarge w3-padding">
-    <a href="javascript:void(0)" class="w3-button w3-cyan w3-margin-right" onclick="w3_open()">☰</a>
-    <span>ICorsi4</span>
-</header>
-
-<!-- Overlay effect when opening sidebar on small screens -->
-<div class="w3-overlay w3-hide-large " onclick="w3_close()" style="cursor:pointer" title="close side menu" id="myOverlay"></div>
-
-<!-- !PAGE CONTENT! -->
-<div class="container" >
-    <div class="row">
-        <h2 style="text-align:center">Grade students and homework</h2>
-        <form id="myForm">
-            <table id="metricsTable">
-                <tr id="row_0">
-                </tr>
-            </table><br>
-        </form>
-        <div id ="avg_grades"></div>
-        <div id ="prof_input"></div>
-        <div id="final_grades"></div>
-    </div>
-</div>
-
-<!-- W3.CSS Container -->
-<div class="w3-light-grey w3-container w3-padding-32 w3-bottom" ><p class="w3-right"> &copy; 2018 Distibuted systems. All rights reserved | Design by<br/> Jelena Budakovic, Bianca Stancu and Davide Matteri</p></div>
-
-<script>
-    // Script to open and close sidebar
-    function w3_open() {
-        document.getElementById("mySidebar").style.display = "block";
-        document.getElementById("myOverlay").style.display = "block";
-    }
-
-    function w3_close() {
-        document.getElementById("mySidebar").style.display = "none";
-        document.getElementById("myOverlay").style.display = "none";
-    }
-
-</script>
-<script>
-    function getUser(){
-        $.ajax({
-            type: "GET",
-            url: "/getUser",
-            cache: false,
-            success: function(res){
-                fillPage(res);
-            }
-        });
-        return false;
-    }
-
-    function fillPage(user) {
-        // Sidebar/menu
-        var sidebar = '<a href="/profile" class="w3-bar-item w3-button w3-hover-white">Dashboard</a>';
-        var i;
-        for (i = 0; i < user.courses.length; i++) {
-            sidebar += '<form method="post" id="getCourseView" action="/getCourseView">' +
-                '<input id="' + 'courseName_' + i + '" type="text" name="courseName" hidden>' +
-                '<input type="submit" style="border: none" class="w3-bar-item w3-button w3-hover-white" value="' +  user.courses[i].name + '">' +
-                '</form>';
-        };
-        document.getElementById("username").innerHTML = user.firstName + " " + user.lastName;
-        document.getElementById("sidebar").innerHTML = sidebar;
-        for (i = 0; i < user.courses.length; i++) {
-            document.getElementById("courseName_" + i).value = user.courses[i].name;
+    <script>
+        // Script to open and close sidebar
+        function w3_open() {
+            document.getElementById("mySidebar").style.display = "block";
+            document.getElementById("myOverlay").style.display = "block";
         }
-    }
 
-    function createform(metrics, grades) {
-        $.ajax({
-            type: "GET",
-            url: "/getHm",
-            cache: false,
-            success: function(res){ // res = [currentHm,teamMembersNames]
-                var numberMembers = res[1].length;
-                var entry = "row_";
-                var colEntry = "col_";
-                var counter = 1;
-                var nmembers = res[1].length;
+        function w3_close() {
+            document.getElementById("mySidebar").style.display = "none";
+            document.getElementById("myOverlay").style.display = "none";
+        }
 
-                // Create rows
-                var first_row = $('#row_0');
-                while(nmembers-- > 0) {
-                    var next_row = first_row.clone();
-                    next_row.prop('id',entry + counter);
-                    next_row.appendTo('#metricsTable');
-                    counter++;
+    </script>
+    <script>
+        function getUser() {
+            $.ajax({
+                type: "GET",
+                url: "/getUser",
+                cache: false,
+                success: function (res) {
+                    fillPage(res);
                 }
-                // Create columns
-                var row_counter = 0;
-                $("#metricsTable tr").each(function(){
-                    for(var i= 0;i<4 ;i++){
-                        $(this).append("<td id='" + colEntry + row_counter + '_' + i + "'>test</td>");
-                    }
-                    row_counter++;
-                });
+            });
+            return false;
+        }
 
-                document.getElementById("col_0_0").innerHTML = "&nbsp";
-                document.getElementById("col_0_1").innerHTML = "Avg grade to self";
-                document.getElementById("col_0_2").innerHTML = "Avg grade to others";
-                document.getElementById("col_0_3").innerHTML = "Avg grade from others";
-
-                var nmembers = res[1].length;
-                for(var i= 0; i<nmembers;i++){
-                    var temp_c = i+1;
-                    var temp = "col_" + temp_c + "_0";
-                    for(var j=1; j<4;j++){
-                        var temp_entries = "col_" + temp_c + "_" + j;
-                        document.getElementById(temp_entries).innerHTML = metrics[i][j-1].toNumber();
-                    }
-
-                    document.getElementById(temp).innerHTML = res[1][i];
-
-
-                }
-                var avg_content = "<p> Average grades computed based on teammates and self-assessment, with equal weights: </p><br>";
-                for(var i = 0; i< nmembers; i++){
-                    avg_content += '<p class="col">' + res[1][i] + ' </p>' + '<p id="member_'+ i +'">' + grades[i] + '</p> <br>';
-                }
-                document.getElementById("avg_grades").innerHTML = avg_content;
-
-                var prof_input_content = '<form id="profForm" action="#" onsubmit="sendGrade(); return false;">' +
-                                '<p>Overall homework grade</p>' +
-                                '<input style="border: solid; width: 10%" type="number" name="hmGrade" id="hmGrade" min="0" value="10" required>' +
-                                '<input style="background-color: cyan;color: white;" type="submit" value="Grade homework">' +
-                                '</form>';
-
-                document.getElementById("prof_input").innerHTML = prof_input_content;
-
-                return;
-
+        function fillPage(user) {
+            // Sidebar/menu
+            var sidebar = '<a href="/profile" class="w3-bar-item w3-button w3-hover-white">Dashboard</a>';
+            var i;
+            for (i = 0; i < user.courses.length; i++) {
+                sidebar += '<form method="post" id="getCourseView" action="/getCourseView">' +
+                    '<input id="' + 'courseName_' + i + '" type="text" name="courseName" hidden>' +
+                    '<input type="submit" style="border: none" class="w3-bar-item w3-button w3-hover-white" value="' + user.courses[i].name + '">' +
+                    '</form>';
+            };
+            document.getElementById("username").innerHTML = user.firstName + " " + user.lastName;
+            document.getElementById("sidebar").innerHTML = sidebar;
+            for (i = 0; i < user.courses.length; i++) {
+                document.getElementById("courseName_" + i).value = user.courses[i].name;
             }
-        });
-    }
+        }
 
-    function sendGrade() {
-        $.ajax({
-            type: "GET",
-            url: "/getHm",
-            cache: false,
-            success: function(res){ // res = [currentHm,teamMembersNames]
-                var nmembers = res[1].length;
-                var overall_grade = document.getElementById("hmGrade").value;
-                $.getJSON("../build/contracts/Grading.json", function(grading_json) {
-                    var Grading = TruffleContract(grading_json);
-                    Grading.setProvider(web3.currentProvider);
-                    Grading.deployed().then(function(instance) {
-                        var instructorEvent = instance.Forgery();
-                        instructorEvent.watch(function(error, result){
-                            if (!error){
-                                alert("Attempt of academic forgery has been uncovered! Your transaction was not performed!");
-                            } else {
-                                console.log(error);
-                            }
-                        });
-                        instance.addOverallGrade(res[0]._id,overall_grade*10,{from: web3.eth.accounts[0], gas:3000000});
-                    });
-                });
+        function createform(metrics, grades) {
+            $.ajax({
+                type: "GET",
+                url: "/getHm",
+                cache: false,
+                success: function (res) { // res = [currentHm,teamMembersNames]
+                    var numberMembers = res[1].length;
+                    var entry = "row_";
+                    var colEntry = "col_";
+                    var counter = 1;
+                    var nmembers = res[1].length;
 
-                var prof_input_content = '<p>Overall grade given to this homework:</p>' +
-                    '<input style="border: solid; width: 10%" type="text" name="hmGrade" id="hmGrade" value=" '+ overall_grade +'" readonly="readonly">';
-                document.getElementById("prof_input").innerHTML = prof_input_content;
-
-                var final_content = "<p> Assign final grade to each team member: </p><br>";
-                var temp_Name = "member_";
-                for(var i = 0; i< nmembers; i++){
-                    var temp_grade_id = temp_Name+i;
-                    var avg_grade_member_i = document.getElementById(temp_grade_id).innerHTML;
-                    var grade = avg_grade_member_i - 10;
-                    console.log("member "+i);
-                    console.log(grade);
-                    var malus = 0;
-
-                    if (grade < 0){
-                        if(grade <= -1 && grade > -2.5){
-                            malus = 0.5;
-                        } else if (grade <= -2.5 && grade > -5){
-                            malus = 1;
-                        } else if (grade <= -5){
-                            malus = 1.5;
+                    // Create rows
+                    var first_row = $('#row_0');
+                    while (nmembers-- > 0) {
+                        var next_row = first_row.clone();
+                        next_row.prop('id', entry + counter);
+                        next_row.appendTo('#metricsTable');
+                        counter++;
+                    }
+                    // Create columns
+                    var row_counter = 0;
+                    $("#metricsTable tr").each(function () {
+                        for (var i = 0; i < 4; i++) {
+                            $(this).append("<td id='" + colEntry + row_counter + '_' + i + "'>test</td>");
                         }
-                    }
-                    console.log(malus);
-                    var final_grade_member_i = overall_grade - malus;
-                    console.log(final_grade_member_i);
-                    final_content += '<form id="finalGrade" action="#" onsubmit="sendFinalGrade(); return false;">' +
-                        '<p class="col">' + res[1][i] + ' </p>' +
-                        '<input class="col" style="border: solid; width: 10%" type="number" name="hmGrade" id="final_grade_' + i + '" min="0" value="' + final_grade_member_i + '" required>';
-                }
-                final_content += '<input style="background-color: cyan;color: white;" type="submit" value="Submit grades"></form>';
-                document.getElementById("final_grades").innerHTML = final_content;
-
-                return false;
-            }
-        });
-
-    }
-
-    function sendFinalGrade(){
-        $.ajax({
-            type: "GET",
-            url: "/getHm",
-            cache: false,
-            success: function(res){ // res = [currentHm,teamMembersNames]
-                var nmember = res[1].length;
-
-                $.ajax({
-                    type: "GET",
-                    url: "/getUser",
-                    cache: false,
-                    success: function(user){
-                        $.getJSON("../build/contracts/Grading.json", function(grading_json) {   
-                            var Grading = TruffleContract(grading_json);
-                            Grading.setProvider(window.web3.currentProvider);
-                            Grading.deployed().then(async function(instance) {
-                                async function smth(i){
-                                    console.log(i);
-                                    var tempUSer = "final_grade_" + i;
-                                    var tempGrade = document.getElementById(tempUSer).value * 10;
-                                    var text = "I ("+ currentUserUsername + ") am grading " +values[2*i].value + " the grade:" + values[2*i+1].value+".";
-                                    await web3.personal.sign(text,web3.currentProvider.selectedAddress, async function(err,signature) {
-                                    var sig = ethers.utils.splitSignature(signature);
-                                    var authorization = instance.NotAuthorized();
-                                    authorization.watch(function(error, result){
-                                    if (!error){
-                                        alert("You are not authorized to perform this grading!");
-                                        window.location.assign("/courseViewProf");
-                                    } else {
-                                        console.log(error);
-                                    }
-                                 });
-                                    await instance.addGradeTo.sendTransaction(res[0]._id,user._id, res[1][i], tempGrade, true,text,sig.v, sig.r, sig.s,{from: web3.currentProvider.selectedAddress}).then(async function(){
-                                        if(i<nmember){ smth(i+1);}
-                                    }); 
-                            instance.addGradeTo.sendTransaction(res[0]._id,user._id, res[1][i], tempGrade, true,text,sig.v, sig.r, sig.s,{from: web3.currentProvider.selectedAddress}).then(function(error,res){
-                                console.log(res);
-                                if(i==nmember-1){
-                                window.location.assign("/courseViewProf");
-                            }
-                    }); 
+                        row_counter++;
                     });
-                                    await instance.addGradeTo.sendTransaction(res[0]._id,user._id,res[1][i],tempGrade, true ,{from: web3.eth.accounts[0], gas:3000000}).then(async function(){
-                                        console.log("ok" + i); if(i<nmember){ smth(i+1);}
+
+                    document.getElementById("col_0_0").innerHTML = "&nbsp";
+                    document.getElementById("col_0_1").innerHTML = "Avg grade to self";
+                    document.getElementById("col_0_2").innerHTML = "Avg grade to others";
+                    document.getElementById("col_0_3").innerHTML = "Avg grade from others";
+
+                    var nmembers = res[1].length;
+                    for (var i = 0; i < nmembers; i++) {
+                        var temp_c = i + 1;
+                        var temp = "col_" + temp_c + "_0";
+                        for (var j = 1; j < 4; j++) {
+                            var temp_entries = "col_" + temp_c + "_" + j;
+                            document.getElementById(temp_entries).innerHTML = metrics[i][j - 1].toNumber();
+                        }
+
+                        document.getElementById(temp).innerHTML = res[1][i];
+
+
+                    }
+                    var avg_content = "<p> Average grades computed based on teammates and self-assessment, with equal weights: </p><br>";
+                    for (var i = 0; i < nmembers; i++) {
+                        avg_content += '<p class="col">' + res[1][i] + ' </p>' + '<p id="member_' + i + '">' + grades[i] + '</p> <br>';
+                    }
+                    document.getElementById("avg_grades").innerHTML = avg_content;
+
+                    var prof_input_content = '<form id="profForm" action="#" onsubmit="sendGrade(); return false;">' +
+                        '<p>Overall homework grade</p>' +
+                        '<input style="border: solid; width: 10%" type="number" name="hmGrade" id="hmGrade" min="0" value="10" required>' +
+                        '<input style="background-color: cyan;color: white;" type="submit" value="Grade homework">' +
+                        '</form>';
+
+                    document.getElementById("prof_input").innerHTML = prof_input_content;
+
+                    return;
+
+                }
+            });
+        }
+
+        function sendGrade() {
+            $.ajax({
+                type: "GET",
+                url: "/getHm",
+                cache: false,
+                success: function (res) { // res = [currentHm,teamMembersNames]
+                    var nmembers = res[1].length;
+                    var overall_grade = document.getElementById("hmGrade").value;
+
+                    var prof_input_content = '<p>Overall grade given to this homework:</p>' +
+                        '<input style="border: solid; width: 10%" type="text" name="hmGrade" id="hmGrade" value=" ' + overall_grade + '" readonly="readonly">';
+                    document.getElementById("prof_input").innerHTML = prof_input_content;
+
+                    var final_content = "<p> Assign final grade to each team member: </p><br>";
+                    var temp_Name = "member_";
+                    for (var i = 0; i < nmembers; i++) {
+                        var temp_grade_id = temp_Name + i;
+                        var avg_grade_member_i = document.getElementById(temp_grade_id).innerHTML;
+                        var grade = avg_grade_member_i - 10;
+                        console.log("member " + i);
+                        console.log(grade);
+                        var malus = 0;
+
+                        if (grade < 0) {
+                            if (grade <= -1 && grade > -2.5) {
+                                malus = 0.5;
+                            } else if (grade <= -2.5 && grade > -5) {
+                                malus = 1;
+                            } else if (grade <= -5) {
+                                malus = 1.5;
+                            }
+                        }
+                        console.log(malus);
+                        var final_grade_member_i = overall_grade - malus;
+                        console.log(final_grade_member_i);
+                        final_content += '<form id="finalGrade" action="#" onsubmit="sendFinalGrade(); return false;">' +
+                            '<p class="col">' + res[1][i] + ' </p>' +
+                            '<input class="col" style="border: solid; width: 10%" type="number" name="hmGrade" id="final_grade_' + i + '" min="0" value="' + final_grade_member_i + '" required>';
+                    }
+                    final_content += '<input style="background-color: cyan;color: white;" type="submit" value="Submit grades"></form>';
+                    document.getElementById("final_grades").innerHTML = final_content;
+
+                    return false;
+                }
+            });
+
+        }
+
+        function sendFinalGrade() {
+            $.ajax({
+                type: "GET",
+                url: "/getHm",
+                cache: false,
+                success: function (res) { // res = [currentHm,teamMembersNames]
+                    var nmember = res[1].length;
+
+                    $.ajax({
+                        type: "GET",
+                        url: "/getUser",
+                        cache: false,
+                        success: function (user) {
+                            $.getJSON("../build/contracts/Grading.json", function (grading_json) {
+                                var Grading = TruffleContract(grading_json);
+                                Grading.setProvider(window.web3.currentProvider);
+                                Grading.deployed().then(async function (instance) {
+                                    var forgery = instance.Forgery();
+                                    forgery.watch(function (error, result) {
+                                        if (!error) {
+                                            alert("Attempt of academic forgery has been uncovered! Your transaction was not performed!");
+                                        } else {
+                                            console.log(error);
+                                        }
                                     });
-                                }
-                                smth(0);
+                                    var overall_grade = document.getElementById("hmGrade").value;
+                                    instance.addOverallGrade(res[0]._id, overall_grade * 10, { from: web3.currentProvider.selectedAddress });
+                                    var authorization = instance.NotAuthorized();
+                                            authorization.watch(function (error, result) {
+                                                if (!error) {
+                                                    alert("You are not authorized to perform this grading!");
+                                                    //window.location.assign("/courseViewProf");
+                                                } else {
+                                                    console.log(error);
+                                                }
+                                            });
+                                    async function addGrade(i) {
+                                        var tempUSer = "final_grade_" + i;
+                                        var tempGrade_v = document.getElementById(tempUSer).value;
+                                        var tempGrade = tempGrade_v*10;
+                                        var text = "I (" + user.username + ") am grading " + res[1][i] + " the grade:" + tempGrade_v + ".";
+                                        console.log(text);
+                                        await web3.personal.sign(text, web3.currentProvider.selectedAddress, async function (err, signature) {
+                                            var sig = ethers.utils.splitSignature(signature);
+                                            var promise =  instance.addGradeTo.sendTransaction(res[0]._id, user.username, res[1][i], tempGrade, true, text, sig.v, sig.r, sig.s, { from: web3.currentProvider.selectedAddress });
+                                            promise.then(async function () {
+                                                console.log(i);
+                                                if (i < nmember - 1) {
+                                                    addGrade(i + 1);
+                                                } else if (i == nmember - 1) {
+                                                    $.ajax({
+                                                        type: "GET",
+                                                        url: "/updateAssignment",
+                                                        cache: false,
+                                                        success: function (res) {
+                                                        //window.location.assign("/courseViewProf");
+                                            }
+                                        });
+                                                }
+                                            });
         
-                            });
-                        });
-                        // setTimeout(function() {
-                        //     window.location.assign("/courseViewProf");
-                        // }, 1000);
-                    }
-                });
-            }
-        });
-    }
-
-    window.onload = function() {
-        getUser();
-        var metrics = [];
-        var grades = [];
-        var forgery = false;
-        $.ajax({
-            type: "GET",
-            url: "/toBlockchainData",
-            cache: false,
-            success: function(res){
-                // res = [currentHm,currentUser, teamMembersNames]
-                var hm_id = res[0]._id;
-                var currentUserUsername = res[1].username;
-                var nmember = res[2].length;
-
-                // Blockchain
-                $.getJSON("../build/contracts/Grading.json", function(grading_json) {
-                    var Grading = TruffleContract(grading_json);
-                    Grading.setProvider(web3.currentProvider);
-                    Grading.deployed().then(function(instance) {
-                        for(var i=0 ; i< nmember; i++){
-                            instance.getMetrics.call(res[2][i],{from: web3.eth.accounts[0], gas:3000000}).then(result => metrics.push(Array.from(result)));
-                            instance.getGradeFor.call(hm_id,res[2][i],{from: web3.eth.accounts[0], gas:3000000}).then(function(result,error) {
-                                grades.push(result[0].toNumber());
+                                        });
+                                    }
+                                    addGrade(0);
+                                });
                             });
                         }
                     });
-                });
-                setTimeout(function() {
-                    createform(metrics,grades)
-                }, 1000);
-            }
-        });
-    };
-</script>
+                }
+            });
+        }
+
+        window.onload = function () {
+            getUser();
+            var metrics = [];
+            var grades = [];
+            $.ajax({
+                type: "GET",
+                url: "/toBlockchainData",
+                cache: false,
+                success: function (res) {
+                    var hm_id = res[0]._id;
+                    var currentUserUsername = res[1].username;
+                    var nmember = res[2].length;
+
+                    // Blockchain
+                    $.getJSON("../build/contracts/Grading.json", function (grading_json) {
+                        var Grading = TruffleContract(grading_json);
+                        Grading.setProvider(web3.currentProvider);
+                        Grading.deployed().then(function (instance) {
+                            async function getMetrics(i) {
+                                await instance.getMetrics.call(res[2][i], { from: web3.currentProvider.selectedAddress }).then(async function (result) {
+                                    metrics.push(Array.from(result));
+                                    await instance.getGradeFor.call(hm_id, res[2][i], { from: web3.currentProvider.selectedAddress }).then(function (result, error) {
+                                        grades.push(result[0].toNumber());
+                                        if (i < nmember - 1) {
+                                            getMetrics(i + 1);
+                                        } else if (i == nmember - 1) {
+                                            createform(metrics, grades);
+                                        }
+                                    });
+                                });
+                            }
+                            getMetrics(0);
+                        });
+                    });
+                }
+            });
+        };
+    </script>
 </body>
+
 </html>
