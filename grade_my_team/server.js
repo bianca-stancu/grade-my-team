@@ -138,6 +138,7 @@ app.post("/addcourse",function (req, res, next){
     //Create course
     var myData = new Course(req.body);
     myData._id = new mongoose.Types.ObjectId();
+    myData.professor = new mongoose.Types.ObjectId();
     myData.save().then(function(item,bla){
         console.log("Course successfuly saved to database");
     });
@@ -167,7 +168,7 @@ app.post('/fileupload', function (req, res, next) {
     var newpath;
     form.parse(req, function (err, fields, files) {
         var members = Object.values(fields).slice(0, Object.values(fields).length-2);
-        // console.log(members)
+        console.log(members)
         var oldpath = files.my_file.path;
         newpath = __dirname + '/assignments/' + files.my_file.name;
         fs.rename(oldpath, newpath, function (err) {

@@ -157,7 +157,6 @@
     }
 
     function register(){
-        //TODO: maybe check if id is already taken and validate.
         $.getJSON("../build/contracts/Grading.json", function(grading_json) {
                                    var Grading = TruffleContract(grading_json);
                                    Grading.setProvider(web3.currentProvider);
