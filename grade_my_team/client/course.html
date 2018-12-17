@@ -341,8 +341,10 @@
                         '<hr style="width:50px;border:5px solid cyan" class="w3-round">';
 
                     document.getElementById("fileForm").innerHTML = content;
+                    document.getElementById("member_0").value = currentUser.username;
+                    document.getElementById("member_0").readOnly = true;
                     /*initiate the autocomplete function on the "myInput" element, and pass along the countries array as possible autocomplete values:*/
-                    for(var i = 0; i < numberMembers; i++){
+                    for(var i = 1; i < numberMembers; i++){
                         content +='<input style="border: solid; width: 10%" type="text" name="member_'+ i + '" id="member_' + i + '">';
                         autocomplete(document.getElementById("member_" + i), res);
                     }
