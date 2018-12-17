@@ -231,20 +231,12 @@
             var Grading = TruffleContract(grading_json);
             Grading.setProvider(window.web3.currentProvider);
             Grading.deployed().then(async function(instance) {
-                for(var i=0 ; i< nmember; i++){  
+                async function smth(i){
                     var to = values[2*i].value;
                     var grade = values[2*i+1].value;
                     var text = "I ("+ currentUserUsername + ") am grading " +values[2*i].value + " the grade:" + values[2*i+1].value+".";
                     await web3.personal.sign(text,web3.currentProvider.selectedAddress, async function(err,signature) {
                         var sig = ethers.utils.splitSignature(signature);
-                        console.log(signature);
-                        console.log(">>>>");
-                        console.log(sig.v)
-                        console.log(sig.r)
-                        console.log(sig.s);
-                        /*var promise = instance.verify_identity(text, sig.v, web3.toHex(sig.r), web3.toHex(sig.s));
-                        promise.then(function(signer) {
-                            console.log(signer);*/
                         var authorization = instance.NotAuthorized();
                         authorization.watch(function(error, result){
                             if (!error){
@@ -255,10 +247,11 @@
                                 console.log(error);
                             }
                         });
-                        instance.addGradeTo.sendTransaction(hm_id, currentUserUsername, to, grade, false,text,sig.v, sig.r, sig.s,{from: web3.currentProvider.selectedAddress}).then(function(error,res){
-                            console.log(res);
-                            if(i==nmember-1){
-                              window.location.assign("/courseView");
+                        await instance.addGradeTo.sendTransaction(hm_id, currentUserUsername, to, grade, false,text,sig.v, sig.r, sig.s,{from: web3.currentProvider.selectedAddress}).then(async function(error,res){
+                            if(i<nmember){ 
+                                smth(i+1);
+                            } else {
+                                window.location.assign("/courseView");
                             }
                     }); 
                     });

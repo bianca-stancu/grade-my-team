@@ -326,15 +326,33 @@
                         $.getJSON("../build/contracts/Grading.json", function(grading_json) {   
                             var Grading = TruffleContract(grading_json);
                             Grading.setProvider(window.web3.currentProvider);
-                            Grading.deployed().then(function(instance) {
+                            Grading.deployed().then(async function(instance) {
                                 async function smth(i){
                                     console.log(i);
                                     var tempUSer = "final_grade_" + i;
                                     var tempGrade = document.getElementById(tempUSer).value * 10;
-                                    console.log(res[0]._id);
-                                    console.log(user._id);
-                                    console.log(res[i]);
-                                    console.log(tempGrade);
+                                    var text = "I ("+ currentUserUsername + ") am grading " +values[2*i].value + " the grade:" + values[2*i+1].value+".";
+                                    await web3.personal.sign(text,web3.currentProvider.selectedAddress, async function(err,signature) {
+                                    var sig = ethers.utils.splitSignature(signature);
+                                    var authorization = instance.NotAuthorized();
+                                    authorization.watch(function(error, result){
+                                    if (!error){
+                                        alert("You are not authorized to perform this grading!");
+                                        window.location.assign("/courseViewProf");
+                                    } else {
+                                        console.log(error);
+                                    }
+                                 });
+                                    await instance.addGradeTo.sendTransaction(res[0]._id,user._id, res[1][i], tempGrade, true,text,sig.v, sig.r, sig.s,{from: web3.currentProvider.selectedAddress}).then(async function(){
+                                        if(i<nmember){ smth(i+1);}
+                                    }); 
+                            instance.addGradeTo.sendTransaction(res[0]._id,user._id, res[1][i], tempGrade, true,text,sig.v, sig.r, sig.s,{from: web3.currentProvider.selectedAddress}).then(function(error,res){
+                                console.log(res);
+                                if(i==nmember-1){
+                                window.location.assign("/courseViewProf");
+                            }
+                    }); 
+                    });
                                     await instance.addGradeTo.sendTransaction(res[0]._id,user._id,res[1][i],tempGrade, true ,{from: web3.eth.accounts[0], gas:3000000}).then(async function(){
                                         console.log("ok" + i); if(i<nmember){ smth(i+1);}
                                     });
