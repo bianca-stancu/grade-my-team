@@ -296,37 +296,9 @@
                 url: "/getAllUsers",
                 cache: false,
                 success: function(res){
-//                    var numberMembers = parseInt(document.getElementById("numMembers").value);
-//                    $("#numMembersForm").hide();
-//
-//                    var content = '<form autocomplete="off" action="/fileupload" method="post" enctype="multipart/form-data" id="my_form">' +
-//                        '<div class="autocomplete">';
-//
-//                    for(var i = 0; i < numberMembers; i++){
-//                        content +='<input style="border: solid; width: 10%" type="text" name="member_'+ i + '" id="member_' + i + '">';
-//                    }
-//
-//                    content += '</div>' +
-//                        '<input type="number" name="nmembers" id="nmembers" value="'+ numberMembers +'" hidden/>' +
-//                        '<input type="file" name="my_file" id="my_file"/>' +
-//                        '<input type="button" style="background-color: cyan;color: white" name="btnSubmit" value="Submit" onclick="validateForm()"/>' +
-//                        '</form>' +
-//                        '<hr style="width:50px;border:5px solid cyan" class="w3-round">';
-//
-//                    document.getElementById("fileForm").innerHTML = content;
-//
-//                    /*initiate the autocomplete function on the "myInput" element, and pass along the users array as possible autocomplete values:*/
-//                    document.getElementById("member_0").value = currentUser.username;
-//                    document.getElementById("member_0").readOnly = true;
-//                    for(var i = 1; i < numberMembers; i++){
-////                        content +='<input style="border: solid; width: 10%" type="text" name="member_'+ i + '" id="member_' + i + '">';
-//                        autocomplete(document.getElementById("member_" + i), res);
-//                    }
-//
-//                    $("#fileForm").show();
                     var numberMembers = parseInt(document.getElementById("numMembers").value);
                     $("#numMembersForm").hide();
-                    var content = '<form autocomplete="off" action="/fileupload" method="post" enctype="multipart/form-data" id="my_form">' +
+                    var content = '<form autocomplete="off" action="/fileupload" method="post" enctype="multipart/form-data" id="my_form" onsubmit="return validateForm()">' +
                         '<div class="autocomplete">';
 
                     for(var i = 0; i < numberMembers; i++){
@@ -371,7 +343,7 @@
                             return false;
                         }
                     }
-                    document.getElementById("my_form").submit();
+                    return true;
 
                 }
             });
