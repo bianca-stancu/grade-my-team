@@ -62,15 +62,15 @@
     }
 
     /* style the submit button */
-    input[type=submit] {
-        background-color: cyan;
-        color: white;
-        cursor: pointer;
-    }
+    /*input[type=submit] {*/
+        /*background-color: cyan;*/
+        /*color: white;*/
+        /*cursor: pointer;*/
+    /*}*/
 
-    input[type=submit]:hover {
-        background-color: cyan;
-    }
+    /*input[type=submit]:hover {*/
+        /*background-color: cyan;*/
+    /*}*/
 
     /* Two-column layout */
     .col {
@@ -174,10 +174,16 @@
         var sidebar = '<a href="/profile" class="w3-bar-item w3-button w3-hover-white">Dashboard</a>';
         var i;
         for (i = 0; i < user.courses.length; i++) {
-            sidebar += '<a href="#c' + i + '" onclick="w3_close()" class="w3-bar-item w3-button w3-hover-white">' + user.courses[i].name + '</a>';
+            sidebar += '<form method="post" id="getCourseView" action="/getCourseView">' +
+                '<input id="' + 'courseName_' + i + '" type="text" name="courseName" hidden>' +
+                '<input type="submit" style="border: none" class="w3-bar-item w3-button w3-hover-white" value="' +  user.courses[i].name + '">' +
+                '</form>';
         };
         document.getElementById("username").innerHTML = user.firstName + " " + user.lastName;
         document.getElementById("sidebar").innerHTML = sidebar;
+        for (i = 0; i < user.courses.length; i++) {
+            document.getElementById("courseName_" + i).value = user.courses[i].name;
+        }
     }
 
     function createform() {
@@ -193,7 +199,7 @@
                         '<input style="border: solid; width: 10%" type="number" name="studGrade_'+ i + '" id="studGrade_' + i + '" min="0" value="10" required>';
                 }
 
-                content += '<input type="submit" value="Create">';
+                content += '<input style="background-color: cyan;color: white;" type="submit" value="Create">';
 
                 document.getElementById("myForm").innerHTML = content;
 

@@ -40,40 +40,6 @@
             opacity: 1;
         }
 
-        /* style the submit button */
-        input[type=submit] {
-            background-color: cyan;
-            color: white;
-            cursor: pointer;
-        }
-
-        input[type=submit]:hover {
-            background-color: cyan;
-        }
-
-        /* Two-column layout */
-        .col {
-            float: left;
-            width: 50%;
-            margin: auto;
-            padding: 0 50px;
-            margin-top: 6px;
-        }
-
-        /* Clear floats after the columns */
-        .row:after {
-            content: "";
-            display: table;
-            clear: both;
-        }
-
-        /* bottom container */
-        .bottom-container {
-            text-align: center;
-            background-color: #666;
-            border-radius: 0px 0px 4px 4px;
-        }
-
         /* Responsive layout - when the screen is less than 650px wide, make the two columns stack on top of each other instead of next to each other */
         @media screen and (max-width: 650px) {
             .col {
@@ -201,11 +167,11 @@
             var gradedHmprof = '<h1 class="w3-xlarge w3-text-cyan"><b> Graded homeworks</b></h1>';
             var i;
             for (i = 0; i < user[0].courses.length; i++) {
-                sidebar += '<a href="#c' + i + '" onclick="w3_close()" class="w3-bar-item w3-button w3-hover-white">' + user[0].courses[i].name + '</a>';
-//                sidebar += '<form method="post" id="getCourseView" action="/getCourseView">' +
-//                    '<input id="' + 'courseName_' + i + '" type="text" name="courseName" hidden>' +
-//                    '<input type="submit" style="border: none" class="w3-bar-item w3-button w3-hover-white" value="' +  user[0].courses[i].name + '">' +
-//                    '</form>';
+//                sidebar += '<a href="#c' + i + '" onclick="w3_close()" class="w3-bar-item w3-button w3-hover-white">' + user[0].courses[i].name + '</a>';
+                sidebar += '<form method="post" id="getCourseView" action="/getCourseView">' +
+                    '<input id="' + 'courseName_' + i + '" type="text" name="courseName" hidden>' +
+                    '<input type="submit" style="border: none" class="w3-bar-item w3-button w3-hover-white" value="' +  user[0].courses[i].name + '">' +
+                    '</form>';
             };
             document.getElementById("username").innerHTML = user[0].firstName + " " + user[0].lastName;
             document.getElementById("sidebar").innerHTML = sidebar;
@@ -241,10 +207,9 @@
             document.getElementById("graded").innerHTML = gradedHm;
             document.getElementById("gradedprof").innerHTML = gradedHmprof;
 
-//            for (i = 0; i < user[0].courses.length; i++) {
-//                document.getElementById("courseName" + i).value = user[0].courses[i].name;
-//                document.getElementById("courseName_" + i).value = user[0].courses[i].name;
-//            }
+            for (i = 0; i < user[0].courses.length; i++) {
+                document.getElementById("courseName_" + i).value = user[0].courses[i].name;
+            }
 
         }
         
@@ -270,7 +235,7 @@
                         Grading.setProvider(window.web3.currentProvider);
                         Grading.deployed().then(async function(instance) {
                             await instance.getGrade.sendTransaction(hm_id, currentUserUsername,{from: web3.currentProvider.selectedAddress}).then(async function(error,res){
-                                var newContent = '<div><p>'+res+'</p></div>';
+                                var newContent = '<div><p>Given grade: '+ res[0] +' ; Expected grade: ' + res[1] +' .</p></div>';
                                 $(formId).replaceWith(newContent);
                             });
 
@@ -296,37 +261,9 @@
                 url: "/getAllUsers",
                 cache: false,
                 success: function(res){
-//                    var numberMembers = parseInt(document.getElementById("numMembers").value);
-//                    $("#numMembersForm").hide();
-//
-//                    var content = '<form autocomplete="off" action="/fileupload" method="post" enctype="multipart/form-data" id="my_form">' +
-//                        '<div class="autocomplete">';
-//
-//                    for(var i = 0; i < numberMembers; i++){
-//                        content +='<input style="border: solid; width: 10%" type="text" name="member_'+ i + '" id="member_' + i + '">';
-//                    }
-//
-//                    content += '</div>' +
-//                        '<input type="number" name="nmembers" id="nmembers" value="'+ numberMembers +'" hidden/>' +
-//                        '<input type="file" name="my_file" id="my_file"/>' +
-//                        '<input type="button" style="background-color: cyan;color: white" name="btnSubmit" value="Submit" onclick="validateForm()"/>' +
-//                        '</form>' +
-//                        '<hr style="width:50px;border:5px solid cyan" class="w3-round">';
-//
-//                    document.getElementById("fileForm").innerHTML = content;
-//
-//                    /*initiate the autocomplete function on the "myInput" element, and pass along the users array as possible autocomplete values:*/
-//                    document.getElementById("member_0").value = currentUser.username;
-//                    document.getElementById("member_0").readOnly = true;
-//                    for(var i = 1; i < numberMembers; i++){
-////                        content +='<input style="border: solid; width: 10%" type="text" name="member_'+ i + '" id="member_' + i + '">';
-//                        autocomplete(document.getElementById("member_" + i), res);
-//                    }
-//
-//                    $("#fileForm").show();
                     var numberMembers = parseInt(document.getElementById("numMembers").value);
                     $("#numMembersForm").hide();
-                    var content = '<form autocomplete="off" action="/fileupload" method="post" enctype="multipart/form-data" id="my_form">' +
+                    var content = '<form autocomplete="off" action="/fileupload" method="post" enctype="multipart/form-data" id="my_form" onsubmit="return validateForm()">' +
                         '<div class="autocomplete">';
 
                     for(var i = 0; i < numberMembers; i++){
@@ -336,13 +273,15 @@
                     content += '</div>' +
                         '<input type="number" name="nmembers" id="nmembers" value="'+ numberMembers +'" hidden/>' +
                         '<input type="file" name="my_file" id="my_file"/>' +
-                        '<input type="submit" name="submit" value="Submit" />' +
+                        '<input type="submit" style="background-color: cyan;" name="submit" value="Submit" />' +
                         '</form>' +
                         '<hr style="width:50px;border:5px solid cyan" class="w3-round">';
 
                     document.getElementById("fileForm").innerHTML = content;
+                    document.getElementById("member_0").value = currentUser.username;
+                    document.getElementById("member_0").readOnly = true;
                     /*initiate the autocomplete function on the "myInput" element, and pass along the countries array as possible autocomplete values:*/
-                    for(var i = 0; i < numberMembers; i++){
+                    for(var i = 1; i < numberMembers; i++){
                         content +='<input style="border: solid; width: 10%" type="text" name="member_'+ i + '" id="member_' + i + '">';
                         autocomplete(document.getElementById("member_" + i), res);
                     }
@@ -369,7 +308,7 @@
                             return false;
                         }
                     }
-                    document.getElementById("my_form").submit();
+                    return true;
 
                 }
             });

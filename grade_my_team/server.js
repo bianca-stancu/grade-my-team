@@ -296,15 +296,18 @@ app.post('/unenroll', function (req, res, next){
 });
 
 app.post('/getCourseView',function(req,res){
+    console.log(req.body.courseName)
     Course.findOne({ name: req.body.courseName }, function (err, course){
         currentCourse = course;
+        console.log(course)
+        console.log(currentCourse)
+        if(currentUser.role == "Professor"){
+            return res.redirect('/courseViewProf');
+        }
+        else{
+            return res.redirect('/courseView');
+        }
     });
-    if(currentUser.role == "Professor"){
-        return res.redirect('/courseViewProf');
-    }
-    else{
-        return res.redirect('/courseView');
-    }
 
 });
 

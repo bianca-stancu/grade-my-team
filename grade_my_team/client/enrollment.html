@@ -15,16 +15,6 @@
     .w3-half img{margin-bottom:-6px;margin-top:16px;opacity:0.8;cursor:pointer}
     .w3-half img:hover{opacity:1}
 
-    /* style the container */
-    .container {
-        margin: auto;
-        width: 50%;
-        border-radius: 5px;
-        background-color: #f2f2f2;
-        padding: 20px 70px 50px 70px;
-        position: fixed;
-    }
-
     /* style inputs and link buttons */
     input,
     .btn {
@@ -43,17 +33,6 @@
     input:hover,
     .btn:hover {
         opacity: 1;
-    }
-
-    /* style the submit button */
-    input[type=submit] {
-        background-color: cyan;
-        color: white;
-        cursor: pointer;
-    }
-
-    input[type=submit]:hover {
-        background-color: cyan;
     }
 
     /* Two-column layout */
@@ -131,10 +110,16 @@
         var sidebar = '<a href="/profile" class="w3-bar-item w3-button w3-hover-white">Dashboard</a>';
         var i;
         for (i = 0; i < user.courses.length; i++) {
-            sidebar += '<a href="#c' + i + '" onclick="w3_close()" class="w3-bar-item w3-button w3-hover-white">' + user.courses[i].name + '</a>';
+            sidebar += '<form method="post" id="getCourseView" action="/getCourseView">' +
+                '<input id="' + 'courseName_' + i + '" type="text" name="courseName" hidden>' +
+                '<input type="submit" style="border: none" class="w3-bar-item w3-button w3-hover-white" value="' +  user.courses[i].name + '">' +
+                '</form>';
         };
         document.getElementById("username").innerHTML = user.firstName + " " + user.lastName;
         document.getElementById("sidebar").innerHTML = sidebar;
+        for (i = 0; i < user.courses.length; i++) {
+            document.getElementById("courseName_" + i).value = user.courses[i].name;
+        }
     }
 
     function getAllCourses() {
@@ -155,13 +140,13 @@
                                             '<div class="col">' +
                                                 '<form method="post" action="/enroll">' +
                                                     '<input type="text" name="enrollCourse" value="' + res[i] +'" hidden>' +
-                                                    '<input type="submit" style="background-color: #666;" value="Enroll">' +
+                                                    '<input type="submit" style="background-color: #666;color: white" value="Enroll">' +
                                                 '</form>' +
                                             '</div>' +
                                         '<div class="col">' +
                                             '<form method="post" action="/unenroll">' +
                                                 '<input type="text" name="unEnrollCourse" value="' + res[i] +'" hidden>' +
-                                                '<input type="submit" style="background-color: #666;" value="Unenroll">' +
+                                                '<input type="submit" style="background-color: #666;color: white" value="Unenroll">' +
                                             '</form>' +
                                         '</div>' +
                                     '</div>' +
