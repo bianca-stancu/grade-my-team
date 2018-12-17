@@ -63,15 +63,15 @@
     }
 
     /* style the submit button */
-    input[type=submit] {
-        background-color: cyan;
-        color: white;
-        cursor: pointer;
-    }
+    /*input[type=submit] {*/
+        /*background-color: cyan;*/
+        /*color: white;*/
+        /*cursor: pointer;*/
+    /*}*/
 
-    input[type=submit]:hover {
-        background-color: cyan;
-    }
+    /*input[type=submit]:hover {*/
+        /*background-color: cyan;*/
+    /*}*/
 
     /* Two-column layout */
     .col {
@@ -174,10 +174,16 @@
         var sidebar = '<a href="/profile" class="w3-bar-item w3-button w3-hover-white">Dashboard</a>';
         var i;
         for (i = 0; i < user.courses.length; i++) {
-            sidebar += '<a href="#c' + i + '" onclick="w3_close()" class="w3-bar-item w3-button w3-hover-white">' + user.courses[i].name + '</a>';
+            sidebar += '<form method="post" id="getCourseView" action="/getCourseView">' +
+                '<input id="' + 'courseName_' + i + '" type="text" name="courseName" hidden>' +
+                '<input type="submit" style="border: none" class="w3-bar-item w3-button w3-hover-white" value="' +  user.courses[i].name + '">' +
+                '</form>';
         };
         document.getElementById("username").innerHTML = user.firstName + " " + user.lastName;
         document.getElementById("sidebar").innerHTML = sidebar;
+        for (i = 0; i < user.courses.length; i++) {
+            document.getElementById("courseName_" + i).value = user.courses[i].name;
+        }
     }
 
     function createform(metrics, grades) {
@@ -236,7 +242,7 @@
                 var prof_input_content = '<form id="profForm" action="#" onsubmit="sendGrade(); return false;">' +
                                 '<p>Overall homework grade</p>' +
                                 '<input style="border: solid; width: 10%" type="number" name="hmGrade" id="hmGrade" min="0" value="10" required>' +
-                                '<input type="submit" value="Grade homework">' +
+                                '<input style="background-color: cyan;color: white;" type="submit" value="Grade homework">' +
                                 '</form>';
 
                 document.getElementById("prof_input").innerHTML = prof_input_content;
@@ -301,7 +307,7 @@
                         '<p class="col">' + res[1][i] + ' </p>' +
                         '<input class="col" style="border: solid; width: 10%" type="number" name="hmGrade" id="final_grade_' + i + '" min="0" value="' + final_grade_member_i + '" required>';
                 }
-                final_content += '<input type="submit" value="Submit grades"></form>';
+                final_content += '<input style="background-color: cyan;color: white;" type="submit" value="Submit grades"></form>';
                 document.getElementById("final_grades").innerHTML = final_content;
 
                 return false;

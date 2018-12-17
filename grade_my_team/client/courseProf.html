@@ -57,11 +57,11 @@
     }
 
     /* style the submit button */
-    input[type=submit] {
-        background-color: cyan;
-        color: white;
-        cursor: pointer;
-    }
+    /*input[type=submit] {*/
+        /*background-color: cyan;*/
+        /*color: white;*/
+        /*cursor: pointer;*/
+    /*}*/
 
     input[type=submit]:hover {
         background-color: cyan;
@@ -202,11 +202,11 @@
         var pendingHm = '<h1 class="w3-xlarge w3-text-cyan"><b> Pending homeworks</b></h1>';
         var i;
         for (i = 0; i < user[0].courses.length; i++) {
-            sidebar += '<a href="#c' + i + '" onclick="w3_close()" class="w3-bar-item w3-button w3-hover-white">' + user[0].courses[i].name + '</a>';
-//                sidebar += '<form method="post" id="getCourseView" action="/getCourseView">' +
-//                    '<input id="' + 'courseName_' + i + '" type="text" name="courseName" hidden>' +
-//                    '<input type="submit" style="border: none" class="w3-bar-item w3-button w3-hover-white" value="' +  user[0].courses[i].name + '">' +
-//                    '</form>';
+//            sidebar += '<a href="#c' + i + '" onclick="w3_close()" class="w3-bar-item w3-button w3-hover-white">' + user[0].courses[i].name + '</a>';
+            sidebar += '<form method="post" id="getCourseView" action="/getCourseView">' +
+                '<input id="' + 'courseName_' + i + '" type="text" name="courseName" hidden>' +
+                '<input type="submit" style="border: none" class="w3-bar-item w3-button w3-hover-white" value="' +  user[0].courses[i].name + '">' +
+                '</form>';
         };
         document.getElementById("username").innerHTML = user[0].firstName + " " + user[0].lastName;
         document.getElementById("sidebar").innerHTML = sidebar;
@@ -222,10 +222,9 @@
         };
         pendingHm += '<hr style="width:50px;border:5px solid cyan" class="w3-round">';
         document.getElementById("pendings").innerHTML = pendingHm;
-//            for (i = 0; i < user[0].courses.length; i++) {
-//                document.getElementById("courseName" + i).value = user[0].courses[i].name;
-//                document.getElementById("courseName_" + i).value = user[0].courses[i].name;
-//            }
+            for (i = 0; i < user[0].courses.length; i++) {
+                document.getElementById("courseName_" + i).value = user[0].courses[i].name;
+            }
 
     }
     window.onload = function() {

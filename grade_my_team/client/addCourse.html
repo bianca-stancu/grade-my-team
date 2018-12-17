@@ -167,13 +167,19 @@
         var sidebar = '<a href="/profile" class="w3-bar-item w3-button w3-hover-white">Dashboard</a>';
         var i;
         for (i = 0; i < user.courses.length; i++) {
-            sidebar += '<a href="#c' + i + '" onclick="w3_close()" class="w3-bar-item w3-button w3-hover-white">' + user.courses[i] + '</a>';
+            sidebar += '<form method="post" id="getCourseView" action="/getCourseView">' +
+                '<input id="' + 'courseName_' + i + '" type="text" name="courseName" hidden>' +
+                '<input type="submit" style="border: none" class="w3-bar-item w3-button w3-hover-white" value="' +  user.courses[i].name + '">' +
+                '</form>';
         };
         document.getElementById("username").innerHTML = user.firstName + " " + user.lastName;
         document.getElementById("sidebar").innerHTML = sidebar;
 
         // Add professor's name in input form
         document.getElementById("profName").value = user.firstName + " " + user.lastName;
+        for (i = 0; i < user.courses.length; i++) {
+            document.getElementById("courseName_" + i).value = user.courses[i].name;
+        }
     }
 
     window.onload = function() {
