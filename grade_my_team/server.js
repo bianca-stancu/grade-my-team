@@ -43,7 +43,7 @@ app.get('/',function(req,res){
     return res.sendFile(__dirname + '/client/login.html');
 });
 
-app.post("/",function (req, res){
+app.post("/",function (req, res,next){
 
     // Create user
     if (req.body.firstName &&
@@ -52,24 +52,42 @@ app.post("/",function (req, res){
         req.body.password &&
         req.body.role) {
 
-        var myData = new User(req.body);
-        myData._id = new mongoose.Types.ObjectId();
-        myData.save().then(function (user, err) {
-            if (user) {
-                console.log("User successfluly saved to database");
-                req.session.userId = user._id;
-                return res.redirect('/profile');
-            } else {
-                throw new Error('An error occured.');
-            }
+
+        // Check if username is unique
+        User.find({}, function(err, users) {
+            users.forEach(function(user) {
+                if(user.username == req.body.username){
+                    const error = new Error('Username already in use. Please try with another one.');
+                    error.httpStatusCode = 400;
+                    return next(error);
+                    // TODO: check why even if error return code execution continues and user is saved
+                }
+            });
+        }).then(function(){
+            var myData = new User(req.body);
+            myData._id = new mongoose.Types.ObjectId();
+            myData.save().then(function (user, err) {
+                if (user) {
+                    console.log("User successfully saved to database");
+                    req.session.userId = user._id;
+                    return res.redirect('/profile');
+                } else {
+                    var err = new Error('Ooops. An unexpected internal error occured');
+                    err.status = 400;
+                    return next(err);
+                }
+            });
         });
+
     }
 
     // Login
     else if((req.body.username && req.body.password)){
         User.authenticate(req.body.username, req.body.password, function (error, user) {
         if (error || !user) {
-            throw new Error('Wrong email or password.');
+            var err = new Error('Wrong username or password.');
+            err.status = 400;
+            return next(err);
         } else {
             req.session.userId = user._id;
             return res.redirect('/profile');
@@ -120,6 +138,7 @@ app.post("/addcourse",function (req, res, next){
     //Create course
     var myData = new Course(req.body);
     myData._id = new mongoose.Types.ObjectId();
+    myData.professor = new mongoose.Types.ObjectId();
     myData.save().then(function(item,bla){
         console.log("Course successfuly saved to database");
     });
@@ -149,7 +168,6 @@ app.post('/fileupload', function (req, res, next) {
     var newpath;
     form.parse(req, function (err, fields, files) {
         var members = Object.values(fields).slice(0, Object.values(fields).length-2);
-        // console.log(members)
         var oldpath = files.my_file.path;
         newpath = __dirname + '/assignments/' + files.my_file.name;
         fs.rename(oldpath, newpath, function (err) {
@@ -191,22 +209,6 @@ app.post('/fileupload', function (req, res, next) {
                     }
                 });
 
-                // To update currentUser
-                User.findById(req.session.userId).populate("courses").populate("assignments")
-                    .exec(function (error, user) {
-                        if (error) {
-                            return next(error);
-                        } else {
-                            if (user === null) {
-                                var err = new Error('Not authorized! Go back!');
-                                err.status = 400;
-                                return next(err);
-                            }
-                            else{
-                                currentUser = user;
-                            }
-                        }
-                    });
                 return res.redirect('/courseView');
             }, 2000);
 
@@ -295,13 +297,13 @@ app.post('/unenroll', function (req, res, next){
 app.post('/getCourseView',function(req,res){
     Course.findOne({ name: req.body.courseName }, function (err, course){
         currentCourse = course;
+        if(currentUser.role == "Professor"){
+            return res.redirect('/courseViewProf');
+        }
+        else{
+            return res.redirect('/courseView');
+        }
     });
-    if(currentUser.role == "Professor"){
-        return res.redirect('/courseViewProf');
-    }
-    else{
-        return res.redirect('/courseView');
-    }
 
 });
 
@@ -314,7 +316,23 @@ app.get('/courseView',function(req,res){
 });
 
 app.get("/getHomoworks",function (req, res){
-    res.json([currentUser, currentCourse])
+    // To update currentUser
+    User.findById(req.session.userId).populate("courses").populate("assignments")
+        .exec(function (error, user) {
+            if (error) {
+                return next(error);
+            } else {
+                if (user === null) {
+                    var err = new Error('Not authorized! Go back!');
+                    err.status = 400;
+                    return next(err);
+                }
+                else{
+                    currentUser = user;
+                    return res.json([currentUser, currentCourse])
+                }
+            }
+        });
 });
 
 app.get("/getProfInfos",function (req, res){
@@ -380,7 +398,7 @@ app.get("/updateAssignment", function (req,res) {
 app.post("/goGradingProf", function (req,res) {
     teamMembersNames = [];
     Homework.findOne({ _id: req.body.ass_}, function(err, hm) {
-        console.log(hm)
+        // console.log(hm)
         for(var i=0; i<hm.members.length;i++){
             User.findOne({ _id: new mongoose.mongo.ObjectId(hm.members[i])}, function(err, user) {
                 teamMembersNames.push(user.username);
@@ -395,7 +413,12 @@ app.get('/profGradeView',function(req,res){
     return res.sendFile(__dirname + '/client/gradeProf.html');
 });
 
-app.listen(3000);
+app.listen(3000, function () {
+    var dirhm = './assignments/';
+    if (!fs.existsSync(dirhm)){
+        fs.mkdirSync(dirhm);
+    }
+});
 console.log("Running at Port 3000");
 
 module.exports = app;

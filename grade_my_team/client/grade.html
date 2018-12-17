@@ -62,15 +62,15 @@
     }
 
     /* style the submit button */
-    input[type=submit] {
-        background-color: cyan;
-        color: white;
-        cursor: pointer;
-    }
+    /*input[type=submit] {*/
+        /*background-color: cyan;*/
+        /*color: white;*/
+        /*cursor: pointer;*/
+    /*}*/
 
-    input[type=submit]:hover {
-        background-color: cyan;
-    }
+    /*input[type=submit]:hover {*/
+        /*background-color: cyan;*/
+    /*}*/
 
     /* Two-column layout */
     .col {
@@ -174,10 +174,16 @@
         var sidebar = '<a href="/profile" class="w3-bar-item w3-button w3-hover-white">Dashboard</a>';
         var i;
         for (i = 0; i < user.courses.length; i++) {
-            sidebar += '<a href="#c' + i + '" onclick="w3_close()" class="w3-bar-item w3-button w3-hover-white">' + user.courses[i].name + '</a>';
+            sidebar += '<form method="post" id="getCourseView" action="/getCourseView">' +
+                '<input id="' + 'courseName_' + i + '" type="text" name="courseName" hidden>' +
+                '<input type="submit" style="border: none" class="w3-bar-item w3-button w3-hover-white" value="' +  user.courses[i].name + '">' +
+                '</form>';
         };
         document.getElementById("username").innerHTML = user.firstName + " " + user.lastName;
         document.getElementById("sidebar").innerHTML = sidebar;
+        for (i = 0; i < user.courses.length; i++) {
+            document.getElementById("courseName_" + i).value = user.courses[i].name;
+        }
     }
 
     function createform() {
@@ -193,7 +199,7 @@
                         '<input style="border: solid; width: 10%" type="number" name="studGrade_'+ i + '" id="studGrade_' + i + '" min="0" value="10" required>';
                 }
 
-                content += '<input type="submit" value="Create">';
+                content += '<input style="background-color: cyan;color: white;" type="submit" value="Create">';
 
                 document.getElementById("myForm").innerHTML = content;
 
@@ -216,61 +222,78 @@
 
         // Number of members
         var nmember = values.length/2;
+        console.log(values)
 
-        $.ajax({
-            type: "GET",
-            url: "/toBlockchainData",
-            cache: false,
-            success: function(res){
-                hm_id = res[0]._id;
-                currentUserUsername = res[1].username;
-            }
-        });
-
-        $.getJSON("../build/contracts/Grading.json", function(grading_json) {
-            var Grading = TruffleContract(grading_json);
-            Grading.setProvider(window.web3.currentProvider);
-            Grading.deployed().then(async function(instance) {
-                async function smth(i){
-                    var to = values[2*i].value;
-                    var grade = values[2*i+1].value;
-                    var text = "I ("+ currentUserUsername + ") am grading " +values[2*i].value + " the grade:" + values[2*i+1].value+".";
-                    await web3.personal.sign(text,web3.currentProvider.selectedAddress, async function(err,signature) {
-                        var sig = ethers.utils.splitSignature(signature);
-                        var authorization = instance.NotAuthorized();
-                        authorization.watch(function(error, result){
-                            if (!error){
-                                alert("You are not authorized to perform this grading!");
-                                window.location.assign("/courseView");
-
-                            } else {
-                                console.log(error);
-                            }
-                        });
-                        await instance.addGradeTo.sendTransaction(hm_id, currentUserUsername, to, grade, false,text,sig.v, sig.r, sig.s,{from: web3.currentProvider.selectedAddress}).then(async function(error,res){
-                            if(i<nmember){ 
-                                smth(i+1);
-                            } else {
-                                window.location.assign("/courseView");
-                            }
-                    }); 
-                    });
-                    
+        // Check if grades sum to 10 * nmembers : point = 10 * nmembers
+        var points = 10 * nmember;
+        var gradeSum = 0;
+        for(var i=0 ; i< nmember; i++){
+            gradeSum = gradeSum + parseInt(values[2*i+1].value);
+        }
+        if(points == gradeSum){
+            $.ajax({
+                type: "GET",
+                url: "/toBlockchainData",
+                cache: false,
+                success: function(res){
+                    hm_id = res[0]._id;
+                    currentUserUsername = res[1].username;
                 }
-            })
-        });
+            });
 
-        $.ajax({
-            type: "GET",
-            url: "/updateAssignment",
-            cache: false,
-            success: function(res){
-            }
-        });
+            $.getJSON("../build/contracts/Grading.json", function(grading_json) {
+                var Grading = TruffleContract(grading_json);
+                Grading.setProvider(window.web3.currentProvider);
+                Grading.deployed().then(async function(instance) {
+                    for(var i=0 ; i< nmember; i++){
+                        var to = values[2*i].value;
+                        var grade = values[2*i+1].value;
+                        var text = "I ("+ currentUserUsername + ") am grading " +values[2*i].value + " the grade:" + values[2*i+1].value+".";
+                        await web3.personal.sign(text,web3.currentProvider.selectedAddress, async function(err,signature) {
+                            var sig = ethers.utils.splitSignature(signature);
+                            console.log(signature);
+                            console.log(">>>>");
+                            console.log(sig.v)
+                            console.log(sig.r)
+                            console.log(sig.s);
+                            /*var promise = instance.verify_identity(text, sig.v, web3.toHex(sig.r), web3.toHex(sig.s));
+                            promise.then(function(signer) {
+                                console.log(signer);*/
+                            var authorization = instance.NotAuthorized();
+                            authorization.watch(function(error, result){
+                                if (!error){
+                                    alert("You are not authorized to perform this grading!");
+                                    window.location.assign("/courseView");
 
+                                } else {
+                                    console.log(error);
+                                }
+                            });
+                            instance.addGradeTo.sendTransaction(hm_id, currentUserUsername, to, grade, false,text,sig.v, sig.r, sig.s,{from: web3.currentProvider.selectedAddress}).then(function(error,res){
+                                console.log(res);
+                                if(i==nmember-1){
+                                  window.location.assign("/courseView");
+                                }
+                        });
+                        });
 
+                    }
+                })
+            });
+
+            $.ajax({
+                type: "GET",
+                url: "/updateAssignment",
+                cache: false,
+                success: function(res){
+                }
+            });
+        }
+        else{
+            alert("You haven't assigned correctly the points. Please try again.")
+        }
         e.preventDefault();
-    })
+    });
 
     window.onload = function() {
         getUser();

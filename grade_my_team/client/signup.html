@@ -129,16 +129,16 @@
                     <option value="Professor">Professor</option>
                 </select>
                 <input type = "text" name = "eth_key" id = "eth_key" required readonly>
-                <input type="button" value="Submit" onclick="register()">
+                <input type="button" style="background-color: cyan;color: white" value="Submit" onclick="register()">
             </form>
         </div>
-    <!-- <div class="bottom-container">
+ <div class="bottom-container">
         <div class="row">
             <form action="/">
                 <input type="submit" style="background-color: #666;" value="Login">
             </form>
         </div>
-    </div> -->
+    </div>
 </div>
 
 <!-- W3.CSS Container -->
@@ -157,7 +157,6 @@
     }
 
     function register(){
-        //TODO: maybe check if id is already taken and validate.
         $.getJSON("../build/contracts/Grading.json", function(grading_json) {
                                    var Grading = TruffleContract(grading_json);
                                    Grading.setProvider(web3.currentProvider);
