@@ -270,7 +270,7 @@
                         Grading.setProvider(window.web3.currentProvider);
                         Grading.deployed().then(async function(instance) {
                             await instance.getGrade.sendTransaction(hm_id, currentUserUsername,{from: web3.currentProvider.selectedAddress}).then(async function(error,res){
-                                var newContent = '<div><p>'+res+'</p></div>';
+                                var newContent = '<div><p>Given grade: '+ res[0] +' ; Expected grade: ' + res[1] +' .</p></div>';
                                 $(formId).replaceWith(newContent);
                             });
 
