@@ -1,7 +1,5 @@
 To run the application follow these steps:
 
-0. Add empty folder "data" in the root directory
-
 1. In a new terminal run "mongod --dbpath=./data"
 
 2. In an other terminal : "node seed.js" ----> To seed the database
